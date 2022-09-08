@@ -9,3 +9,8 @@
 
 - [Assignment 1](assignments/assignment1.html)
 
+### 2. R Basics: Operations on Vectors
+
+- [Slides](slides/2_r_basics.html)
+
+- [Assignment 2](assignments/assignment2.html)

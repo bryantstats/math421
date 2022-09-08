@@ -151,7 +151,7 @@ class: inverse
 
 # Assignment 1: Setting it up
 
-- Download and Install R at: https://cran.r-project.org/bin/windows/base/R-4.2.1-win.exe
+- Download and Install R at: https://cran.r-project.org/bin/windows/base/old/4.1.1
 
 - Download and Install Rstudio at:
 https://download1.rstudio.org/desktop/windows/RStudio-2022.07.1-554.exe
