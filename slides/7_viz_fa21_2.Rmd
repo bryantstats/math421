@@ -1,0 +1,236 @@
+
+---
+title: "Visualization- Some aspects of ggplot2"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse, middle, center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+
+class: inverse, middle, center
+# Combine multiple graphs with the same aes
+
+---
+```{r, message=FALSE}
+library(tidyverse)
+library(knitr)    # For knitting document and include_graphics function
+df <- read_csv('../data/all-states-history.csv')
+
+df <- df %>% filter(deathIncrease>0, positiveIncrease>0, date<'2021-01-01')
+library(lubridate)
+df$year <- year(df$date)
+
+df$quarters <- as.factor(quarter(df$date))
+
+df$month <- factor(month(df$date, label = TRUE))
+
+df$day <- wday(df$date)
+df$day_type <- case_when(df$day < 6 ~ 'weekday',
+                         TRUE~'weekend')
+```
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_point(mapping=aes(x=positiveIncrease, y=deathIncrease, color=quarters))+
+  geom_smooth(mapping=aes(x=positiveIncrease, y=deathIncrease, color=quarters))
+```
+---
+```{r, fig.height=6}
+df %>% ggplot(mapping=aes(x=positiveIncrease, y=deathIncrease, color=quarters))+ 
+  geom_point()+
+  geom_smooth()
+```
+---
+class: inverse, middle, center
+# Facets
+---
+```{r, fig.height=6}
+df %>% filter(month=='Apr'|month=='Jul') %>% 
+  ggplot(mapping=aes(x=positiveIncrease, y=deathIncrease))+ 
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(~month)
+```
+
+---
+```{r, fig.height=6}
+df %>% 
+  ggplot(mapping=aes(x=positiveIncrease, y=deathIncrease, color=quarters))+ 
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(quarters~day_type)
+```
+---
+class: inverse, middle, center
+# Position adjustments
+---
+```{r, fig.height=6}
+df %>% filter(state=='RI', month=='Aug') %>% ggplot()+ 
+  geom_point(mapping=aes(x=positiveIncrease, y=deathIncrease, color=quarters))
+```
+---
+```{r, fig.height=6}
+df %>% filter(state=='RI', month=='Aug') %>% ggplot()+ 
+  geom_point(mapping=aes(x=positiveIncrease, y=deathIncrease, color=quarters), 
+             position='jitter')
+```
+---
+
+```{r, fig.height=6}
+df %>% filter(state=='RI') %>% ggplot()+ 
+  geom_bar(mapping=aes(x=quarters, fill=day_type), 
+           position = 'dodge')
+```
+---
+```{r, fig.height=6}
+df %>% filter(state=='RI') %>% ggplot()+ 
+  geom_bar(mapping=aes(x=quarters, fill=day_type), 
+           position = 'fill')
+```
+---
+class: inverse, middle, center
+
+# geom_bar vs. geom_col
+---
+**geom_bar**
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_bar(mapping=aes(x=quarters))
+```
+
+---
+**geom_col**
+```{r, fig.height=6}
+df %>% group_by(quarters) %>% summarise(average_positive=mean(positiveIncrease)) %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x=quarters, y=average_positive))
+```
+
+---
+class: inverse, middle, center
+
+# Correlogram
+
+---
+
+```{r}
+library(ggcorrplot)
+df_cor <- df %>% select(deathIncrease, hospitalizedIncrease, positiveIncrease, negativeIncrease, totalTestsViralIncrease, totalTestResultsIncrease, totalTestEncountersViralIncrease)
+corr <- df_cor %>% cor
+ggcorrplot(corr, hc.order = TRUE, type = "lower", lab = TRUE, lab_size = 3, method="circle", colors = c("tomato2", "white", "springgreen3"), title="Correlogram", ggtheme=theme_bw)
+```
+---
+
+```{r}
+data(mtcars)
+corr <- round(cor(mtcars), 1)
+ggcorrplot(corr, hc.order = TRUE, type = "lower", lab = TRUE, lab_size = 3, method="circle", colors = c("tomato2", "white", "springgreen3"), title="Correlogram", ggtheme=theme_bw)
+```
+
+---
+
+- For more: http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+
+---
+class: inverse, middle, center
+# Labels/Title
+
+---
+```{r, fig.height=6, eval=FALSE}
+df %>% filter(month=='Apr'|month=='Sep') %>% 
+  ggplot()+ 
+  geom_point(mapping=aes(x=positiveIncrease, y=deathIncrease, color=month))+
+  labs(x='Number of Positive Case', 
+       y = 'Number of Death', 
+       color='Month of the Year', 
+       title = 'Scatter Plot of Positive Cases and Deaths', 
+       caption = 'April appears to be more deadly than September.')
+```
+
+---
+```{r, echo=FALSE}
+df %>% filter(month=='Apr'|month=='Sep') %>% 
+  ggplot()+ 
+  geom_point(mapping=aes(x=positiveIncrease, y=deathIncrease, color=month))+
+  labs(x='Number of Positive Case', y = 'Number of Death', color='Month of the Year', title = 'Scatter Plot of Positive Cases and Deaths', caption = 'April appears to be more deadly than September.')
+```
+
+---
+```{r, fig.height=6}
+df %>% filter(month=='Sep') %>% 
+  ggplot()+ 
+  labs(x='Number of  Positive Case', y='Number of  Death')+
+  geom_point(mapping=aes(x=positiveIncrease, y=deathIncrease))
+```
+
+---
+class: inverse, middle, center
+
+# Change Themes
+
+---
+```{r, fig.height=6}
+df %>% filter(month=='Apr'|month=='Jul') %>% 
+  ggplot(mapping=aes(x=positiveIncrease, y=deathIncrease, color=month))+ 
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(month~day_type)
+```
+
+---
+```{r, fig.height=6}
+df %>% filter(month=='Apr'|month=='Jul') %>% 
+  ggplot(mapping=aes(x=positiveIncrease, y=deathIncrease, color=month))+ 
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(month~day_type)+
+  theme_dark()
+```
+
+---
+```{r, fig.height=6}
+df %>% filter(month=='Apr'|month=='Jul') %>% 
+  ggplot(mapping=aes(x=positiveIncrease, y=deathIncrease, color=month))+ 
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(month~day_type)+
+  theme_linedraw()
+```
+---
+# More Themes
+
+- https://ggplot2.tidyverse.org/reference/ggtheme.html
+
+---
+**`ggthemes` package**
+
+```{r, fig.height=6}
+library(ggthemes)
+df %>% filter(month=='Apr'|month=='Jul') %>% 
+  ggplot(mapping=aes(x=positiveIncrease, y=deathIncrease, color=month))+ 
+  geom_point()+geom_smooth()+facet_wrap(month~day_type)+
+  scale_color_stata()
+```
+
+---
+**Save plots**
+```{r, fig.height=6}
+gg <- df %>% group_by(quarters) %>% summarise(mean=mean(positiveIncrease)) %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x=quarters, y=mean))
+
+ggsave(filename = 'abc.png', plot = gg)
+```

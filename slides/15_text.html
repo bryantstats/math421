@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Text Mining</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Text Mining
+
+---
+
+class: inverse, middle, center
+
+
+
+
+
+---
+
+
+---
+
+- The first 5 rows and a three columns of the data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; release_year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3% &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2020 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; In a future where the elite inhabit an island paradise far from the crowded slums, you get one chance to join the 3% saved from squalor. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7:19 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2016 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; After a devastating earthquake hits Mexico City, trapped survivors from all walks of life wait to be rescued while trying desperately to stay alive. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 23:59 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2011 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; When an army recruit is found dead, his fellow soldiers are forced to confront a terrifying secret that's haunting their jungle island training camp. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2009 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; In a postapocalyptic world, rag-doll robots hide in fear from dangerous machines out to exterminate them, until a brave newcomer joins the group. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 21 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; A brilliant group of students become card-counting experts with the intent of swindling millions out of Las Vegas casinos by playing blackjack. &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+# Token
+
+- A token is a meaningful unit of text. 
+
+- One row of text will be converted to multiple rows of tokens. 
+---
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Superheroes amass to stop intergalactic sociopath Thanos from acquiring a full set of Infinity Stones and wiping out half of all life in the universe. &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; superheroes &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; amass &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; to &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stop &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; intergalactic &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sociopath &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; thanos &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; from &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; acquiring &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; a &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; full &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; set &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; of &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stones &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; and &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; wiping &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; half &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; of &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; all &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; life &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; in &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; the &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; universe &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; superheroes &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; amass &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stop &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; intergalactic &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sociopath &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; thanos &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; acquiring &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; full &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; set &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stones &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; wiping &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; half &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; life &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; universe &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; n &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; life &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 746 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; young &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 655 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; new &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 613 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; family &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 497 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; man &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 464 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; world &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 453 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; love &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 447 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; two &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 443 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; woman &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 402 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; friends &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 383 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+![](15_text_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+class: center
+![](15_text_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+---
+# Sentiment Analysis
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Superheroes amass to stop intergalactic sociopath Thanos from acquiring a full set of Infinity Stones and wiping out half of all life in the universe. &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; superheroes &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; amass &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; to &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stop &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; intergalactic &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sociopath &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; thanos &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; from &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; acquiring &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; a &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; full &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; set &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; of &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stones &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; and &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; wiping &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; half &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; of &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; all &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; life &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; in &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; the &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; universe &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+&lt;table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; superheroes &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; amass &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stop &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; intergalactic &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sociopath &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; thanos &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; acquiring &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; full &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; set &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stones &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; wiping &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; half &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; life &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; universe &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+# Using `nrc`
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sentiment &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; acquiring &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; anticipation &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; acquiring &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; positive &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; full &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; positive &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; anticipation &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; joy &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; positive &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; infinity &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; trust &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+ - Some words are missing
+ - Some words have more than one sentiment
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

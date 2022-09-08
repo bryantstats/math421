@@ -1,0 +1,82 @@
+
+---
+output: # rmarkdown::github_document
+  html_document:
+    theme: cerulean
+    toc: true
+  pdf_document: default
+  word_document: default
+title: "Assignment 5: Handle Missing Values"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](fa2021_assignment5.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas under Assignment 5. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+-------
+
+**The data:** 
+
+*The sinking of the Titanic is one of the most infamous shipwrecks in history.  On April 15, 1912, during her maiden voyage, the widely considered “unsinkable” RMS Titanic sank after colliding with an iceberg. Unfortunately, there weren’t enough lifeboats for everyone onboard, resulting in the death of 1502 out of 2224 passengers and crew.  While there was some element of luck involved in surviving, it seems some groups of people were more likely to survive than others.*
+
+-------
+
+**Questions**
+
+1. Use read_csv to import the [titanic data](titanic.csv). 
+
+-------
+
+2. How many missing values in total?  Which columns has the most number if missing values?
+
+-------
+
+3. Remove the column with the most number of missing value
+
+-------
+
+4.  Create a dataset where the rows with missing data are removed. The original dataset remains unchanged by this action.
+
+-------
+
+5.  Replace the missing values of numeric variables with the corresponding average of the columns.
+
+
+-------
+
+6.  Replace the missing values of categorical variables with the corresponding mode (most frequent value) of the columns. Hint:  You can use the `table` function to see what is the mode of the variable. 
+
+-------
+
+7.  The `Survived` column records whether a passenger is survived or not. `Survived = 1` means the passenger survived. Thus, the chance of survived for a random passenger can be estimated by
+
+```{r, eval=FALSE}
+mean(df$Survived)
+```
+
+Compare the chance of survived between male and female.  *Hint (Use group_by + summarise combo)*
+
+-------
+
+8.  Use the `summary` function to find the first quartile (Q1) and the thrid quartile(Q3) of variable `Age`. Create a new variable taking values of `young` (Age < Q1), `middle` (Age from Q1 to Q3), and `old`(Age > Q3). Compare the chance of survived between these three groups of age. 
+
+-------
+
+9.  This dataset ([link](data/Vehicle.CSV)) records the vehicles in car accident in 2019. The variable information can be found at [this link.](data/Fatality Analysis Reporting System (FARS) Analytical User’s Manual, 1975-2019.pdf) Import the data using `read_csv`. Let `d` be the data containing only accidents happened in Rhode Island.  Is there any missing values in `d`? 
+
+-------
+
+10. Continue with the dataset `d` in Question 9. We will analyze the traveling speed variable (`TRAV_SP`). This variable records the travel speeds (miles per hours) when the accident happened. Use the `table` function to check all the values of this variable.  Do you observe any unexpected values?  These unexpected values are actually the codes for missing values.  Use the `na_if` function to changes the unexpected values to `NA`.  Then replace the NAs by the average speed. 
+

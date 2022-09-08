@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title> gganimate - Making a bar race</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=" Son Nguyen " />
+    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <img src="figures/bat-cartoon.png" /> gganimate - Making a bar race
+### <font size="5"> Son Nguyen </font>
+
+---
+
+
+&lt;style&gt;
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide &gt; h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide &gt; h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide &gt; h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+&lt;/style&gt;
+
+&lt;style type="text/css"&gt;
+.left-code {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 59%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+
+---
+
+class: inverse, middle, center
+
+# Introduction
+
+---
+
+# What is gganimate?
+
+- An extension to ggplot2 for creating animated graphics in R
+
+- Originally written by David Robinson
+
+- Updated by Thomas Lin Pedersen
+
+- Code from a year(ish) ago will probably not work anymore
+
+- Uses the R package [tweenr](https://github.com/thomasp85/tweenr) (also by Lin Pedersen)
+
+- Pedersen describes it as... 
+
+&gt; "a theoretical backbone of how to describe animation, and it's also an implementation of set theoretical backbones."
+
+&lt;img src="figures/logo.png" width="150px" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+---
+
+# gganimate Example
+
+
+```r
+# Load packages
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+g &lt;- ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = continent)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = c("darkorchid4", "orange", 
+                                 "purple", "darkorange", "black")) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') +
+  transition_time(year) +
+  ease_aes('linear')
+
+animate(g)
+```
+
+---
+
+# gganimate Example
+
+&lt;img src="8_viz_bar_race_files/figure-html/gapminder-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+
+# gganimate Example
+
+&lt;img src="8_viz_bar_race_files/figure-html/covid-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+# How does it work?
+
+From the documentation...
+
+&gt; gganimate provides "a range of new grammar classes that can be added to the plot object in order to customize how it should change with time."  
+
+&lt;br&gt;
+
+| New Grammar Classes | |
+| :----- | :------------ | 
+| transitions | defines how the data changes in the graphic across time |
+| views | defines changes in the viewpoint of the graphic (i.e. x and y axes) | 
+| shadows | defines how to display "memories" in the animation |
+| enter/exit | defines how the data should appear and disappear during the animation |
+| ease_aes | defines the aesthetics associated with the ease during transitions |
+
+---
+
+# Transition: &lt;font color="black"&gt; States &lt;/font&gt;
+
+`transition_states`: Transition between *values* of a variable
+
+Principles:
+
+- `Step 1`: data is split in subsets according to the values of a variable
+
+- `Step 2`: each subset generates a plot
+
+- `Step 3`:	plots of subsets are combined into an animation
+
+
+---
+
+# Set up
+
+Packages to load if you are following along
+
+
+```r
+# Loads the library
+library(gganimate)
+# Other libraries that will be used
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+```
+
+---
+
+# Data
+
+
+.left-code[
+
+```r
+# Create a dataset
+data &lt;- tibble(salary = c(1000, 2000), 
+               year = c(2019, 2020))
+kable(data)
+```
+
+]
+.right-plot[
+
+| salary| year|
+|------:|----:|
+|   1000| 2019|
+|   2000| 2020|
+]
+
+---
+
+# Static Plot
+
+.left-code[
+
+```r
+*ggplot(data,
+*      aes(x = year,
+*          y = salary))
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+# Static Plot
+
+
+
+.left-code[
+
+```r
+ggplot(data, 
+       aes(x = year, 
+           y = salary))+ 
+* geom_point(size=4)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+# State 1
+
+
+.left-code[
+
+```r
+ggplot(data %&gt;% filter(year==2019), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_point(size=4)+
+  xlim(2019, 2020)+
+  ylim(1000, 2000)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# State 2
+
+.left-code[
+
+```r
+ggplot(data %&gt;% filter(year==2020), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_point(size=4)+
+  xlim(2019, 2020)+
+  ylim(1000, 2000)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Combining States
+
+.left-code[
+
+```r
+g &lt;- ggplot(data, 
+       aes(x = year, 
+           y = salary))+
+  geom_point(size=4) + 
+* transition_states(year)
+animate(g)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-8-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Static Plot
+
+.left-code[
+
+```r
+*ggplot(data,
+*      aes(x = year,
+*          y = salary))
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+# Static Plot
+
+
+.left-code[
+
+```r
+ggplot(data, 
+       aes(x = year, 
+           y = salary))+ 
+* geom_col()
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# State 1
+
+
+.left-code[
+
+```r
+ggplot(data %&gt;% filter(year==2019), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_col()+
+  xlim(2018.5, 2020.5)+
+  ylim(0, 2000)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# State 2
+
+.left-code[
+
+```r
+ggplot(data %&gt;% filter(year==2020), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_col()+
+  xlim(2018.5, 2020.5)+
+  ylim(0, 2000)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Combining States
+
+
+.left-code[
+
+```r
+g &lt;- ggplot(data, 
+       aes(x = year, 
+           y = salary))+
+  geom_col() + 
+* transition_states(year)
+animate(g)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-13-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Combining States
+
+.left-code[
+
+```r
+g &lt;- ggplot(data, 
+       aes(x = year, 
+           y = salary, 
+*          fill = salary))+
+  geom_col() + 
+  transition_states(year) 
+animate(g)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-14-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Second Data
+
+.left-code[
+
+```r
+data &lt;- data.frame(
+  salary = c(1000, 2000, 5000, 20000), 
+    year = c(2019, 2020, 2019, 2020), 
+    Job=c('Part Time','Part Time',
+          'Full-time','Full-time'))
+kable(data)
+```
+]
+.right-plot[
+
+| salary| year|Job       |
+|------:|----:|:---------|
+|   1000| 2019|Part Time |
+|   2000| 2020|Part Time |
+|   5000| 2019|Full-time |
+|  20000| 2020|Full-time |
+]
+
+
+---
+# Static Plot
+
+.left-code[
+
+```r
+ggplot(data, 
+       aes(x=Job, 
+           y=salary, 
+           fill=salary))+ 
+  geom_col()
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# State 1
+
+.left-code[
+
+```r
+ggplot(data %&gt;% filter(year==2019), 
+       aes(x=Job, 
+           y=salary, 
+           fill=salary))+ 
+  geom_col()+
+  ylim(0, 25000)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# State 2
+
+.left-code[
+
+```r
+ggplot(data %&gt;% 
+         filter(year==2020), 
+       aes(x=Job, 
+           y=salary, 
+           fill=salary)) + 
+  geom_col()+
+  ylim(0, 25000)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Combining States
+.left-code[
+
+```r
+g &lt;- ggplot(data, aes(x=Job, 
+                 y=salary, 
+                 fill=salary)) + 
+  geom_col()+
+  ylim(0, 25000)+
+* transition_states(year)
+animate(g)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-19-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Combining States
+.left-code[
+
+```r
+g &lt;- ggplot(data, aes(x=Job, 
+                 y=salary, 
+                 fill=salary)) + 
+  geom_col()+
+  ylim(0, 25000)+
+  transition_states(year)+
+* labs(title = 'Year: {closest_state}')
+animate(g)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-20-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Compare NY and FL 
+
+Let's make an animation to compare the number of covid-19 cases in NY and FL from July to December 2020
+
+- Step 1: Make the data for ploting:  Calculate the number of cases for these two states in these months
+
+- Step 2: Make an animation with `transition_states` through variable `month`
+---
+# Step 1
+
+
+```r
+df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df$month &lt;- month(df$date)
+```
+
+
+.left-code[
+
+```r
+d1 &lt;- df %&gt;% 
+  filter(state %in% c('NY','FL'),
+                      month&gt;6)%&gt;% 
+  group_by(month, state) %&gt;% 
+  summarise(mean = mean(positive)) 
+kable(d1)
+```
+]
+.right-plot[
+
+| month|state |      mean|
+|-----:|:-----|---------:|
+|     7|FL    |  309311.5|
+|     7|NY    |  404663.0|
+|     8|FL    |  556725.0|
+|     8|NY    |  425254.1|
+|     9|FL    |  662531.9|
+|     9|NY    |  446471.9|
+|    10|FL    |  741519.4|
+|    10|NY    |  481957.9|
+|    11|FL    |  881535.2|
+|    11|NY    |  567379.9|
+|    12|FL    | 1140378.6|
+|    12|NY    |  807812.5|
+]
+
+---
+# Step 2
+
+.left-code[
+
+```r
+p1 &lt;- d1 %&gt;% 
+  ggplot(aes(y=state, x=mean)) + 
+  geom_col()+
+  transition_states(month)+
+  labs(x = 'Total Positive', 
+       title = 'Month: {closest_state}')
+
+animate(p1, nframes=100)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-23-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Make a bar race
+
+- Position of states' bars are not fixed
+- But the ranks are fixed. 
+- We need to create the rank variable to rank the states in each month
+
+---
+# Craete the rank variable
+
+.left-code[
+
+```r
+d2 &lt;- d1 %&gt;% 
+  group_by(month) %&gt;% 
+  mutate(rank=rank(-mean))
+kable(d2)
+```
+]
+.right-plot[
+
+| month|state |      mean| rank|
+|-----:|:-----|---------:|----:|
+|     7|FL    |  309311.5|    2|
+|     7|NY    |  404663.0|    1|
+|     8|FL    |  556725.0|    1|
+|     8|NY    |  425254.1|    2|
+|     9|FL    |  662531.9|    1|
+|     9|NY    |  446471.9|    2|
+|    10|FL    |  741519.4|    1|
+|    10|NY    |  481957.9|    2|
+|    11|FL    |  881535.2|    1|
+|    11|NY    |  567379.9|    2|
+|    12|FL    | 1140378.6|    1|
+|    12|NY    |  807812.5|    2|
+]
+
+---
+# Make the animation
+
+.left-code[
+
+```r
+p1 &lt;- d2 %&gt;% 
+  ggplot(aes(y=factor(rank), 
+             x=mean, group=state, 
+             fill=state)) + 
+  geom_col()+
+  transition_states(month)+
+  labs(x = 'Total Positive', 
+       title = 'Month: {closest_state}')
+
+animate(p1, nframes=100)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-25-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Make it looks nicer
+
+.left-code[
+
+```r
+p1 &lt;- d2 %&gt;% 
+  ggplot(aes(x=rank, 
+             y=mean, 
+             group=state, 
+             fill=state, 
+             label=state))+ 
+     geom_col()+
+    geom_text(aes(y = mean, 
+                  label = state), 
+              hjust = 1.4)+ 
+    coord_flip(clip = "off", 
+               expand = FALSE)+
+    scale_x_reverse()+
+    labs(title='Month {closest_state}', 
+         y='Total Positive', x='', fill='')+
+    theme(plot.title = 
+          element_text(hjust=1,size=22),
+          axis.ticks.y=element_blank(),
+          axis.text.y=element_blank())+ 
+    transition_states(month)+
+    ease_aes("cubic-in-out")
+
+animate(p1, nframes=100)
+```
+]
+.right-plot[
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-26-1.gif" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+# Bar Race - Covid19
+
+
+```r
+df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df &lt;- df %&gt;% filter(deathIncrease&gt;0, positiveIncrease&gt;0)
+
+library(lubridate)
+
+df$week &lt;- week(df$date)
+d1 &lt;- df %&gt;% group_by(week, state) %&gt;% summarise(mean = mean(positive))
+d2 &lt;- d1 %&gt;% group_by(week) %&gt;% mutate(rank=rank(-mean)) %&gt;% ungroup()
+d3 &lt;- d2 %&gt;% filter(rank &lt;= 10)
+
+a1 &lt;- d3 %&gt;% ggplot(aes(x=rank, y=mean, group=state, fill=state, label=state)) + geom_col()+
+    geom_text(aes(y = mean, label = state), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Number of Positive Caeses', fill='state')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+
+animate(a1, nframes = 400)
+```
+
+---
+# Bar Race - Covid19
+
+&lt;img src="8_viz_bar_race_files/figure-html/covid3-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+# Bar Race - Covid19 Vaccination
+
+
+```r
+df &lt;- read_csv('https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/us_data/time_series/vaccine_data_us_timeline.csv')
+
+df &lt;- df %&gt;% filter(Vaccine_Type=='All', Date&gt;'2021-01-01')
+
+library(lubridate)
+df$week &lt;- week(df$Date)
+d1 &lt;- df %&gt;% group_by(week, Province_State) %&gt;% summarise(mean = mean(Doses_shipped, na.rm=TRUE))
+d2 &lt;- d1 %&gt;% group_by(week) %&gt;% mutate(rank=rank(-mean)) %&gt;% ungroup()
+d3 &lt;- d2 %&gt;% filter(rank &lt;= 10)
+a1 &lt;- d3 %&gt;% ggplot(aes(x=rank, y=mean, group=Province_State, fill=Province_State, label=Province_State)) + geom_col()+
+    geom_text(aes(y = mean, label = Province_State), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Doses Shipped', fill='state')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank(), legend.position = "none") + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+animate(a1, nframes = 400)
+```
+
+---
+# Bar Race - Covid19 Vaccination
+
+&lt;img src="8_viz_bar_race_files/figure-html/unnamed-chunk-28-1.gif" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">\n  <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">\n  </div>\n</div>`"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

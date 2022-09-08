@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Wrangling with Base R</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data Wrangling with Base R
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+---
+class: middle, center
+# Data Frame
+
+---
+# What's a data frame?
+
+- A data frame is a **table** of data 
+
+- Each **column** contains values of one variable 
+
+- Each **row** contains one set of values from each column.
+
+--
+
+- Example
+
+| Name    | Salary | Start_Date | Gender |
+|---------|--------|------------|--------|
+| Rick    | 623.30 | 2012-01-01 | Male   |
+| Dan     | 515.20 | 2013-09-23 | Male   |
+| Jessica | 611.00 | 2014-11-15 | Female |
+| Julia   | 729.00 | 2014-05-11 | Female |
+
+
+---
+class: center, middle
+
+# Live Code
+# Creating a Data Frame
+
+---
+# Creating a Data Frame
+
+
+```r
+df = data.frame(Name = c('Rick','Dan','Jessica','Julia','Sophia'),
+                Salary = c(623.30,515.20,611.00,729.00,843.25),
+                Start_Date = c('2012-01-01',
+                                       '2013-09-23',
+                                       '2014-11-15',
+                                       '2014-05-11',
+                                       '2015-03-27'),
+                Gender = c('Male', 'Male', 'Female','Female','Female' ))
+
+df
+```
+
+```
+##      Name Salary Start_Date Gender
+## 1    Rick 623.30 2012-01-01   Male
+## 2     Dan 515.20 2013-09-23   Male
+## 3 Jessica 611.00 2014-11-15 Female
+## 4   Julia 729.00 2014-05-11 Female
+## 5  Sophia 843.25 2015-03-27 Female
+```
+
+---
+class: middle, center
+# Live Code
+
+Import a data frame using `read.csv` 
+
+Use `str` function to give an overview 
+
+Correct data type using `as.factor`, `as.numeric`, `as.Date`, `as.character`
+
+Check missing data with `sum(is.na())`, `colSums((is.na))`
+
+---
+# Read (Import) a Data Frame using `read.csv`
+
+- Method 1: Download the file to your computer and read it
+
+
+```r
+setwd("C:/Users/sonou/Downloads")
+df &lt;-  read.csv('WHO-COVID-19-global-data.csv')
+```
+
+---
+# Read (Import) a Data Frame using `read.csv`
+
+- Method 2: Read the data directly from its URL
+
+
+```r
+df &lt;-  read.csv('https://covid19.who.int/WHO-COVID-19-global-data.csv')
+```
+
+
+---
+# Check the variables (columns) of the data
+
+
+```r
+names(df)
+```
+
+```
+## [1] "ï..Date_reported"  "Country_code"      "Country"          
+## [4] "WHO_region"        "New_cases"         "Cumulative_cases" 
+## [7] "New_deaths"        "Cumulative_deaths"
+```
+
+---
+# Quick summary of the data
+
+
+```r
+str(df)
+```
+
+```
+## 'data.frame':	147414 obs. of  8 variables:
+##  $ ï..Date_reported : chr  "2020-01-03" "2020-01-04" "2020-01-05" "2020-01-06" ...
+##  $ Country_code     : chr  "AF" "AF" "AF" "AF" ...
+##  $ Country          : chr  "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" ...
+##  $ WHO_region       : chr  "EMRO" "EMRO" "EMRO" "EMRO" ...
+##  $ New_cases        : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Cumulative_cases : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ New_deaths       : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Cumulative_deaths: int  0 0 0 0 0 0 0 0 0 0 ...
+```
+
+---
+# Quick view of the data
+
+
+```r
+head(df)
+```
+
+```
+##   ï..Date_reported Country_code     Country WHO_region New_cases
+## 1       2020-01-03           AF Afghanistan       EMRO         0
+## 2       2020-01-04           AF Afghanistan       EMRO         0
+## 3       2020-01-05           AF Afghanistan       EMRO         0
+## 4       2020-01-06           AF Afghanistan       EMRO         0
+## 5       2020-01-07           AF Afghanistan       EMRO         0
+## 6       2020-01-08           AF Afghanistan       EMRO         0
+##   Cumulative_cases New_deaths Cumulative_deaths
+## 1                0          0                 0
+## 2                0          0                 0
+## 3                0          0                 0
+## 4                0          0                 0
+## 5                0          0                 0
+## 6                0          0                 0
+```
+
+---
+# Check missing values
+
+
+```r
+sum(is.na(df))
+```
+
+```
+## [1] 622
+```
+
+```r
+colSums(is.na(df))
+```
+
+```
+##  ï..Date_reported      Country_code           Country        WHO_region 
+##                 0               622                 0                 0 
+##         New_cases  Cumulative_cases        New_deaths Cumulative_deaths 
+##                 0                 0                 0                 0
+```
+
+```r
+colMeans(is.na(df))
+```
+
+```
+##  ï..Date_reported      Country_code           Country        WHO_region 
+##       0.000000000       0.004219409       0.000000000       0.000000000 
+##         New_cases  Cumulative_cases        New_deaths Cumulative_deaths 
+##       0.000000000       0.000000000       0.000000000       0.000000000
+```
+
+---
+# Change the name of a variable
+
+
+```r
+names(df)[1] &lt;- 'Date_report'
+```
+
+---
+# Change the type of a variable
+
+
+```r
+# Check type
+class(df$Date_report)
+```
+
+```
+## [1] "character"
+```
+
+```r
+str(df)
+```
+
+```
+## 'data.frame':	147414 obs. of  8 variables:
+##  $ Date_report      : chr  "2020-01-03" "2020-01-04" "2020-01-05" "2020-01-06" ...
+##  $ Country_code     : chr  "AF" "AF" "AF" "AF" ...
+##  $ Country          : chr  "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" ...
+##  $ WHO_region       : chr  "EMRO" "EMRO" "EMRO" "EMRO" ...
+##  $ New_cases        : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Cumulative_cases : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ New_deaths       : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Cumulative_deaths: int  0 0 0 0 0 0 0 0 0 0 ...
+```
+
+```r
+# Change type
+df$Date_report = as.Date(df$Date_report)
+```
+
+---
+# Statistics of continuous/date variable
+
+
+```r
+mean(df$Cumulative_deaths, na.rm=TRUE)
+```
+
+```
+## [1] 7434.825
+```
+
+```r
+max(df$Cumulative_deaths, na.rm=TRUE)
+```
+
+```
+## [1] 657114
+```
+
+```r
+# Other operation on one variable
+summary(df$Date_report)
+```
+
+```
+##         Min.      1st Qu.       Median         Mean      3rd Qu.         Max. 
+## "2020-01-03" "2020-06-06" "2020-11-08" "2020-11-08" "2021-04-13" "2021-09-15"
+```
+
+---
+# Frequency of Categorical variable
+
+```r
+table(df$WHO_region)
+```
+
+```
+## 
+##  AFRO  AMRO  EMRO  EURO Other SEARO  WPRO 
+## 31100 34832 13684 38564   622  6842 21770
+```
+
+```r
+prop.table(table(df$WHO_region))
+```
+
+```
+## 
+##        AFRO        AMRO        EMRO        EURO       Other       SEARO 
+## 0.210970464 0.236286920 0.092827004 0.261603376 0.004219409 0.046413502 
+##        WPRO 
+## 0.147679325
+```
+
+---
+# Correlation of two continuous variables
+
+
+```r
+# Correlation 
+
+cor(df$Cumulative_cases, df$Cumulative_deaths)
+```
+
+```
+## [1] 0.9300613
+```
+
+---
+# 1 continuous by 1 categorical
+
+
+```r
+by(df$New_deaths, df$WHO_region, mean)
+```
+
+```
+## df$WHO_region: AFRO
+## [1] 4.533762
+## ------------------------------------------------------------ 
+## df$WHO_region: AMRO
+## [1] 61.79493
+## ------------------------------------------------------------ 
+## df$WHO_region: EMRO
+## [1] 20.44826
+## ------------------------------------------------------------ 
+## df$WHO_region: EURO
+## [1] 33.79224
+## ------------------------------------------------------------ 
+## df$WHO_region: Other
+## [1] 0.02090032
+## ------------------------------------------------------------ 
+## df$WHO_region: SEARO
+## [1] 97.12438
+## ------------------------------------------------------------ 
+## df$WHO_region: WPRO
+## [1] 4.767249
+```
+
+---
+# Binning Continuous variable
+
+Create the categorical variable `New_cases2` variable taking the values as follows
+
+- `No_new_cases` if there is a no new cases that day
+-  `Has_new_cases` if there is at least a new case that day
+
+---
+
+```r
+df$New_cases2 &lt;- ifelse(df$New_cases==0, 
+                        'No_new_cases','Has_new_cases') 
+```
+
+---
+# Binning Continuous variable
+
+Create the categorical variable `New_deaths2` variable taking the values as follows
+
+- `low_death` if the number of `New_deaths` smaller 2
+
+- `mid_death` if the number of `New_deaths` from 2 to 5
+
+- `high_death` if the number of `New_deaths` greater than 5
+
+---
+
+```r
+df$New_deaths2 &lt;- cut(df$New_deaths, 
+                      breaks = c(-Inf, 2, 5,Inf), 
+                      labels=c('low_death','mid_death','high_death'))
+table(df$New_deaths2)
+```
+
+```
+## 
+##  low_death  mid_death high_death 
+##     102445       9100      35869
+```
+
+
+---
+# Subsetting by columns
+
+
+```r
+# by columns
+df1 &lt;- df[,c(1,3)]
+head(df1)
+```
+
+```
+##   Date_report     Country
+## 1  2020-01-03 Afghanistan
+## 2  2020-01-04 Afghanistan
+## 3  2020-01-05 Afghanistan
+## 4  2020-01-06 Afghanistan
+## 5  2020-01-07 Afghanistan
+## 6  2020-01-08 Afghanistan
+```
+
+---
+# Subsetting by columns
+
+
+```r
+# by columns
+df1 &lt;- df[, c('Date_report','New_cases')]
+head(df1)
+```
+
+```
+##   Date_report New_cases
+## 1  2020-01-03         0
+## 2  2020-01-04         0
+## 3  2020-01-05         0
+## 4  2020-01-06         0
+## 5  2020-01-07         0
+## 6  2020-01-08         0
+```
+
+---
+# Subsetting by rows
+
+
+```r
+# by rows
+df1 &lt;- df[c(1:5),]
+head(df1)
+```
+
+```
+##   Date_report Country_code     Country WHO_region New_cases Cumulative_cases
+## 1  2020-01-03           AF Afghanistan       EMRO         0                0
+## 2  2020-01-04           AF Afghanistan       EMRO         0                0
+## 3  2020-01-05           AF Afghanistan       EMRO         0                0
+## 4  2020-01-06           AF Afghanistan       EMRO         0                0
+## 5  2020-01-07           AF Afghanistan       EMRO         0                0
+##   New_deaths Cumulative_deaths   New_cases2 New_deaths2
+## 1          0                 0 No_new_cases   low_death
+## 2          0                 0 No_new_cases   low_death
+## 3          0                 0 No_new_cases   low_death
+## 4          0                 0 No_new_cases   low_death
+## 5          0                 0 No_new_cases   low_death
+```
+
+---
+# Subsetting by columns and rows
+
+
+```r
+# by rows
+df1 &lt;- df[c(1:5), c('Date_report','New_cases')]
+head(df1)
+```
+
+```
+##   Date_report New_cases
+## 1  2020-01-03         0
+## 2  2020-01-04         0
+## 3  2020-01-05         0
+## 4  2020-01-06         0
+## 5  2020-01-07         0
+```
+
+
+
+---
+# Subsetting by condition
+
+
+```r
+df1 &lt;- df[df$New_deaths&gt;10,]
+df2 &lt;- df[df$Country=='United States of America',]
+df3 &lt;- df[df$Date_report&gt;='2021-01-01',]
+
+df4 &lt;- df[(df$Country=='United States of America')&amp;
+            (df$Date_report&gt;='2021-01-01'),]
+```
+
+---
+# Logical Operators
+
+| Operator  	| Description              	|
+|-----------	|--------------------------	|
+| &lt;         	| less than                	|
+| &lt;=        	| less than or equal to    	|
+| &gt;         	| greater than             	|
+| &gt;=        	| greater than or equal to 	|
+| ==        	| exactly equal to         	|
+| !=        	| not equal to             	|
+| !x        	| Not x                    	|
+| x &amp;#124; y    	| x OR y                   	|
+| x &amp; y     	| x AND y                  	|
+| isTRUE(x) 	| test if X is TRUE        	|
+
+---
+class: middle, center
+# Some Examples
+
+---
+class: middle, center
+Find the average new cases by region in 2021. 
+
+---
+
+```r
+df1 &lt;- df[df$Date_report&gt;='2021-01-01',]
+by(df1$New_cases, df1$WHO_region, mean)
+```
+
+```
+## df1$WHO_region: AFRO
+## [1] 305.9382
+## ------------------------------------------------------------ 
+## df1$WHO_region: AMRO
+## [1] 3559.575
+## ------------------------------------------------------------ 
+## df1$WHO_region: EMRO
+## [1] 1833.233
+## ------------------------------------------------------------ 
+## df1$WHO_region: EURO
+## [1] 2525.466
+## ------------------------------------------------------------ 
+## df1$WHO_region: Other
+## [1] 0.07364341
+## ------------------------------------------------------------ 
+## df1$WHO_region: SEARO
+## [1] 10672.26
+## ------------------------------------------------------------ 
+## df1$WHO_region: WPRO
+## [1] 725.5994
+```
+
+---
+class: middle, center
+Find the median new deaths by weekday in the US
+
+---
+
+```r
+df$weekdays &lt;- weekdays(df$Date_report)
+df1 = df[df$Country=='United States of America',]
+by(df1$New_deaths,df1$weekdays, median)
+```
+
+```
+## df1$weekdays: Friday
+## [1] 1023
+## ------------------------------------------------------------ 
+## df1$weekdays: Monday
+## [1] 775
+## ------------------------------------------------------------ 
+## df1$weekdays: Saturday
+## [1] 970
+## ------------------------------------------------------------ 
+## df1$weekdays: Sunday
+## [1] 910
+## ------------------------------------------------------------ 
+## df1$weekdays: Thursday
+## [1] 854
+## ------------------------------------------------------------ 
+## df1$weekdays: Tuesday
+## [1] 512
+## ------------------------------------------------------------ 
+## df1$weekdays: Wednesday
+## [1] 575
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

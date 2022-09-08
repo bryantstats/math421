@@ -1,0 +1,340 @@
+---
+title: "![](./figures/bat-cartoon.png) Hyperparameters Tuning: Random Forest"
+author: <font size="5"> Son Nguyen </font>
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>`
+---
+
+<style>
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide > h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide > h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide > h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+</style>
+
+```{css, echo=FALSE}
+.left-code {
+  color: #777;
+  width: 48%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 51%;
+  float: right;
+  padding-left: 1%;
+}
+```
+
+```{r setup, include = FALSE}
+
+# R markdown options
+knitr::opts_chunk$set(echo = TRUE, 
+                      
+                      fig.width = 10,
+                      fig.height = 5,
+                      fig.align = "center", 
+                      message = FALSE,
+                      warning = FALSE)
+
+# Load packages
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+
+```
+
+# Data Preparation
+
+```{r}
+library(tidyverse)
+library(rpart)
+df = read_csv("../data/titanic.csv")
+
+# Set the target variable
+names(df)[8] <- 'target'
+
+# Remove some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+
+# Correct variables' types
+df$target <- factor(df$target)
+df$Pclass = factor(df$Pclass)
+df$Sex <- factor(df$Sex)
+df$Embarked <- factor(df$Embarked)
+
+# Handle missing values
+df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+
+df = drop_na(df)
+
+# Split the data to train and test
+library(caret)
+set.seed(00000)
+splitIndex <- createDataPartition(df$target, p = .90, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+```
+
+
+---
+# Random Forest
+
+- What hyperparameters can we tune?
+
+```{r}
+getModelInfo('rf')$rf$parameters
+```
+
+-  As shown, `mtry` is the only tuning parameter that method `rf` offers. 
+
+---
+# Random Forest
+
+- Tuning `mtry` using Cross-Validation
+
+```{r}
+# Decide the range of the mtry to search for the best
+tuneGrid = expand.grid(mtry = 2:4)
+
+# Tell caret to do 10 - fold cross-Validation
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+
+# train a forest using above setup
+forest_rf <- train(target~., data=df_train, 
+                                method = "rf", 
+                                trControl = trControl,
+                                tuneGrid = tuneGrid)
+```
+
+
+---
+# Random Forest
+
+```{r}
+plot(forest_rf)
+```
+
+---
+# Random Forest with Ranger
+
+- If you want to tune other hyperparameter, you may want to look at different method for random forest. 
+
+- Random Forest can be implemented by method `ranger`
+
+- Let's check to see what parameters we can tune with `ranger` method
+
+```{r}
+getModelInfo('ranger')$ranger$parameters
+```
+
+- As shown, `ranger` offer to tune three hyperparameters for random forest: `mtry`, `splitrule` and `min.node.size`. 
+
+---
+# Tune
+
+- Tune `mtry`, `splitrule` and `min.node.size`. 
+
+```{r}
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+tuneGrid = expand.grid(mtry = 2:4,
+                       splitrule = c('gini', 'extratrees'),
+                       min.node.size = c(1:10))
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                    trControl = trControl,
+                    tuneGrid = tuneGrid)
+```
+
+---
+# Tune
+
+```{r}
+plot(forest_ranger)
+```
+
+---
+# Evaluate the tuned model
+
+- The tuning process is done on the training data.  
+
+- The tuned model have never seen the testing data.  Let's evaluate the tuned model the testing data
+
+```{r}
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+---
+- Caret tunes models by default even if you don't set the tuneGrid, for example:
+
+```{r}
+trControl = trainControl(method = "cv",
+                         number = 10)
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                    trControl = trControl)
+plot(forest_ranger)
+```
+
+
+---
+class: inverse, middle, center
+# Model Comparison
+
+
+---
+# Model Comparison
+
+Let's compare different models: Decision Tree, Random Forest and Linear Discriminant Analysis. 
+
+```{r, eval=FALSE}
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+tree <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                                trControl = trControl)
+
+lda <- train(target~., data=df_train, 
+                                method = "lda", 
+                                trControl = trControl)
+
+results <- resamples(list('Decision Tree' = tree,
+                          'Random Forest' = forest_ranger,
+                          'LDA'= lda))
+
+bwplot(results)
+```
+
+---
+# Model Comparison
+
+```{r, echo=FALSE}
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+tree <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                                trControl = trControl)
+
+lda <- train(target~., data=df_train, 
+                                method = "lda", 
+                                trControl = trControl)
+
+results <- resamples(list('Decision Tree' = tree,
+                          'Random Forest' = forest_ranger,
+                          'LDA'= lda))
+
+bwplot(results)
+```
+
+
+---
+# Final Model
+
+- The comparison shows that random forest using `ranger` package is the best out of the three.  
+
+- This comparison is done on training data.  The models have never seen the test data. 
+
+- Let's evaluate this model on the test data
+
+```{r}
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+

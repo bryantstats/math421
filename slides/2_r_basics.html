@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R Basics</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R Basics
+
+---
+
+# R as a calculator
+
+
+
+
+
+
+
+
+
+
+
+
+- Addition: +
+
+- Subtraction: -
+
+- Multiplication: *
+
+- Division: /
+
+- Exponentiation: ^
+
+--
+
+Put the following to the console in Rstudio
+
+
+```r
+(3+4)^2 - 3^4 - 1/2 - 3*4
+```
+
+```
+## [1] -44.5
+```
+
+
+---
+# Data structures in R
+
+|    | Homogeneous | Heterogeneous |
+|----|-------------|---------------|
+| 1d | Vector      | List          |
+| 2d | Matrix      | Data Frame    |
+| nd | Array       |               |
+
+
+---
+# Vector
+
+- Numeric vectors
+
+```r
+x &lt;- c(2,3,4,5,6)
+x
+```
+
+```
+## [1] 2 3 4 5 6
+```
+
+- Use `&lt;-` to assign *something* to a variable/an object
+
+---
+# Vector
+
+- Character vectors
+
+```r
+x &lt;-  c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+x
+```
+
+```
+## [1] "Monday"    "Tuesday"   "Wednesday" "Thursday"  "Friday"
+```
+
+--
+
+- Logical vectors
+
+
+```r
+x &lt;- c(TRUE, FALSE, TRUE)
+sum(x)
+```
+
+```
+## [1] 2
+```
+
+---
+# Operations on Numeric Vectors
+
+- Operations on Vectors are **element-to-element**
+
+- You can add, subtract, multiply, and divide vectors
+
+--
+
+
+```r
+x &lt;- c(2, 3, 4, 5, 6)
+y &lt;- c(1, 0, 0, 0, 99)
+x+y
+```
+
+```
+## [1]   3   3   4   5 105
+```
+
+```r
+x-y
+```
+
+```
+## [1]   1   3   4   5 -93
+```
+
+```r
+x*y
+```
+
+```
+## [1]   2   0   0   0 594
+```
+
+
+
+---
+# Operations on Numeric Vectors
+
+- You can apply a function to vector
+
+```r
+x &lt;- c(2, 3, 4, 5, 6)
+y &lt;- c(1, 0, 0, 0, 99)
+x^2
+```
+
+```
+## [1]  4  9 16 25 36
+```
+
+```r
+log(x)
+```
+
+```
+## [1] 0.6931472 1.0986123 1.3862944 1.6094379 1.7917595
+```
+
+```r
+sin(x)
+```
+
+```
+## [1]  0.9092974  0.1411200 -0.7568025 -0.9589243 -0.2794155
+```
+
+
+
+---
+# Some functions with vectors
+
+
+```r
+x &lt;- c(2, 3, 40, 5, 6)
+mean(x)
+```
+
+```
+## [1] 11.2
+```
+
+```r
+sum(x)
+```
+
+```
+## [1] 56
+```
+
+```r
+max(x)
+```
+
+```
+## [1] 40
+```
+
+```r
+length(x)
+```
+
+```
+## [1] 5
+```
+
+---
+# Some functions with vectors
+
+
+```r
+x &lt;- c(2, 3, 40, 5, 6)
+# Standard Deviation
+sd(x)
+```
+
+```
+## [1] 16.17714
+```
+
+```r
+# Index of the maximum element
+which.max(x)
+```
+
+```
+## [1] 3
+```
+
+```r
+# Index of the element equaling 40
+which(x==40)
+```
+
+```
+## [1] 3
+```
+
+
+---
+# Quickly generate vectors
+
+
+```r
+c(1:10)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+rep(1, 10)
+```
+
+```
+##  [1] 1 1 1 1 1 1 1 1 1 1
+```
+
+```r
+rep(c(1,2,3), 10)
+```
+
+```
+##  [1] 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3
+```
+
+```r
+# Arithmetic sequences
+seq(1, 2, .2)
+```
+
+```
+## [1] 1.0 1.2 1.4 1.6 1.8 2.0
+```
+
+
+---
+class: inverse, middle, center
+
+# Live Coding 
+
+solve problems, (talk about variable environment, variables, shortcuts...) 
+
+present the results in an rmarkdown and 
+
+publish it to Github Page
+
+
+
+
+---
+class:inverse
+# Problem
+
+- **Calculate**: 
+$$
+S_{1} = 1 + 2 +...+  100
+$$
+--
+
+- **Solution**
+
+```r
+x &lt;- c(1:100)
+
+sum(x)
+```
+
+```
+## [1] 5050
+```
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S_{2} = 1^2 + 2^2 +...+  100^2
+$$
+--
+
+- **Solution**
+
+
+```r
+x &lt;- c(1:100)
+sum(x^2)
+```
+
+```
+## [1] 338350
+```
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S = \frac{1^3 + 2^3 +...+  100^3}{100}
+$$
+--
+
+- Solution*
+
+
+```r
+x &lt;- c(1:100)
+sum(x^3)/100
+```
+
+```
+## [1] 255025
+```
+
+--
+
+- **Another way?**
+
+--
+
+
+```r
+# Or
+
+mean(x^3)
+```
+
+```
+## [1] 255025
+```
+
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S = 1\cdot 2 + 3 \cdot 4 + 5 \cdot 6 + 7 \cdot 8 +...+ 99 \cdot 100
+$$
+--
+
+
+- **Solution**
+
+
+```r
+x &lt;- seq(1, 99, 2)
+y &lt;- seq(2, 100, 2)
+
+sum(x*y)
+```
+
+```
+## [1] 169150
+```
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S = \frac{1}{2} + \frac{2}{3} + \frac{3}{4} + ...+  \frac{100}{101}
+$$
+--
+
+
+- **Solution**
+
+
+```r
+x &lt;- c(1:100)
+y &lt;- c(2:101)
+
+sum(x/y)
+```
+
+```
+## [1] 95.80272
+```
+
+---
+class:inverse
+# Problem
+
+- Is this summation *convergent* or *divergent*?
+
+$$
+S = 1+\frac{1}{4}+\frac{1}{9}+\frac{1}{16}+\frac{1}{25}+...
+$$
+
+
+---
+class:inverse
+# Solution
+
+- Rewrite `\(S\)`:
+
+$$
+S = 1+\frac{1}{2^2}+\frac{1}{3^2}+\frac{1}{4^2}+\frac{1}{5^2}+...
+$$
+--
+
+- The sum of the first 1000 terms
+
+
+```r
+n &lt;-  1000
+x &lt;-  c(1:n)
+sum(1/x^2)
+```
+
+```
+## [1] 1.643935
+```
+--
+
+- The sum of the first 10000 terms
+
+
+```r
+n &lt;-  10000
+x &lt;-  c(1:n)
+sum(1/x^2)
+```
+
+```
+## [1] 1.644834
+```
+
+---
+class: center, middle, inverse
+
+### The series converges! 
+
+---
+class: center, middle, inverse
+
+### YOUR TURN
+
+This is also your assignment 2: https://bryantstats.github.io/math421/fa100_assignment2.html
+
+---
+class:inverse
+# Problem
+
+***Guideline***: Use the rmarkdown [here](https://bryantstats.github.io/math421/fa100_assignment2.Rmd) as a template to write your codes. Open the Rmarkdown file in Rstudio. After each question, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the questions. `Knit` the rmarkdown file (hotkey `Ctrl + Alt + K`) to export an html.  Then Publish the html to your Githiub Page. 
+
+***Submissions***: Submit the link on Github of the assignment to Blackboard under Assignment 2. 
+
+**Go the the next page for the problems**
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+
+$$
+S = 1 + 4 + 7 + 11+... + 100
+$$
+$$
+S = 1^{100} + 2^{100} + 3^{100} +...+100^{100}
+$$
+$$
+S = \frac{1}{1\cdot 2}+\frac{1}{2 \cdot 3}+...+\frac{1}{100\cdot 101}
+$$
+
+$$
+S = \frac{1}{1\cdot 2 \cdot 3}+\frac{1}{2 \cdot 3 \cdot 4}+...+\frac{1}{100\cdot 101 \cdot 102}
+$$
+
+$$
+S = 1^1 + 3^3 + 5^5 + 7^7 +....+101^{101}
+$$
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

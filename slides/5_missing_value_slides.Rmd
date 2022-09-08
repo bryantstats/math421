@@ -1,0 +1,304 @@
+---
+title: "Handle Missing Values"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+# New Functions
+
+- colSums(is.na()), colMeans(is.na())
+
+- mean(x, na.rm=TRUE)
+
+- na_if
+
+- drop_na
+
+- replace_na
+
+- is.infinite
+
+---
+class: inverse
+# Agenda
+
+1. Do you need to handle missing values?
+
+2. When do you need to handle missing values?
+
+3. Forms of missing values: Na, NaN, and Inf
+
+4. Steps to Handle missing values
+
+5. Identify Missing Values and Convert them to `NA`
+
+6. Remove missing values with drop_na
+
+7. Replace Missing values with replace_na
+
+---
+class: inverse
+# Checking missing values
+
+```{r}
+library(tidyverse)
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df <- df %>% filter(date>='2020-01-01', date<'2021-01-01')
+# Total missing values
+sum(is.na(df))
+```
+
+---
+class: inverse
+
+```{r}
+# Missing values by columns
+colSums(is.na(df))
+```
+
+
+---
+class: inverse, center, middle
+# 1. Do you need to handle missing values?
+
+---
+class: inverse, center, middle
+# No if just doing some calculations on the data
+
+---
+class: inverse
+
+```{r}
+# Calculate the average death
+mean(df$death)
+
+# na.rm = remove NA
+mean(df$death, na.rm = TRUE)
+```
+
+---
+class: inverse
+
+```{r}
+# tidy
+df %>% summarise(average_death = mean(death, na.rm = TRUE))
+```
+
+---
+class: inverse
+```{r}
+# Calculate death by dataQualityGrade
+df$quarters = quarters(df$date)
+by(df$death, df$quarters, mean, na.rm=TRUE)
+```
+
+---
+class: inverse
+```{r}
+# Calculate death by dataQualityGrade
+df %>% 
+  group_by(quarters) %>% 
+  summarise(average_death = mean(death, na.rm = TRUE))
+```
+
+---
+class: inverse, center, middle
+# No if just doing Visualization
+
+---
+class: inverse
+```{r}
+df %>% group_by(quarters) %>% 
+    summarise(average_death = mean(death, na.rm = TRUE)) %>% 
+    ggplot(aes(x=quarters, y=average_death))+
+    geom_bar(stat = 'identity')
+```
+
+---
+class: inverse
+# 2. When do you need to handle missing values
+
+- When you know the values of the missing values
+
+
+- When building predictive models
+
+- Other cases?
+
+---
+class: inverse
+# 3. Forms of missing values: Na, NaN and Inf
+
+```{r}
+# NaN = Not a Number
+0/0
+
+# Infinity
+1/0
+
+# NA = Missing value
+```
+
+
+---
+class: inverse
+# Check for missing values
+
+```{r}
+x <- c(1, 2, NA, NaN, Inf)
+
+# Check which one is missing
+is.na(x)
+
+# Check which one is infinity
+is.infinite(x)
+```
+
+
+---
+class: inverse
+```{r}
+d1 <- read.csv('Book1.csv')
+d1
+```
+
+---
+class: inverse
+```{r}
+d2 <- read_csv('Book1.csv')
+d2
+```
+
+---
+class: inverse
+# 4. Steps to Handle missing values
+
+- Step 1: Identify Missing Values (NA, 'Unknown', 'Missing','9999'...) and Convert them to `NA`
+
+- Step 2:  Either 
+
+  - Remove them
+  - Replace them 
+
+---
+class: inverse
+# Replace Missing values
+
+- Numeric Variables: 
+  - (1) by the mean/ median 
+  - (2) predicted values by some models
+  
+- Categorical Variables: 
+  - (1) the mode or make it a new category
+  - (2) predicted values by some models    
+
+
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+```{r}
+d <- read_csv('car.csv')
+
+sum(is.na(d))
+```
+
+- Notice: You can download the `cars.csv` dataset at: [this link](car.csv).  This data records vehicle accidents in the US in 2015. 
+
+---
+class: inverse
+```{r}
+sum(d=='Unknown', na.rm = TRUE)
+```
+
+---
+class: inverse
+```{r}
+sum(d=='Not Reported', na.rm = TRUE)
+```
+
+---
+class: inverse
+```{r}
+sum(d=='Not Rep', na.rm = TRUE)
+```
+
+---
+class: inverse
+# Convert values to NA 
+
+```{r}
+d$TRAV_SP <- na_if(d$TRAV_SP, 'Unknown')
+sum(d$TRAV_SP=='Unknown', na.rm = TRUE)
+``` 
+
+---
+class: inverse
+# 5. Remove rows with missing values with drop_na
+
+- Remove rows without `hospitalized` data
+
+```{r}
+drop_na(df, hospitalized)
+```
+
+---
+class: inverse
+```{r}
+drop_na(df, hospitalized, death)
+
+# Pipe
+df %>% drop_na(hospitalized, death)
+```
+
+---
+class: inverse
+# Remove columns with missing values
+
+```{r}
+df$negativeTestsPeopleAntibody <- NULL
+```
+
+---
+class: inverse
+# 6. Replace Missing values with replace_na
+
+```{r}
+# Replace by the mode for categorical variable
+average_death <- mean(df$deathConfirmed, na.rm = TRUE)
+df$deathConfirmed <- replace_na(df$deathConfirmed, average_death)
+```
+

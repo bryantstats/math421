@@ -1,0 +1,99 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 13: Text Mining"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](fa2021_assignment13.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+[Sample Codes](text_mining_sample_codes2.html)
+
+-------
+
+### Netflix Data
+
+**1.** Download the `netflix_titles` at this [link](data/netflix_titles.csv).  Create a century variable taking two values:
+
+    - '21' if the released_year is greater or equal to 2000, and
+    
+    - '20' otherwise. 
+    
+**2. Word Frequency**    
+
+  a. Convert the description to tokens, remove all the stop words. What are the top 10 frequent words of movies/TV Shows in the 20th century.  Plot the bar chart of the frequency of these words. 
+
+  b. What are the top 10 frequent words of movies/TV Shows in the 21st century. Plot the bar chart of the frequency of these words. Plot a side-by-side bar charts to compare the most frequent words by the two centuries. 
+
+**3. Word Cloud**
+
+  a. Plot the word cloud of the words in the descriptions in the movies/TV Shows in the 20th century.
+  
+  b. Plot the word cloud of the words in the descriptions in the movies/TV Shows in the 21st century. 
+
+**4. Sentiment Analysis**
+
+  a. Is movies/TV Shows in the 21st century tends to be more positive than those in 20th century?  Use the sentiment analysis by `Bing` lexicons to address the question. 
+  
+  b. Do sentiment analysis using `nrc` and `afinn` lexicons.  Give your comments on the results.
+
+**5. Modeling**
+
+  a. Use the description to predict if a movie/TV show is in 20th or 21st century. Give the accuracy and plot the confusion matrix table. 
+  
+  b. Create variable century2 taking three following values. (Hint: You can use the case_when function to do this)
+
+    - `21` if released_year is greater or equal to 2000
+    
+    - `second_half_20`if released_year is greater than or equal to 1950 and less than 2000
+    
+    - `first_half_20` otherwise
+    
+  Predict century2 using the descriptions. Give the accuracy and plot the confusion matrix table. (Notice that the codes for 8 should still work for this question)
+
+**6.** Create another categorical variable from the data and do the following
+
+    - Plot side-by-side word frequency by different categories of the newly created variable
+    
+    - Plot word clouds on different categories of the newly created variable
+    
+    - Do sentiment analysis to compare different categories of the newly created variable
+    
+    - Predict the newly created variable using the description. Give the accuracy and plot the confusion matrix table. 
+    
+-------
+
+### Animal Reviews Data
+
+We will study the Animal Crossing Data at [Kaggle](https://www.kaggle.com/jessemostipak/animal-crossing). The data file is `user_review`
+
+**7.**  Download the animal reviews data at this [link](data/user_reviews.tsv).  Read the data using `read_tsv()` function.
+
+**8.** Create a `rating` variable taking value `good` if the grade is greater than 7 and `bad` otherwise. 
+
+**9.** Do the follows. Notice that the text information is in the `text` variable. 
+
+    - Plot side-by-side word frequency by different categories of the `rating` variable
+    
+    - Plot word clouds on different categories of the `rating` variable
+    
+    - Do sentiment analysis to compare different categories of the `rating` variable
+    
+    - Predict the rating using the reviews (`text` variable). Give the accuracy and plot the confusion matrix table.

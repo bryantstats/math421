@@ -1,0 +1,324 @@
+---
+title: "Data Wrangling with Base R"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+   
+
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+---
+class: middle, center
+# Data Frame
+
+---
+# What's a data frame?
+
+- A data frame is a **table** of data 
+
+- Each **column** contains values of one variable 
+
+- Each **row** contains one set of values from each column.
+
+--
+
+- Example
+
+| Name    | Salary | Start_Date | Gender |
+|---------|--------|------------|--------|
+| Rick    | 623.30 | 2012-01-01 | Male   |
+| Dan     | 515.20 | 2013-09-23 | Male   |
+| Jessica | 611.00 | 2014-11-15 | Female |
+| Julia   | 729.00 | 2014-05-11 | Female |
+
+
+---
+class: center, middle
+
+# Live Code
+# Creating a Data Frame
+
+---
+# Creating a Data Frame
+
+```{r}
+
+df = data.frame(Name = c('Rick','Dan','Jessica','Julia','Sophia'),
+                Salary = c(623.30,515.20,611.00,729.00,843.25),
+                Start_Date = c('2012-01-01',
+                                       '2013-09-23',
+                                       '2014-11-15',
+                                       '2014-05-11',
+                                       '2015-03-27'),
+                Gender = c('Male', 'Male', 'Female','Female','Female' ))
+
+df
+
+```
+
+---
+class: middle, center
+# Live Code
+
+Import a data frame using `read.csv` 
+
+Use `str` function to give an overview 
+
+Correct data type using `as.factor`, `as.numeric`, `as.Date`, `as.character`
+
+Check missing data with `sum(is.na())`, `colSums((is.na))`
+
+---
+# Read (Import) a Data Frame using `read.csv`
+
+- Method 1: Download the file to your computer and read it
+
+```{r, eval=FALSE}
+setwd("C:/Users/sonou/Downloads")
+df <-  read.csv('WHO-COVID-19-global-data.csv')
+```
+
+---
+# Read (Import) a Data Frame using `read.csv`
+
+- Method 2: Read the data directly from its URL
+
+```{r}
+df <-  read.csv('https://covid19.who.int/WHO-COVID-19-global-data.csv')
+```
+
+
+---
+# Check the variables (columns) of the data
+
+```{r}
+names(df)
+```
+
+---
+# Quick summary of the data
+
+```{r}
+str(df)
+```
+
+---
+# Quick view of the data
+
+```{r}
+head(df)
+```
+
+---
+# Check missing values
+
+```{r}
+sum(is.na(df))
+colSums(is.na(df))
+colMeans(is.na(df))
+```
+
+---
+# Change the name of a variable
+
+```{r}
+names(df)[1] <- 'Date_report'
+```
+
+---
+# Change the type of a variable
+
+```{r}
+# Check type
+class(df$Date_report)
+str(df)
+
+# Change type
+df$Date_report = as.Date(df$Date_report)
+
+```
+
+---
+# Statistics of continuous/date variable
+
+```{r}
+mean(df$Cumulative_deaths, na.rm=TRUE)
+
+max(df$Cumulative_deaths, na.rm=TRUE)
+# Other operation on one variable
+summary(df$Date_report)
+```
+
+---
+# Frequency of Categorical variable
+```{r}
+table(df$WHO_region)
+prop.table(table(df$WHO_region))
+```
+
+---
+# Correlation of two continuous variables
+
+```{r}
+# Correlation 
+
+cor(df$Cumulative_cases, df$Cumulative_deaths)
+```
+
+---
+# 1 continuous by 1 categorical
+
+```{r}
+by(df$New_deaths, df$WHO_region, mean)
+```
+
+---
+# Binning Continuous variable
+
+Create the categorical variable `New_cases2` variable taking the values as follows
+
+- `No_new_cases` if there is a no new cases that day
+-  `Has_new_cases` if there is at least a new case that day
+
+---
+```{r}
+df$New_cases2 <- ifelse(df$New_cases==0, 
+                        'No_new_cases','Has_new_cases') 
+```
+
+---
+# Binning Continuous variable
+
+Create the categorical variable `New_deaths2` variable taking the values as follows
+
+- `low_death` if the number of `New_deaths` smaller 2
+
+- `mid_death` if the number of `New_deaths` from 2 to 5
+
+- `high_death` if the number of `New_deaths` greater than 5
+
+---
+```{r}
+df$New_deaths2 <- cut(df$New_deaths, 
+                      breaks = c(-Inf, 2, 5,Inf), 
+                      labels=c('low_death','mid_death','high_death'))
+table(df$New_deaths2)
+```
+
+
+---
+# Subsetting by columns
+
+```{r}
+# by columns
+df1 <- df[,c(1,3)]
+head(df1)
+```
+
+---
+# Subsetting by columns
+
+```{r}
+# by columns
+df1 <- df[, c('Date_report','New_cases')]
+head(df1)
+```
+
+---
+# Subsetting by rows
+
+```{r}
+# by rows
+df1 <- df[c(1:5),]
+head(df1)
+```
+
+---
+# Subsetting by columns and rows
+
+```{r}
+# by rows
+df1 <- df[c(1:5), c('Date_report','New_cases')]
+head(df1)
+```
+
+
+
+---
+# Subsetting by condition
+
+```{r}
+df1 <- df[df$New_deaths>10,]
+df2 <- df[df$Country=='United States of America',]
+df3 <- df[df$Date_report>='2021-01-01',]
+
+df4 <- df[(df$Country=='United States of America')&
+            (df$Date_report>='2021-01-01'),]
+
+```
+
+---
+# Logical Operators
+
+| Operator  	| Description              	|
+|-----------	|--------------------------	|
+| <         	| less than                	|
+| <=        	| less than or equal to    	|
+| >         	| greater than             	|
+| >=        	| greater than or equal to 	|
+| ==        	| exactly equal to         	|
+| !=        	| not equal to             	|
+| !x        	| Not x                    	|
+| x &#124; y    	| x OR y                   	|
+| x & y     	| x AND y                  	|
+| isTRUE(x) 	| test if X is TRUE        	|
+
+---
+class: middle, center
+# Some Examples
+
+---
+class: middle, center
+Find the average new cases by region in 2021. 
+
+---
+```{r}
+df1 <- df[df$Date_report>='2021-01-01',]
+by(df1$New_cases, df1$WHO_region, mean)
+```
+
+---
+class: middle, center
+Find the median new deaths by weekday in the US
+
+---
+```{r}
+df$weekdays <- weekdays(df$Date_report)
+df1 = df[df$Country=='United States of America',]
+by(df1$New_deaths,df1$weekdays, median)
+```
+

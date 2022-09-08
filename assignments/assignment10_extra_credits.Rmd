@@ -1,0 +1,47 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 10 - Extra Credits: Precitive Model and Imbalanced Data"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](fa2021_assignment10_extra_credits.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+-------
+
+1. In the `Adult Census Income` dataset ([Link](https://www.kaggle.com/uciml/adult-census-income)), identify and handle all the missing values. Put the categorical variables in factor form. 
+
+2. Train and test a decision tree to predict whether or not a person earns more than 50k.  What is the testing accuracy of the tree? What are the three most important variables? Notice:  you may need to set the positive (1) and negative (0) of the target variable. 
+
+3. Train and test a random forest to predict whether or not a person earns more than 50k.  What is the testing accuracy of the tree? What are the three most important variables?
+
+4. Download credit card default data at [this link](https://www.kaggle.com/uciml/default-of-credit-card-clients-dataset). Train and test a random forest to predict whether or not a customer has a default payment next month. What is the accuracy of the forest?
+
+5.  Sometime, the accuracy is not enough to evaluate a model. In this example, we notice that the model predicts the `not-default payment` very well which reflects through the high specificity (True Negative Rate), but predicts the `default payment` not very well reflecting through a low sensitivity (True Positive Rate). The balanced accuracy is the average of the sensitivity and specificity.  Use `cm$byClass[11]` to check the these metrics of the model. 
+
+6. The low specificity is due to the imbalanced distribution of the target variable.  Use `prop.table(table())` to check the imbalance of the target. 
+
+7. (Challenging) We want to improve the specificity of the model. To do that we first need to balance the training data so that there is a 50:50 distribution between the two classes (default and not default).  Do the follows to balance the training data
+
+   - Split the original training data into 2 subsets.  Subset 1 contains default customers.  Subset 2 contains the remainders. Let n1, and n2 be the numbers of the rows in Subset 1 and 2 respectively. 
+   
+   - Create a new training data contains Subset 1 and randomly n1 observations in Subset 2. You can use the `sample` functions to randomly select n1 observations in Subset 2. You can use the `rbind` function to merge two dataset by row. 
+   
+   - Train a random forest on the new training data.  Calculate the specificity and balanced accuracy of the new model on the (same) testing data. 

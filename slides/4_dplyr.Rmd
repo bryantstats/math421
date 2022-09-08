@@ -1,0 +1,353 @@
+---
+title: "Data Wrangling with Dplyr"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, eval = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+# Agenda
+
+1. `tidyverse` package
+
+2. `tibble` vs. `data frame`
+
+3. read_csv vs read.csv
+
+3. Subset by `select`, `filter` functions
+
+4. Combo 1: `group_by` and `summarise`
+
+5. Pipe operator (%>%) 
+
+6. Combo 2: `filter`, `group_by`, `summarise`
+
+---
+class: inverse
+
+# `tidyverse` package
+
+- The tidyverse is an opinionated collection of R packages designed for data science.
+
+- All packages share an underlying design philosophy, grammar, and data structures.
+
+---
+class: inverse
+
+# Core Packages
+
+- **ggplot2**: Visualization
+
+- **dplyr**: Data Wrangling
+
+- **purrr**: Functional Programming
+
+---
+class: inverse
+
+# Install `tidyverse`
+
+```{r, eval=FALSE}
+install.packages('tidyverse')
+library(tidyverse)
+```
+
+```{r, eval=TRUE, echo=FALSE}
+library(tidyverse)
+```
+
+---
+class: inverse
+
+# Tibble 
+
+- A tibble  is a data frame and MORE
+
+- `read_csv` returns a tibble
+
+```{r, eval=FALSE}
+library(tidyverse)
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+```
+
+---
+class: inverse
+
+# Tibble 
+
+- Use it like a data frame
+
+
+```{r, eval=FALSE}
+names(df)
+
+table(df$dataQualityGrade)
+
+```
+
+---
+class: inverse
+
+# Tibble 
+
+- Print out the data more nicely
+
+```{r, eval=FALSE}
+df
+
+```
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+```{r, eval=TRUE}
+start_time <- Sys.time()
+df <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+end_time <- Sys.time()
+
+end_time - start_time
+
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+```{r, eval=TRUE}
+start_time <- Sys.time()
+df <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+end_time <- Sys.time()
+
+end_time - start_time
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv recognize the types of data better
+
+```{r, eval=TRUE}
+df <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+
+```
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv recognize the types of data better
+
+```{r, eval=TRUE}
+df <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+
+```
+
+---
+class: inverse
+
+# select and filter function
+
+```{r}
+df <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+# Select variable state and date for df1
+df1 <-  select(df, state, date)
+
+# Deselect variable state from df
+df2 <-  select(df, -state)
+
+# Select rows or days with no deaths
+df3 <- filter(df, deaths==0, )
+```
+
+---
+class: inverse
+
+# Combo 1: group_by + summarise
+
+```{r}
+# Group by dataQualityGrade
+df1 = group_by(df, state)
+
+# Calculate something for each group
+summarise(df1, mean(deaths))
+```
+
+---
+class: inverse
+
+# Pipe operator (%>%) 
+
+- Pipe operator will make `tidyverse` much more attractive!
+
+- $x$ %>% $f$ is the same $f(x)$
+
+```{r, eval=TRUE}
+
+x <- c(1:10)
+
+# conventional way
+sum(x)
+
+# Pipe
+x %>% sum
+
+```
+
+---
+class: inverse
+
+class: center, middle
+# (%>%) 
+
+# Hotkey: Ctrl + Shift + M
+
+
+---
+class: inverse
+
+# Pipe operator (%>%)
+
+- $x$ %>% $f$ %>% $g$ is the same $g(f(x))$
+
+```{r, eval=TRUE}
+
+x <- c(1:10)
+
+# conventional way
+log(sum(x))
+
+# Pipe
+x %>% sum %>% log
+```
+
+
+
+---
+class: inverse
+
+# Pipe operator (%>%)
+
+- $x$ %>% $f(y)$ is the same $f(x, y)$
+
+```{r}
+
+# conventional way
+filter(df, state =='Rhode Island')
+
+# pipe
+df %>% filter(state=='Rhode Island')
+
+```
+
+
+---
+class: inverse
+
+# Combo 1: group_by + summarise
+
+```{r}
+# conventional way
+df1 = group_by(df, state)
+summarise(df1, summarise(mean(deaths)))
+
+# Pipe
+df %>% 
+  group_by(state) %>% 
+  summarise(mean(deaths))
+```
+
+---
+class: inverse
+
+# Combo 2: filter + group_by + summarise
+
+```{r}
+# conventional way
+df1 = filter(df, date>'01-01-2021')
+df2 = group_by(df1, state )
+summarise(df2, summarise(mean(deaths)))
+
+
+# Pipe
+df %>% 
+  filter(date>'01-01-2021') %>% 
+  group_by(state) %>% 
+  summarise(mean(deaths))
+
+```
+
+---
+class: inverse
+
+# Combo 3: filter + group_by + summarise + arrange
+
+```{r}
+# Pipe
+df %>% 
+  filter(date>'01-01-2021') %>% 
+  group_by(state) %>% 
+  summarise(average_deaths = mean(deaths)) %>% 
+  arrange(average_deaths)
+
+```
+
+---
+class: inverse
+
+# Combo 3: filter + group_by + summarise + arrange
+
+```{r}
+# Pipe
+df %>% 
+  filter(date>'01-01-2021') %>% 
+  group_by(state) %>% 
+  summarise(average_deaths = mean(deaths)) %>% 
+  arrange(-average_deaths)
+```

@@ -1,0 +1,85 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 10: Predictive Modeling - Part 1"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](fa2021_assignment10.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+-------
+
+1. Install the package `mlbench` and use the follows to import the data
+
+```{r}
+library(mlbench)
+data(PimaIndiansDiabetes)
+df <- PimaIndiansDiabetes
+```
+
+- Set seed to be 2020. 
+- The target variable is `diabetes`
+- Partition the data into 80% training and 20% testing.  
+
+-------
+
+2. Practice Decision Tree.  Do the follows:
+
+  - Use `rpart` package, create a decision tree with maximum depth of 3. 
+  
+  - Calculate the accuracy of the model on the testing data. 
+  
+  - Plot the tree
+  
+  - Plot the variable importance by the tree
+
+-------
+
+3. Practice Random Forest.  Do the follows: 
+
+  - Use `randomForest` package, create a random forest of 1000 trees. 
+  
+  - Calculate the accuracy of the model on the testing data. 
+  
+  - Plot the variable importance by the forest
+
+-------
+
+4. Compare the testing accuracy of a forest of 1000 trees and a forest of 2000 trees. 
+
+-------
+
+5. Using Caret, create a tree with maximum depth of 3 and forest of 1000 trees. Compare the accuracy of these two models.
+
+-------
+
+6. Plot variable importance by the two models in 5. 
+
+-------
+
+7. (Optional - For extra credits only) Use your own selected data.  Do the follows. 
+
+- Handle missing values if any
+
+- Put the variables in the right format (categorical vs. continuous)
+
+- Select a binary target variable (Use can create a binary target variable from a continuous variable). 
+
+- Using caret with method `ranger` to train then test the accuracy of a random forest of 1000 trees. 

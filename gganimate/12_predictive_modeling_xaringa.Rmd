@@ -1,0 +1,64 @@
+
+---
+title: "Visualization- Animation"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse, middle, center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+---
+# Check
+
+---
+# R vs. Rstudio
+
+--
+
+
+- R is a **programming language**
+
+
+--
+
+
+- Rsudio is an **editor**
+
+
+--
+
+- Rsudio makes it easier to write R codes. 
+
+
+--
+
+
+

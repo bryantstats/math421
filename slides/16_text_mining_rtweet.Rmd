@@ -1,0 +1,338 @@
+---
+title: "Twitter Mining with rtweet"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: united
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+![](twit.png)
+
+
+```{r}
+library(rtweet) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+```
+
+## Search tweets
+
+-  Do this one then save the csv file.  Running this code multiple time may stop you from getting access to tweeter API. 
+
+```{r, eval=FALSE}
+
+keyword_search = '#olegunnarsolskjaer'
+
+df <- search_tweets(q = keyword_search, 
+                        n = 18000,
+                        include_rts = FALSE,
+                        `-filter` = "replies",
+                        lang = "en") %>% 
+  mutate(created_at = ymd_hms(format(created_at, tz = "US/Eastern")))
+
+write_csv(df, 'twitter_data_ole.csv')
+```
+
+```{r}
+df <- read_csv('twitter_data_ole.csv')
+```
+
+
+## Hashtag
+
+### Frequency
+
+```{r}
+df %>% 
+  unnest_tokens(output = hashtag, input = text, token = "tweets") %>%
+  filter(!hashtag %in% c("#olegunnarsolskjaer",'#mufc','#manutd','#manchesterunited'), str_detect(hashtag, "^#")) %>% 
+  count(hashtag, sort = TRUE) %>%
+  head(10)
+```
+
+
+```{r}
+df %>% 
+  unnest_tokens(output = hashtag, input = text, token = "tweets") %>%
+  filter(!hashtag %in% c("#olegunnarsolskjaer",'#mufc','#manutd','#manchesterunited'), str_detect(hashtag, "^#")) %>%
+  count(hashtag, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(x = n, y = reorder(hashtag, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+### Cloud
+
+```{r}
+library(RColorBrewer)
+
+pal <- brewer.pal(8,"Dark2")
+library(wordcloud) 
+
+df %>% 
+  unnest_tokens(output = hashtag, input = text, token = "tweets") %>%
+  filter(!hashtag %in% c("#olegunnarsolskjaer",'#mufc','#manutd','#manchesterunited'), str_detect(hashtag, "^#")) %>%
+  count(hashtag, sort = TRUE) %>%
+  mutate(hashtag = str_remove(hashtag, '#')) %>% 
+  filter(hashtag != 'mufc') %>% 
+  with(wordcloud(hashtag, n, random.order = FALSE, max.words = 50, colors = pal))
+```
+
+## Emoji
+
+```{r}
+# Install emo pakage:
+# devtools::install_github("hadley/emo")
+
+library(emo)
+df %>%
+  mutate(emoji = ji_extract_all(text)) %>%
+  unnest(cols = c(emoji)) %>%
+  count(emoji, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(y=reorder(emoji,n), x=n)) +
+  geom_col()+
+  theme(axis.text.y = element_text(size = 40))+
+  labs(x = 'Frequency', y = '')
+```
+
+## Favourite Counts
+
+```{r}
+df %>% 
+  arrange(-favorite_count) %>%
+  head(5) %>% 
+  select(favorite_count, text, favorite_count)
+```
+
+## Screen Name
+
+```{r}
+df %>% 
+  count(screen_name, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(x = n, y = reorder(screen_name, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+## Mentions
+
+```{r}
+df %>% 
+  unnest_tokens(mentions, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(mentions, "^@")) %>%  
+  count(mentions, sort = TRUE) %>%
+  head(10)
+```
+
+
+```{r}
+df %>% 
+  unnest_tokens(mentions, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(mentions, "^@")) %>%  
+  count(mentions, sort = TRUE) %>%
+  head(10) %>% 
+  ggplot(aes(x = n, y = reorder(mentions, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+
+
+## Source
+
+```{r}
+df %>% 
+  count(source, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(x = n, y = reorder(source, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+## Country
+
+```{r}
+df %>% 
+  filter(!is.na(country)) %>% 
+  count(country, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(x = n, y = reorder(country, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+## Location
+
+```{r}
+df %>% 
+  filter(!is.na(location), !location=='') %>% 
+  count(location, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(x = n, y = reorder(location, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+
+```{r}
+df %>% 
+  select(screen_name, favourites_count) %>% 
+  filter(!is.na(favourites_count)) %>% 
+  group_by(screen_name) %>% 
+  summarise(average_fav = mean(favourites_count)) %>% 
+  arrange(-average_fav) %>% 
+  head(5) %>% 
+  ggplot(aes(x=average_fav, y = reorder(screen_name, average_fav)))+
+  geom_col()+
+  labs(y='Account')
+```
+
+
+## Tweets
+
+```{r}
+df %>% 
+  unnest_tokens(output = word, input = text, token = "words") %>%
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(x = n, y = reorder(word, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+- Filter out some unnecessary words. 
+
+```{r}
+df %>% 
+  unnest_tokens(output = word, input = text, token = "words") %>%
+  anti_join(get_stopwords()) %>% 
+  filter(!word %in% c('https', 't.co')) %>% 
+  count(word, sort = TRUE) %>%
+  head(5) %>% 
+  ggplot(aes(x = n, y = reorder(word, n)))+
+  geom_col()+
+  labs(x = 'Frequency', y = '')
+```
+
+
+```{r}
+words <- df %>%
+  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
+         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
+         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+        !word %in% str_remove_all(stop_words$word, "'"),
+        str_detect(word, "[a-z]"),
+        !str_detect(word, "^#"),         
+        !str_detect(word, "@\\S+"),
+        !word %in% c('united','manchester')) %>%
+  count(word, sort = TRUE)
+
+al <- brewer.pal(8,"Dark2")
+library(wordcloud) 
+words %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors = pal))
+```
+
+## Tweets Frequency
+
+```{r}
+ts_plot(df, "hours") +
+  labs(x = NULL, y = NULL,
+       title = "Frequency of tweets",
+       subtitle = paste0(format(min(df$created_at), "%d %B %Y"), " to ", format(max(df$created_at),"%d %B %Y")),
+       caption = "Data collected from Twitter's REST API via rtweet") +
+  theme_minimal()
+```
+
+
+## Sentiment Analysis
+
+```{r}
+df %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(word, sort = TRUE) %>%
+    inner_join(get_sentiments("nrc")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(y= reorder(sentiment, n), x = n))+geom_col()+
+    labs(y='Relative Frequency', x ='')
+```
+
+
+```{r}
+df %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(word, sort = TRUE) %>%
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(y= reorder(sentiment, n), x = n))+geom_col()+
+    labs(y='Relative Frequency', x ='')
+```
+
+
+```{r}
+df %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(word, sort = TRUE) %>%
+    inner_join(get_sentiments("afinn")) %>%
+    filter(!is.na(value)) %>%
+    count(value, wt = n, sort = TRUE) %>% 
+    ggplot(aes(x= value, y = n))+geom_col()+
+    labs(y='Frequency', x ='')
+```
+
+## Trending Tweets
+
+```{r}
+# Show available locations to get trends
+trends_available()
+
+# See World wide trends twits
+get_trends('Worldwide')
+```
+
+## Lookup users
+
+Source: https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html
+
+```{r}
+## lookup users by screen_name or user_id
+users <- c("KimKardashian", "justinbieber", "taylorswift13",
+           "espn", "JoelEmbiid", "cstonehoops", "KUHoops",
+           "upshotnyt", "fivethirtyeight", "hadleywickham",
+           "cnn", "foxnews", "msnbc", "maddow", "seanhannity",
+           "potus", "epa", "hillaryclinton", "realdonaldtrump",
+           "natesilver538", "ezraklein", "annecoulter")
+
+famous_tweeters <- lookup_users(users)
+
+## preview users data
+famous_tweeters
+
+# extract most recent tweets data from the famous tweeters
+tweets_data(famous_tweeters)
+```

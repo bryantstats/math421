@@ -1,0 +1,302 @@
+
+---
+title: "Visualization - Aesthetic Mapping"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+---
+class: inverse, middle, center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+
+
+```
+---
+# A visualization:
+
+--
+
+- is a geometry object (a geom)
+
+--
+
+- whose aesthetics
+
+--
+
+- represents variables
+
+--
+
+- from a data set
+
+
+---
+# Aesthetics mean
+
+--
+
+- “something you can see”. 
+
+--
+
+Examples include:
+
+- position (i.e., on the x and y axes)
+- color (“outside” color)
+- fill (“inside” color)
+- shape (of points)
+- size
+
+---
+# Aesthetics Mapping
+
+--
+
+- map
+
+--
+
+- variables
+
+--
+
+- to aesthetics
+
+---
+class: inverse, middle, center
+# Examples
+
+---
+
+
+```{r, message=FALSE}
+
+library(tidyverse)
+library(knitr)    # For knitting document and include_graphics function
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+
+df <- df %>% filter(positiveIncrease>0)
+
+library(lubridate)
+
+df$year <- year(df$date)
+
+df$quarters <- as.factor(quarter(df$date))
+
+df$month <- factor(month(df$date))
+
+df$day <- wday(df$date)
+df$day_type <- case_when(df$day < 6 ~ 'weekday',
+                         TRUE~'weekend')
+
+```
+
+
+---
+```{r, message=FALSE}
+df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
+  geom_point(mapping = aes(x = date, y = positiveIncrease, color = state))
+```
+
+---
+```{r, message=FALSE}
+df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
+  geom_line(mapping = aes(x = date, y = positiveIncrease, color = state))
+```
+
+---
+```{r, message=FALSE}
+df %>% ggplot()+
+  geom_smooth(mapping = aes(x = positiveIncrease, y = deathIncrease, color = day_type))
+```
+
+---
+```{r, message=FALSE}
+df %>% filter(month %in% c('9','10','11','12'), year==2020) %>% ggplot()+
+  geom_smooth(mapping = aes(x = positiveIncrease, y = deathIncrease, color = day_type))
+```
+
+
+---
+```{r, message=FALSE}
+df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease, color = state))
+
+```
+---
+```{r, message=FALSE}
+df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
+  geom_bar(mapping = aes(x = day_type, fill = state))
+
+```
+---
+# Aesthetic of a geom
+
+- A geom has its list of own aesthetics
+
+- Use `?geom_point()` to check for the list of `geom_point`
+
+- Some aesthetics are required, some are not
+
+---
+class: inverse, middle, center
+# Required Aesthetics
+
+---
+```{r, message=FALSE}
+df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
+  geom_point(mapping = aes(x = date, y = positiveIncrease, color = state))
+
+```
+---
+```{r, message=FALSE}
+df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
+  geom_point(mapping = aes(x = date, y = positiveIncrease))
+```
+
+---
+```{r, message=FALSE, eval=FALSE}
+df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
+  geom_point(mapping = aes(x = date))
+```
+
+- Will produce an error since `y` aesthetic is required for `geom_point`. 
+
+---
+class: inverse, middle, center
+# Common Visualization Practices
+
+---
+# One Continuous Variable
+
+- Density: `geom_density`
+
+- Histogram: `geom_histogram`
+
+- Boxplot: `geom_boxplot`
+
+---
+**One Continuous Variable: Density**
+
+```{r}
+df %>% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease))
+```
+
+---
+**One Continuous Variable: Histogram**
+
+```{r}
+df %>% ggplot()+
+  geom_histogram(mapping = aes(x = positiveIncrease))
+```
+---
+**One Continuous Variable: Boxplot**
+
+```{r}
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(y = positiveIncrease))
+```
+---
+**One Continuous Variable: Boxplot**
+
+```{r}
+df %>% filter(positiveIncrease<1000) %>% ggplot()+
+  geom_boxplot(mapping = aes(y = positiveIncrease))
+```
+---
+**One Categorical Variable: Bar chart**
+
+```{r}
+df %>% ggplot()+
+  geom_bar(mapping = aes(x = day_type))
+```
+
+---
+# Two Continuous Variables
+
+- Scatter Plot: `geom_point`
+- Line Plot: `geom_line`
+- Smooth Plot: `geom_smooth`
+
+---
+# One Continuous Variable + One Categorical Variable
+
+- Density
+- BoxPlot
+
+---
+**One Continuous + One Categorical: Density**
+
+```{r}
+df %>% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease, color = day_type))
+```
+
+---
+**One Continuous + One Categorical: Density**
+
+```{r}
+df %>% filter(positiveIncrease<1000) %>% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease, color = day_type))
+```
+
+---
+**One Continuous + One Categorical: Boxplot**
+
+```{r}
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x = positiveIncrease, y = day_type))
+
+```
+---
+**One Continuous + One Categorical: Boxplot**
+
+```{r}
+df %>% filter(positiveIncrease<1000) %>% ggplot()+
+  geom_boxplot(mapping = aes(x = positiveIncrease, y = day_type))
+
+```
+---
+# One Categorical Variable + One Categorical Variable
+
+- Barplot
+
+---
+**One Categorical + One Categorical: Barplot**
+
+```{r}
+df %>% ggplot()+
+  geom_bar(mapping=aes(x=month, fill=day_type), position='dodge')
+
+```
+---
+# More
+
+- [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf)
+

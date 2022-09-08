@@ -1,0 +1,56 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "How effective the Covid vaccines?"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](fa2021_assignment9_extra_credits.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+-------
+
+How effective is the covid vaccines? There are multiple analysis to answer the question. This following practice give ONE way to analyze how effective the Covid vaccines are. The analysis is done for the United States. 
+
+1. Import the two following data
+
+  - Data 1: https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv
+
+  - Data 2: https://covid19.who.int/who-data/vaccination-data.csv
+
+
+2. We will merge these two datasets in one for our analysis.  We will use the `inner_join()` function to join the two datasets into one new datasets where the primary keys are Country and Date.  First we need to change the names of the two datasets so that they have the same name for country and date.  In dataset 1, change the name of the `location` to `Country`. In dataset 2, change the name of the variable `Date_reported` to `date`
+
+3. In dataset 2 and variable `Country` change `United States of America` to `United States` (You can use `str_replace`)
+
+4. Use `inner_join(data1, data2, by = c('Country','date')` to create a new dataset. 
+
+For more about joining data, see this datacamp course:  https://app.datacamp.com/learn/courses/joining-data-with-dplyr-in-r
+
+5. In the new dataset, create a variable `death_per_vac` by dividing the `Cumulative_deaths` by `total_vaccinations`. 
+
+6. Plot the `death_per_vac` by `date` for the United State using `geom_point`. 
+
+7. Use the log transformation for the plot above for better view.  Hint: add to the code above `+scale_y_continuous(trans='log')`
+
+8. Filter the plot above for July to current date only. Give your comments.
+
+9. Do the above analysis to other countries or continents. Give your comments.
+
+10. Do you have any other analysis for the effectiveness of the vaccine covid?

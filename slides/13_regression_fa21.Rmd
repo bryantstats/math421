@@ -1,0 +1,195 @@
+
+---
+title: "Predictive Modeling - Regression"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+---
+# Regression vs. Classification
+
+-  When the target variable is categorical, we have classification problem. For example, predict if a patient has cancer or not. Predict an image is a dog image or cat image.  
+
+-  When the target variable is continuous, we have a regression problem. For example, predict a salary of a fresh graduate, predict the average temperature next year. 
+
+-  A regression model can be evaluated using R-squared. In caret, R-squared is the correlation between the observed and predicted values (i.e. R) and squaring the value. 
+
+---
+# Predicting the age of a passenger
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+
+
+```
+
+
+
+```{r, message=FALSE}
+library(tidyverse)
+library(rpart)
+library(caret)
+df = read_csv("../data/titanic.csv")
+# Remove some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+# Set the target variable
+names(df)[4] <- 'target'
+df <- df %>% drop_na(target)
+# Correct variables' types
+df$Survived <- factor(df$Survived)
+df$Pclass = factor(df$Pclass)
+df$Sex <- factor(df$Sex)
+df$Embarked <- factor(df$Embarked)
+df = drop_na(df)
+set.seed(00000)
+splitIndex <- createDataPartition(df$target, p = .70, list = FALSE)
+# Split the data to train and test
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+```
+
+
+---
+class: inverse, center, middle
+# Decision Tree
+
+---
+```{r}
+library(rpart) #load the rpart package
+# Create a tree
+tree_model <- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
+library(rattle)
+fancyRpartPlot(tree_model)
+```
+
+---
+# Variables Importance
+
+```{r}
+barplot(tree_model$variable.importance)
+```
+
+---
+# Evaluation on Test Data
+```{r}
+pred <- predict(tree_model, df_test)
+postResample(pred = pred, obs = df_test$target)
+```
+
+---
+class: inverse, middle, center
+# Random Forest with Ranger
+
+---
+```{r}
+library(ranger)
+rf <- ranger(target ~ ., 
+                   num.trees = 100, mtry = 4, importance = "impurity", data = df_train)
+
+pred_rf <- predict(rf, df_test)$predictions
+
+postResample(pred = pred_rf, obs = df_test$target)
+```
+
+---
+
+```{r}
+df_test %>% mutate(predicted = predict(rf, df_test)$predictions) %>% 
+      ggplot(aes(predicted, target)) + geom_point(colour = "#ff6767", alpha = 0.3) +
+      labs(title = "Predicted and observed") +  theme_bw(18)
+```
+
+---
+# Variable Importance
+```{r}
+barplot(rf$variable.importance)
+```
+
+---
+class: inverse, middle, center
+# Random Forest using Caret
+
+---
+```{r, message=FALSE}
+forest_ranger <- train(target~., data=df_train, 
+                       method = "ranger", num.trees = 100)
+pred <- predict(forest_ranger, df_test)
+postResample(pred = pred, obs = df_test$target)
+```
+
+---
+class: inverse, middle, center
+# Model Comparison using Caret
+
+---
+```{r, eval=FALSE}
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+tree <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                                trControl = trControl)
+
+glm <- train(target~., data=df_train, 
+                                method = "glm", 
+                                trControl = trControl)
+
+results <- resamples(list('Decision Tree' = tree,
+                          'Random Forest' = forest_ranger,
+                          'Generalized Linear Model'= glm))
+
+bwplot(results)
+```
+
+---
+```{r, echo=FALSE}
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+tree <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                                trControl = trControl)
+
+glm <- train(target~., data=df_train, 
+                                method = "glm", 
+                                trControl = trControl)
+
+results <- resamples(list('Decision Tree' = tree,
+                          'Random Forest' = forest_ranger,
+                          'Generalized Linear Model'= glm))
+
+bwplot(results)
+```
+
+

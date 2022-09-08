@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title> Predictive Modeling - Part 1</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=" Son Nguyen " />
+    <meta name="date" content="2020-09-28" />
+    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <img src="figures/bat-cartoon.png" /> Predictive Modeling - Part 1
+### <font size="5"> Son Nguyen </font>
+### <font size="5"> September 28, 2020 </font>
+
+---
+
+
+&lt;style&gt;
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide &gt; h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide &gt; h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide &gt; h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+&lt;/style&gt;
+
+&lt;style type="text/css"&gt;
+.left-code {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 59%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+# Data
+
+
+
+
+
+|Pclass |Sex    |      Age| SibSp| Parch|    Fare|Embarked |target |
+|:------|:------|--------:|-----:|-----:|-------:|:--------|:------|
+|3      |male   | 22.00000|     1|     0|  7.2500|S        |0      |
+|1      |female | 38.00000|     1|     0| 71.2833|C        |1      |
+|3      |female | 26.00000|     0|     0|  7.9250|S        |1      |
+|1      |female | 35.00000|     1|     0| 53.1000|S        |1      |
+|3      |male   | 35.00000|     0|     0|  8.0500|S        |0      |
+|3      |male   | 29.69912|     0|     0|  8.4583|Q        |0      |
+
+- Passengers in the Titanic
+- `Target = 1` means the passenger was survived
+- `Target = 0` means the passenger was not survived
+
+---
+# Prediction Problem
+
+
+|Pclass |Sex    |      Age| SibSp| Parch|    Fare|Embarked |target |
+|:------|:------|--------:|-----:|-----:|-------:|:--------|:------|
+|3      |male   | 22.00000|     1|     0|  7.2500|S        |0      |
+|1      |female | 38.00000|     1|     0| 71.2833|C        |1      |
+|3      |female | 26.00000|     0|     0|  7.9250|S        |1      |
+|1      |female | 35.00000|     1|     0| 53.1000|S        |1      |
+|3      |male   | 35.00000|     0|     0|  8.0500|S        |0      |
+|3      |male   | 29.69912|     0|     0|  8.4583|Q        |0      |
+
+- We want to predict the `target` given the information of other variables.
+
+---
+# Import and Clean the data
+
+
+```r
+# Read in the data
+library(tidyverse)
+df = read_csv("titanic.csv")
+```
+---
+# Set the Target Variable
+
+- It's a common practice that the target variable named `target`
+
+
+```r
+# The target variable is the variable at column 8. 
+
+names(df)[8] &lt;- 'target'
+
+# Remove some columns
+df$PassengerId =  NULL
+df$Ticket =  NULL
+df$Name = NULL
+df$Cabin = NULL
+```
+
+---
+# Correct Variables' Types
+
+- Make sure all categorical variables are factors. 
+
+
+```r
+df$target &lt;- factor(df$target)
+df$Pclass = factor(df$Pclass)
+df$Sex &lt;- factor(df$Sex)
+df$Embarked &lt;- factor(df$Embarked)
+```
+
+---
+# Handle Missing Values
+
+- Make sure there are no missing values
+
+
+```r
+df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+df = drop_na(df)
+```
+
+---
+# Split the data to training and testing
+
+- Make sure to set.seed to that the results are reproducible. 
+
+
+```r
+library(caret)
+set.seed(2020)
+splitIndex &lt;- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train &lt;- df[ splitIndex,]
+df_test &lt;- df[-splitIndex,]
+```
+
+---
+# Create a tree
+
+```r
+library(rpart) #load the rpart package
+
+# Create a tree
+tree_model &lt;- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
+```
+
+---
+# Plot the tree
+
+```r
+library(rattle)
+fancyRpartPlot(tree_model)
+```
+
+&lt;img src="10_predictive_modeling_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Variable importances
+
+
+```r
+tree_model$variable.importance
+```
+
+```
+##       Sex      Fare    Pclass       Age     SibSp     Parch  Embarked 
+## 83.761904 32.854400 28.807881 19.954127 19.287469 14.431109  7.625484
+```
+
+
+---
+# Variable importances
+
+
+```r
+barplot(tree_model$variable.importance)
+```
+
+&lt;img src="10_predictive_modeling_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Evaluate the tree
+
+
+```r
+#predict on testing data
+pred &lt;- predict(tree_model, df_test, type = "class")
+
+#Evaluate the predictions
+cm &lt;- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+cm$overall[1]
+```
+
+```
+##  Accuracy 
+## 0.8383459
+```
+
+---
+# Evaluate the tree
+
+
+|               |    Metric|
+|:--------------|---------:|
+|Accuracy       | 0.8383459|
+|Kappa          | 0.6483429|
+|AccuracyLower  | 0.7884950|
+|AccuracyUpper  | 0.8804722|
+|AccuracyNull   | 0.6165414|
+|AccuracyPValue | 0.0000000|
+|McnemarPValue  | 0.0327626|
+
+---
+# Evaluate the tree
+
+
+|                     |    Metric|
+|:--------------------|---------:|
+|Sensitivity          | 0.7156863|
+|Specificity          | 0.9146341|
+|Pos Pred Value       | 0.8390805|
+|Neg Pred Value       | 0.8379888|
+|Precision            | 0.8390805|
+|Recall               | 0.7156863|
+|F1                   | 0.7724868|
+|Prevalence           | 0.3834586|
+|Detection Rate       | 0.2744361|
+|Detection Prevalence | 0.3270677|
+|Balanced Accuracy    | 0.8151602|
+
+---
+# Random Forest
+
+
+```r
+library(randomForest)
+forest_model = randomForest(target ~ ., data=df_train, ntree = 500)
+pred &lt;- predict(forest_model, df_test, type = "class")
+
+cm &lt;- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+```
+##  Accuracy 
+## 0.8421053
+```
+
+
+---
+# Variable importances
+
+
+```r
+importance(forest_model)
+```
+
+```
+##          MeanDecreaseGini
+## Pclass          22.816745
+## Sex             67.882267
+## Age             38.066271
+## SibSp           11.464391
+## Parch           10.109353
+## Fare            50.905132
+## Embarked         8.835307
+```
+
+---
+# Evaluate the Forest
+
+
+|               |    Metric|
+|:--------------|---------:|
+|Accuracy       | 0.8421053|
+|Kappa          | 0.6518759|
+|AccuracyLower  | 0.7926243|
+|AccuracyUpper  | 0.8837721|
+|AccuracyNull   | 0.6165414|
+|AccuracyPValue | 0.0000000|
+|McnemarPValue  | 0.0011937|
+
+---
+# Evaluate the Forest
+
+
+|                     |    Metric|
+|:--------------------|---------:|
+|Sensitivity          | 0.6862745|
+|Specificity          | 0.9390244|
+|Pos Pred Value       | 0.8750000|
+|Neg Pred Value       | 0.8279570|
+|Precision            | 0.8750000|
+|Recall               | 0.6862745|
+|F1                   | 0.7692308|
+|Prevalence           | 0.3834586|
+|Detection Rate       | 0.2631579|
+|Detection Prevalence | 0.3007519|
+|Balanced Accuracy    | 0.8126495|
+
+---
+# Other packages for Trees and Forests
+
+- Decision Tree can be implemented by `C50`, `RWeka`, `party`... packages
+
+- Random Forest can be implemented by `ranger`, `foreach`,`e1071`... packages
+
+---
+# Consistency Issue in R
+
+- Modeling Packages are made by different people
+
+
+---
+# Consistency Issue in R
+
+- Modeling Packages are made by different people
+
+- They have slightly different interfaces
+
+
+---
+# Consistency Issue in R
+
+- Modeling Packages are made by different people
+
+- They have slightly different interfaces
+
+- Trying to keep everything in line can be frustrating
+
+---
+# Unified Interface
+
+- A package to unify all the model interfaces is needed
+
+- This is called a `wrapper`
+
+- There are several wrappers for machine learning in R:
+
+  - caret
+  
+  - mlr3
+  
+  - tidymodels
+
+---
+# CARET
+
+- Short for Classification And REgression Training 
+
+- Attempt to streamline the process for creating predictive models. 
+
+- Created by Max Kuhn
+
+---
+# Create a Decision Tree with Caret
+
+
+```r
+model1 &lt;- train(target~., data=df_train, 
+*               method = "rpart2",
+                maxdepth=3)
+
+pred &lt;- predict(model1, df_test)
+
+cm &lt;- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+```
+##  Accuracy 
+## 0.8383459
+```
+
+---
+# Create a Random Forest with Caret
+
+
+```r
+model2 &lt;- train(target~., data=df_train, 
+*               method = "rf",
+                ntree = 1000) 
+
+pred &lt;- predict(model2, df_test)
+
+cm &lt;- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+```
+##  Accuracy 
+## 0.8308271
+```
+
+---
+# Variable Importance
+
+
+```r
+# Tree
+varImp(model1)
+```
+
+```
+## rpart2 variable importance
+## 
+##           Overall
+## Sexmale   100.000
+## Pclass3    71.396
+## Fare       65.386
+## Age        19.806
+## SibSp      15.846
+## Parch       9.523
+## EmbarkedS   7.882
+## Pclass2     4.249
+## EmbarkedQ   0.000
+```
+
+---
+# Variable Importance
+
+
+```r
+# Forest
+varImp(model2)
+```
+
+```
+## rf variable importance
+## 
+##           Overall
+## Sexmale   100.000
+## Fare       62.752
+## Age        40.963
+## Pclass3    24.169
+## SibSp      11.175
+## Parch      10.185
+## EmbarkedS   3.747
+## Pclass2     2.634
+## EmbarkedQ   0.000
+```
+
+---
+# Plot Variable Importance
+
+```r
+# Tree
+*plot(varImp(model1))
+```
+
+&lt;img src="10_predictive_modeling_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Plot Variable Importance
+
+```r
+# Forest
+*plot(varImp(model2))
+```
+
+&lt;img src="10_predictive_modeling_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">\n  <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">\n  </div>\n</div>`"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+name: app9
+title: app9
+username:
+account: fall20
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3142275
+bundleId: 3811993
+url: https://fall20.shinyapps.io/app9/
+when: 1604344360.9426
+asMultiple: FALSE
+asStatic: FALSE

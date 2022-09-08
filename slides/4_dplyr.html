@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Wrangling with Dplyr</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data Wrangling with Dplyr
+
+---
+
+class: inverse
+
+
+
+
+
+
+
+
+
+
+
+
+# Agenda
+
+1. `tidyverse` package
+
+2. `tibble` vs. `data frame`
+
+3. read_csv vs read.csv
+
+3. Subset by `select`, `filter` functions
+
+4. Combo 1: `group_by` and `summarise`
+
+5. Pipe operator (%&gt;%) 
+
+6. Combo 2: `filter`, `group_by`, `summarise`
+
+---
+class: inverse
+
+# `tidyverse` package
+
+- The tidyverse is an opinionated collection of R packages designed for data science.
+
+- All packages share an underlying design philosophy, grammar, and data structures.
+
+---
+class: inverse
+
+# Core Packages
+
+- **ggplot2**: Visualization
+
+- **dplyr**: Data Wrangling
+
+- **purrr**: Functional Programming
+
+---
+class: inverse
+
+# Install `tidyverse`
+
+
+```r
+install.packages('tidyverse')
+library(tidyverse)
+```
+
+
+
+---
+class: inverse
+
+# Tibble 
+
+- A tibble  is a data frame and MORE
+
+- `read_csv` returns a tibble
+
+
+```r
+library(tidyverse)
+df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+```
+
+---
+class: inverse
+
+# Tibble 
+
+- Use it like a data frame
+
+
+
+```r
+names(df)
+
+table(df$dataQualityGrade)
+```
+
+---
+class: inverse
+
+# Tibble 
+
+- Print out the data more nicely
+
+
+```r
+df
+```
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+
+```r
+start_time &lt;- Sys.time()
+df &lt;- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+end_time &lt;- Sys.time()
+
+end_time - start_time
+```
+
+```
+## Time difference of 1.172959 mins
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+
+```r
+start_time &lt;- Sys.time()
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+end_time &lt;- Sys.time()
+
+end_time - start_time
+```
+
+```
+## Time difference of 20.58847 secs
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv recognize the types of data better
+
+
+```r
+df &lt;- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+```
+
+```
+## 'data.frame':	1735384 obs. of  6 variables:
+##  $ date  : chr  "2020-01-21" "2020-01-22" "2020-01-23" "2020-01-24" ...
+##  $ county: chr  "Snohomish" "Snohomish" "Snohomish" "Cook" ...
+##  $ state : chr  "Washington" "Washington" "Washington" "Illinois" ...
+##  $ fips  : int  53061 53061 53061 17031 53061 6059 17031 53061 4013 6037 ...
+##  $ cases : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ deaths: int  0 0 0 0 0 0 0 0 0 0 ...
+```
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv recognize the types of data better
+
+
+```r
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+```
+
+```
+## spec_tbl_df [1,735,384 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ date  : Date[1:1735384], format: "2020-01-21" "2020-01-22" ...
+##  $ county: chr [1:1735384] "Snohomish" "Snohomish" "Snohomish" "Cook" ...
+##  $ state : chr [1:1735384] "Washington" "Washington" "Washington" "Illinois" ...
+##  $ fips  : chr [1:1735384] "53061" "53061" "53061" "17031" ...
+##  $ cases : num [1:1735384] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ deaths: num [1:1735384] 0 0 0 0 0 0 0 0 0 0 ...
+##  - attr(*, "spec")=
+##   .. cols(
+##   ..   date = col_date(format = ""),
+##   ..   county = col_character(),
+##   ..   state = col_character(),
+##   ..   fips = col_character(),
+##   ..   cases = col_double(),
+##   ..   deaths = col_double()
+##   .. )
+##  - attr(*, "problems")=&lt;externalptr&gt;
+```
+
+---
+class: inverse
+
+# select and filter function
+
+
+```r
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+# Select variable state and date for df1
+df1 &lt;-  select(df, state, date)
+
+# Deselect variable state from df
+df2 &lt;-  select(df, -state)
+
+# Select rows or days with no deaths
+df3 &lt;- filter(df, deaths==0, )
+```
+
+---
+class: inverse
+
+# Combo 1: group_by + summarise
+
+
+```r
+# Group by dataQualityGrade
+df1 = group_by(df, state)
+
+# Calculate something for each group
+summarise(df1, mean(deaths))
+```
+
+---
+class: inverse
+
+# Pipe operator (%&gt;%) 
+
+- Pipe operator will make `tidyverse` much more attractive!
+
+- `\(x\)` %&gt;% `\(f\)` is the same `\(f(x)\)`
+
+
+```r
+x &lt;- c(1:10)
+
+# conventional way
+sum(x)
+```
+
+```
+## [1] 55
+```
+
+```r
+# Pipe
+x %&gt;% sum
+```
+
+```
+## [1] 55
+```
+
+---
+class: inverse
+
+class: center, middle
+# (%&gt;%) 
+
+# Hotkey: Ctrl + Shift + M
+
+
+---
+class: inverse
+
+# Pipe operator (%&gt;%)
+
+- `\(x\)` %&gt;% `\(f\)` %&gt;% `\(g\)` is the same `\(g(f(x))\)`
+
+
+```r
+x &lt;- c(1:10)
+
+# conventional way
+log(sum(x))
+```
+
+```
+## [1] 4.007333
+```
+
+```r
+# Pipe
+x %&gt;% sum %&gt;% log
+```
+
+```
+## [1] 4.007333
+```
+
+
+
+---
+class: inverse
+
+# Pipe operator (%&gt;%)
+
+- `\(x\)` %&gt;% `\(f(y)\)` is the same `\(f(x, y)\)`
+
+
+```r
+# conventional way
+filter(df, state =='Rhode Island')
+
+# pipe
+df %&gt;% filter(state=='Rhode Island')
+```
+
+
+---
+class: inverse
+
+# Combo 1: group_by + summarise
+
+
+```r
+# conventional way
+df1 = group_by(df, state)
+summarise(df1, summarise(mean(deaths)))
+
+# Pipe
+df %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(mean(deaths))
+```
+
+---
+class: inverse
+
+# Combo 2: filter + group_by + summarise
+
+
+```r
+# conventional way
+df1 = filter(df, date&gt;'01-01-2021')
+df2 = group_by(df1, state )
+summarise(df2, summarise(mean(deaths)))
+
+
+# Pipe
+df %&gt;% 
+  filter(date&gt;'01-01-2021') %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(mean(deaths))
+```
+
+---
+class: inverse
+
+# Combo 3: filter + group_by + summarise + arrange
+
+
+```r
+# Pipe
+df %&gt;% 
+  filter(date&gt;'01-01-2021') %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(average_deaths = mean(deaths)) %&gt;% 
+  arrange(average_deaths)
+```
+
+---
+class: inverse
+
+# Combo 3: filter + group_by + summarise + arrange
+
+
+```r
+# Pipe
+df %&gt;% 
+  filter(date&gt;'01-01-2021') %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(average_deaths = mean(deaths)) %&gt;% 
+  arrange(-average_deaths)
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

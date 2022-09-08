@@ -1,0 +1,145 @@
+
+---
+title: "Text Mining"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse, middle, center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE)
+```
+
+
+
+---
+```{r, message=FALSE, eval=FALSE}
+library(tidyverse)
+library(tidytext)
+library(knitr)
+library(kableExtra)
+df <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-20/netflix_titles.csv')
+df %>% head(5) %>% select(title, release_year, description) %>% kable()
+```
+
+---
+
+- The first 5 rows and a three columns of the data
+
+```{r, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(tidytext)
+library(knitr)
+library(kableExtra)
+df <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-20/netflix_titles.csv')
+df %>% head(5) %>% select(title, release_year, description) %>% kable()
+```
+---
+# Token
+
+- A token is a meaningful unit of text. 
+
+- One row of text will be converted to multiple rows of tokens. 
+---
+```{r}
+library(tidyverse)
+library(tidytext)
+library(knitr)
+library(kableExtra)
+df <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-20/netflix_titles.csv')
+
+d1 <- df %>% 
+  filter(title=='Avengers: Infinity War') %>% 
+  select(title, description)
+kable(d1)
+```
+
+---
+```{r}
+d1 %>% unnest_tokens(input = description, output = word) %>% 
+  kable() %>% kable_styling(font_size = 12)
+```
+
+---
+```{r}
+d1 %>% unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  kable()%>% kable_styling(font_size = 12)
+```
+
+---
+```{r}
+d1 <- df %>%
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE)
+
+d1 %>% head(10) %>% kable()
+```
+
+---
+```{r}
+d1 %>% head(10) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+```
+
+---
+class: center
+```{r, echo=FALSE}
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+d1 %>%
+  with(wordcloud(word, n, random.order = FALSE, 
+                 max.words = 50, colors=pal))
+```
+---
+# Sentiment Analysis
+
+```{r}
+df %>% 
+  filter(title=='Avengers: Infinity War') %>% 
+  select(title, description) %>% 
+  kable()
+
+d1 <- df %>% 
+  filter(title=='Avengers: Infinity War') %>% 
+  select(title, description)
+```
+
+---
+```{r}
+d1 %>% 
+  unnest_tokens(input = description, output = word) %>% 
+  kable() %>% kable_styling(font_size = 12)
+```
+
+---
+```{r}
+d1 %>% unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  kable() %>% kable_styling(font_size = 12)
+```
+
+
+---
+# Using `nrc`
+```{r}
+d1 %>% unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  inner_join(get_sentiments("nrc")) %>% 
+  kable()
+```
+
+ - Some words are missing
+ - Some words have more than one sentiment

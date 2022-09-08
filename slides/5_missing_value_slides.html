@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Handle Missing Values</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Handle Missing Values
+
+---
+
+class: inverse
+
+
+
+
+
+
+
+
+
+
+
+
+# New Functions
+
+- colSums(is.na()), colMeans(is.na())
+
+- mean(x, na.rm=TRUE)
+
+- na_if
+
+- drop_na
+
+- replace_na
+
+- is.infinite
+
+---
+class: inverse
+# Agenda
+
+1. Do you need to handle missing values?
+
+2. When do you need to handle missing values?
+
+3. Forms of missing values: Na, NaN, and Inf
+
+4. Steps to Handle missing values
+
+5. Identify Missing Values and Convert them to `NA`
+
+6. Remove missing values with drop_na
+
+7. Replace Missing values with replace_na
+
+---
+class: inverse
+# Checking missing values
+
+
+```r
+library(tidyverse)
+df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+```
+
+```
+## Warning: One or more parsing issues, see `problems()` for details
+```
+
+```r
+df &lt;- df %&gt;% filter(date&gt;='2020-01-01', date&lt;'2021-01-01')
+# Total missing values
+sum(is.na(df))
+```
+
+```
+## [1] 314903
+```
+
+---
+class: inverse
+
+
+```r
+# Missing values by columns
+colSums(is.na(df))
+```
+
+```
+##                             date                            state 
+##                                0                                0 
+##                            death                   deathConfirmed 
+##                              850                             9587 
+##                    deathIncrease                    deathProbable 
+##                                0                            11273 
+##                     hospitalized           hospitalizedCumulative 
+##                             7078                             7078 
+##            hospitalizedCurrently             hospitalizedIncrease 
+##                             3243                                0 
+##                  inIcuCumulative                   inIcuCurrently 
+##                            14087                             8220 
+##                         negative                 negativeIncrease 
+##                             6104                                0 
+##            negativeTestsAntibody      negativeTestsPeopleAntibody 
+##                            15956                            17083 
+##               negativeTestsViral           onVentilatorCumulative 
+##                            13144                            16058 
+##            onVentilatorCurrently                         positive 
+##                            10070                              188 
+##               positiveCasesViral                 positiveIncrease 
+##                             5650                                0 
+##                    positiveScore            positiveTestsAntibody 
+##                                0                            14530 
+##             positiveTestsAntigen      positiveTestsPeopleAntibody 
+##                            15661                            17070 
+##       positiveTestsPeopleAntigen               positiveTestsViral 
+##                            16649                             9936 
+##                        recovered         totalTestEncountersViral 
+##                             7325                            12777 
+## totalTestEncountersViralIncrease                 totalTestResults 
+##                                0                              166 
+##         totalTestResultsIncrease               totalTestsAntibody 
+##                                0                            13351 
+##                totalTestsAntigen         totalTestsPeopleAntibody 
+##                            14959                            15412 
+##          totalTestsPeopleAntigen            totalTestsPeopleViral 
+##                            16415                             9669 
+##    totalTestsPeopleViralIncrease                  totalTestsViral 
+##                                0                             5314 
+##          totalTestsViralIncrease 
+##                                0
+```
+
+
+---
+class: inverse, center, middle
+# 1. Do you need to handle missing values?
+
+---
+class: inverse, center, middle
+# No if just doing some calculations on the data
+
+---
+class: inverse
+
+
+```r
+# Calculate the average death
+mean(df$death)
+```
+
+```
+## [1] NA
+```
+
+```r
+# na.rm = remove NA
+mean(df$death, na.rm = TRUE)
+```
+
+```
+## [1] 2749.944
+```
+
+---
+class: inverse
+
+
+```r
+# tidy
+df %&gt;% summarise(average_death = mean(death, na.rm = TRUE))
+```
+
+```
+## # A tibble: 1 x 1
+##   average_death
+##           &lt;dbl&gt;
+## 1         2750.
+```
+
+---
+class: inverse
+
+```r
+# Calculate death by dataQualityGrade
+df$quarters = quarters(df$date)
+by(df$death, df$quarters, mean, na.rm=TRUE)
+```
+
+```
+## df$quarters: Q1
+## [1] 24.74821
+## ------------------------------------------------------------ 
+## df$quarters: Q2
+## [1] 1352.309
+## ------------------------------------------------------------ 
+## df$quarters: Q3
+## [1] 2859.466
+## ------------------------------------------------------------ 
+## df$quarters: Q4
+## [1] 4465.048
+```
+
+---
+class: inverse
+
+```r
+# Calculate death by dataQualityGrade
+df %&gt;% 
+  group_by(quarters) %&gt;% 
+  summarise(average_death = mean(death, na.rm = TRUE))
+```
+
+```
+## # A tibble: 4 x 2
+##   quarters average_death
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 Q1                24.7
+## 2 Q2              1352. 
+## 3 Q3              2859. 
+## 4 Q4              4465.
+```
+
+---
+class: inverse, center, middle
+# No if just doing Visualization
+
+---
+class: inverse
+
+```r
+df %&gt;% group_by(quarters) %&gt;% 
+    summarise(average_death = mean(death, na.rm = TRUE)) %&gt;% 
+    ggplot(aes(x=quarters, y=average_death))+
+    geom_bar(stat = 'identity')
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+class: inverse
+# 2. When do you need to handle missing values
+
+- When you know the values of the missing values
+
+
+- When building predictive models
+
+- Other cases?
+
+---
+class: inverse
+# 3. Forms of missing values: Na, NaN and Inf
+
+
+```r
+# NaN = Not a Number
+0/0
+```
+
+```
+## [1] NaN
+```
+
+```r
+# Infinity
+1/0
+```
+
+```
+## [1] Inf
+```
+
+```r
+# NA = Missing value
+```
+
+
+---
+class: inverse
+# Check for missing values
+
+
+```r
+x &lt;- c(1, 2, NA, NaN, Inf)
+
+# Check which one is missing
+is.na(x)
+```
+
+```
+## [1] FALSE FALSE  TRUE  TRUE FALSE
+```
+
+```r
+# Check which one is infinity
+is.infinite(x)
+```
+
+```
+## [1] FALSE FALSE FALSE FALSE  TRUE
+```
+
+
+---
+class: inverse
+
+```r
+d1 &lt;- read.csv('Book1.csv')
+d1
+```
+
+```
+##   ï..Number Letter
+## 1         1      a
+## 2         2      b
+## 3         3       
+## 4        NA      d
+## 5         4       
+## 6        NA      e
+## 7         7       
+## 8        NA       
+## 9         9      h
+```
+
+---
+class: inverse
+
+```r
+d2 &lt;- read_csv('Book1.csv')
+d2
+```
+
+```
+## # A tibble: 9 x 2
+##   Number Letter
+##    &lt;dbl&gt; &lt;chr&gt; 
+## 1      1 a     
+## 2      2 b     
+## 3      3 &lt;NA&gt;  
+## 4     NA d     
+## 5      4 &lt;NA&gt;  
+## 6     NA e     
+## 7      7 &lt;NA&gt;  
+## 8     NA &lt;NA&gt;  
+## 9      9 h
+```
+
+---
+class: inverse
+# 4. Steps to Handle missing values
+
+- Step 1: Identify Missing Values (NA, 'Unknown', 'Missing','9999'...) and Convert them to `NA`
+
+- Step 2:  Either 
+
+  - Remove them
+  - Replace them 
+
+---
+class: inverse
+# Replace Missing values
+
+- Numeric Variables: 
+  - (1) by the mean/ median 
+  - (2) predicted values by some models
+  
+- Categorical Variables: 
+  - (1) the mode or make it a new category
+  - (2) predicted values by some models    
+
+
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+
+```r
+d &lt;- read_csv('car.csv')
+
+sum(is.na(d))
+```
+
+```
+## [1] 37320
+```
+
+- Notice: You can download the `cars.csv` dataset at: [this link](car.csv).  This data records vehicle accidents in the US in 2015. 
+
+---
+class: inverse
+
+```r
+sum(d=='Unknown', na.rm = TRUE)
+```
+
+```
+## [1] 18614
+```
+
+---
+class: inverse
+
+```r
+sum(d=='Not Reported', na.rm = TRUE)
+```
+
+```
+## [1] 33992
+```
+
+---
+class: inverse
+
+```r
+sum(d=='Not Rep', na.rm = TRUE)
+```
+
+```
+## [1] 37957
+```
+
+---
+class: inverse
+# Convert values to NA 
+
+
+```r
+d$TRAV_SP &lt;- na_if(d$TRAV_SP, 'Unknown')
+sum(d$TRAV_SP=='Unknown', na.rm = TRUE)
+```
+
+```
+## [1] 0
+```
+
+---
+class: inverse
+# 5. Remove rows with missing values with drop_na
+
+- Remove rows without `hospitalized` data
+
+
+```r
+drop_na(df, hospitalized)
+```
+
+```
+## # A tibble: 10,006 x 42
+##    date       state death deathConfirmed deathIncrease deathProbable
+##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+##  1 2020-12-31 AK      206            206             3            NA
+##  2 2020-12-31 AL     4827           4219            53           608
+##  3 2020-12-31 AR     3676           3088            39           588
+##  4 2020-12-31 AZ     8864           8006           146           858
+##  5 2020-12-31 CO     4814           4168            64           646
+##  6 2020-12-31 FL    21990             NA           133            NA
+##  7 2020-12-31 GA    10934           9872            88          1062
+##  8 2020-12-31 HI      288            288             3            NA
+##  9 2020-12-31 ID     1403           1240            10           163
+## 10 2020-12-31 IN     8263           7911           103           352
+## # ... with 9,996 more rows, and 36 more variables: hospitalized &lt;dbl&gt;,
+## #   hospitalizedCumulative &lt;dbl&gt;, hospitalizedCurrently &lt;dbl&gt;,
+## #   hospitalizedIncrease &lt;dbl&gt;, inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;,
+## #   negative &lt;dbl&gt;, negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
+## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
+## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, positive &lt;dbl&gt;,
+## #   positiveCasesViral &lt;dbl&gt;, positiveIncrease &lt;dbl&gt;, positiveScore &lt;dbl&gt;, ...
+```
+
+---
+class: inverse
+
+```r
+drop_na(df, hospitalized, death)
+```
+
+```
+## # A tibble: 9,986 x 42
+##    date       state death deathConfirmed deathIncrease deathProbable
+##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+##  1 2020-12-31 AK      206            206             3            NA
+##  2 2020-12-31 AL     4827           4219            53           608
+##  3 2020-12-31 AR     3676           3088            39           588
+##  4 2020-12-31 AZ     8864           8006           146           858
+##  5 2020-12-31 CO     4814           4168            64           646
+##  6 2020-12-31 FL    21990             NA           133            NA
+##  7 2020-12-31 GA    10934           9872            88          1062
+##  8 2020-12-31 HI      288            288             3            NA
+##  9 2020-12-31 ID     1403           1240            10           163
+## 10 2020-12-31 IN     8263           7911           103           352
+## # ... with 9,976 more rows, and 36 more variables: hospitalized &lt;dbl&gt;,
+## #   hospitalizedCumulative &lt;dbl&gt;, hospitalizedCurrently &lt;dbl&gt;,
+## #   hospitalizedIncrease &lt;dbl&gt;, inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;,
+## #   negative &lt;dbl&gt;, negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
+## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
+## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, positive &lt;dbl&gt;,
+## #   positiveCasesViral &lt;dbl&gt;, positiveIncrease &lt;dbl&gt;, positiveScore &lt;dbl&gt;, ...
+```
+
+```r
+# Pipe
+df %&gt;% drop_na(hospitalized, death)
+```
+
+```
+## # A tibble: 9,986 x 42
+##    date       state death deathConfirmed deathIncrease deathProbable
+##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+##  1 2020-12-31 AK      206            206             3            NA
+##  2 2020-12-31 AL     4827           4219            53           608
+##  3 2020-12-31 AR     3676           3088            39           588
+##  4 2020-12-31 AZ     8864           8006           146           858
+##  5 2020-12-31 CO     4814           4168            64           646
+##  6 2020-12-31 FL    21990             NA           133            NA
+##  7 2020-12-31 GA    10934           9872            88          1062
+##  8 2020-12-31 HI      288            288             3            NA
+##  9 2020-12-31 ID     1403           1240            10           163
+## 10 2020-12-31 IN     8263           7911           103           352
+## # ... with 9,976 more rows, and 36 more variables: hospitalized &lt;dbl&gt;,
+## #   hospitalizedCumulative &lt;dbl&gt;, hospitalizedCurrently &lt;dbl&gt;,
+## #   hospitalizedIncrease &lt;dbl&gt;, inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;,
+## #   negative &lt;dbl&gt;, negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
+## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
+## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, positive &lt;dbl&gt;,
+## #   positiveCasesViral &lt;dbl&gt;, positiveIncrease &lt;dbl&gt;, positiveScore &lt;dbl&gt;, ...
+```
+
+---
+class: inverse
+# Remove columns with missing values
+
+
+```r
+df$negativeTestsPeopleAntibody &lt;- NULL
+```
+
+---
+class: inverse
+# 6. Replace Missing values with replace_na
+
+
+```r
+# Replace by the mode for categorical variable
+average_death &lt;- mean(df$deathConfirmed, na.rm = TRUE)
+df$deathConfirmed &lt;- replace_na(df$deathConfirmed, average_death)
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

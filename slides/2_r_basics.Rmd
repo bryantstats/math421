@@ -1,0 +1,377 @@
+---
+title: "R Basics"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+   
+
+---
+# R as a calculator
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+- Addition: +
+
+- Subtraction: -
+
+- Multiplication: *
+
+- Division: /
+
+- Exponentiation: ^
+
+--
+
+Put the following to the console in Rstudio
+
+```{r}
+(3+4)^2 - 3^4 - 1/2 - 3*4
+```
+
+
+---
+# Data structures in R
+
+|    | Homogeneous | Heterogeneous |
+|----|-------------|---------------|
+| 1d | Vector      | List          |
+| 2d | Matrix      | Data Frame    |
+| nd | Array       |               |
+
+
+---
+# Vector
+
+- Numeric vectors
+```{r}
+x <- c(2,3,4,5,6)
+x
+```
+
+- Use `<-` to assign *something* to a variable/an object
+
+---
+# Vector
+
+- Character vectors
+```{r}
+x <-  c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+x
+```
+
+--
+
+- Logical vectors
+
+```{r}
+x <- c(TRUE, FALSE, TRUE)
+sum(x)
+```
+
+---
+# Operations on Numeric Vectors
+
+- Operations on Vectors are **element-to-element**
+
+- You can add, subtract, multiply, and divide vectors
+
+--
+
+```{r}
+x <- c(2, 3, 4, 5, 6)
+y <- c(1, 0, 0, 0, 99)
+x+y
+x-y
+x*y
+```
+
+
+
+---
+# Operations on Numeric Vectors
+
+- You can apply a function to vector
+```{r}
+x <- c(2, 3, 4, 5, 6)
+y <- c(1, 0, 0, 0, 99)
+x^2
+log(x)
+sin(x)
+```
+
+
+
+---
+# Some functions with vectors
+
+```{r}
+x <- c(2, 3, 40, 5, 6)
+mean(x)
+sum(x)
+max(x)
+length(x)
+```
+
+---
+# Some functions with vectors
+
+```{r}
+x <- c(2, 3, 40, 5, 6)
+# Standard Deviation
+sd(x)
+# Index of the maximum element
+which.max(x)
+
+# Index of the element equaling 40
+which(x==40)
+
+```
+
+
+---
+# Quickly generate vectors
+
+```{r}
+c(1:10)
+
+rep(1, 10)
+
+rep(c(1,2,3), 10)
+
+# Arithmetic sequences
+seq(1, 2, .2)
+
+```
+
+
+---
+class: inverse, middle, center
+
+# Live Coding 
+
+solve problems, (talk about variable environment, variables, shortcuts...) 
+
+present the results in an rmarkdown and 
+
+publish it to Github Page
+
+
+
+
+---
+class:inverse
+# Problem
+
+- **Calculate**: 
+$$
+S_{1} = 1 + 2 +...+  100
+$$
+--
+
+- **Solution**
+```{r}
+x <- c(1:100)
+
+sum(x)
+```
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S_{2} = 1^2 + 2^2 +...+  100^2
+$$
+--
+
+- **Solution**
+
+```{r}
+x <- c(1:100)
+sum(x^2)
+
+```
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S = \frac{1^3 + 2^3 +...+  100^3}{100}
+$$
+--
+
+- Solution*
+
+```{r}
+x <- c(1:100)
+sum(x^3)/100
+
+```
+
+--
+
+- **Another way?**
+
+--
+
+```{r}
+# Or
+
+mean(x^3)
+```
+
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S = 1\cdot 2 + 3 \cdot 4 + 5 \cdot 6 + 7 \cdot 8 +...+ 99 \cdot 100
+$$
+--
+
+
+- **Solution**
+
+```{r}
+x <- seq(1, 99, 2)
+y <- seq(2, 100, 2)
+
+sum(x*y)
+
+```
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+$$
+S = \frac{1}{2} + \frac{2}{3} + \frac{3}{4} + ...+  \frac{100}{101}
+$$
+--
+
+
+- **Solution**
+
+```{r}
+x <- c(1:100)
+y <- c(2:101)
+
+sum(x/y)
+
+```
+
+---
+class:inverse
+# Problem
+
+- Is this summation *convergent* or *divergent*?
+
+$$
+S = 1+\frac{1}{4}+\frac{1}{9}+\frac{1}{16}+\frac{1}{25}+...
+$$
+
+
+---
+class:inverse
+# Solution
+
+- Rewrite $S$:
+
+$$
+S = 1+\frac{1}{2^2}+\frac{1}{3^2}+\frac{1}{4^2}+\frac{1}{5^2}+...
+$$
+--
+
+- The sum of the first 1000 terms
+
+```{r}
+n <-  1000
+x <-  c(1:n)
+sum(1/x^2)
+```
+--
+
+- The sum of the first 10000 terms
+
+```{r}
+n <-  10000
+x <-  c(1:n)
+sum(1/x^2)
+```
+
+---
+class: center, middle, inverse
+
+### The series converges! 
+
+---
+class: center, middle, inverse
+
+### YOUR TURN
+
+This is also your assignment 2: https://bryantstats.github.io/math421/fa100_assignment2.html
+
+---
+class:inverse
+# Problem
+
+***Guideline***: Use the rmarkdown [here](https://bryantstats.github.io/math421/fa100_assignment2.Rmd) as a template to write your codes. Open the Rmarkdown file in Rstudio. After each question, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the questions. `Knit` the rmarkdown file (hotkey `Ctrl + Alt + K`) to export an html.  Then Publish the html to your Githiub Page. 
+
+***Submissions***: Submit the link on Github of the assignment to Blackboard under Assignment 2. 
+
+**Go the the next page for the problems**
+
+---
+class:inverse
+# Problem
+
+- **Calculate**
+
+$$
+S = 1 + 4 + 7 + 11+... + 100
+$$
+$$
+S = 1^{100} + 2^{100} + 3^{100} +...+100^{100}
+$$
+$$
+S = \frac{1}{1\cdot 2}+\frac{1}{2 \cdot 3}+...+\frac{1}{100\cdot 101}
+$$
+
+$$
+S = \frac{1}{1\cdot 2 \cdot 3}+\frac{1}{2 \cdot 3 \cdot 4}+...+\frac{1}{100\cdot 101 \cdot 102}
+$$
+
+$$
+S = 1^1 + 3^3 + 5^5 + 7^7 +....+101^{101}
+$$
+
+
