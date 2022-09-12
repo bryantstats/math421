@@ -32,7 +32,7 @@ xaringanExtra::use_fit_screen()
 ```
 
 
-class: middle, center
+class: inverse, middle, center
 # Data Frame
 
 ---
@@ -54,12 +54,6 @@ class: middle, center
 | Dan     | 515.20 | 2013-09-23 | Male   |
 | Jessica | 611.00 | 2014-11-15 | Female |
 | Julia   | 729.00 | 2014-05-11 | Female |
-
-
----
-class: center, middle
-
-# Creating a Data Frame
 
 ---
 # Creating a Data Frame
@@ -161,7 +155,7 @@ df$Date_report = as.Date(df$Date_report)
 ```
 
 ---
-class: middle, center
+class: inverse, middle, center
 # Simple Data Exploration
 
 ---
@@ -200,7 +194,7 @@ by(df$New_deaths, df$WHO_region, FUN = mean)
 
 
 ---
-class: middle, center
+class: inverse, middle, center
 
 # Create new variables
 
@@ -266,6 +260,10 @@ df$month2 <- case_when(df$month %in% c('Sep','Oct','Nov','Dec') ~ 'fall_semester
   
 ```
 
+---
+class: inverse, middle, center
+
+# Subsetting
 
 ---
 # Subsetting by columns
@@ -335,7 +333,7 @@ df4 <- df[(df$Country=='United States of America')&
 | isTRUE(x) 	| test if X is TRUE        	|
 
 ---
-class: middle, center
+class: inverse, middle, center
 # Some Examples
 
 ---

@@ -34,7 +34,7 @@ class: center, middle, inverse, title-slide
 
 
 
-class: middle, center
+class: inverse, middle, center
 # Data Frame
 
 ---
@@ -258,7 +258,7 @@ df$Date_report = as.Date(df$Date_report)
 ```
 
 ---
-class: middle, center
+class: inverse, middle, center
 # Simple Data Exploration
 
 ---
@@ -363,7 +363,7 @@ by(df$New_deaths, df$WHO_region, FUN = mean)
 
 
 ---
-class: middle, center
+class: inverse, middle, center
 
 # Create new variables
 
@@ -471,6 +471,10 @@ df$month2 &lt;- case_when(df$month %in% c('Sep','Oct','Nov','Dec') ~ 'fall_semes
                        TRUE~'break')
 ```
 
+---
+class: inverse, middle, center
+
+# Subsetting
 
 ---
 # Subsetting by columns
@@ -588,7 +592,7 @@ df4 &lt;- df[(df$Country=='United States of America')&amp;
 | isTRUE(x) 	| test if X is TRUE        	|
 
 ---
-class: middle, center
+class: inverse, middle, center
 # Some Examples
 
 ---
