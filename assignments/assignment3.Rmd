@@ -38,7 +38,7 @@ Problems
 
 2. Use `read.csv` to import the Covid19 Vaccination data from WHO: [link](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv).
 
-Show the names of the variables in the data
+2. Show the names of the variables in the data
 
 3. How many columns and rows the data have? 
 
