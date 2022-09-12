@@ -76,3 +76,23 @@ Find the frequency and relative frequency of `no_death` and `has_death`.
 14. Find the median cases by weekdays in Rhode Island in 2021 
 
 15. Compare the median cases in Rhode Island in June, July, August and September in 2021. 
+
+16.  Find your own dataset, import it and implement the following functions on the data
+
+- head
+- str
+- names
+- mean, min, max
+- table
+- is.na
+- colSums
+- class
+- cor
+- by
+- ifelse
+- case_when
+
+17.  In the dataset in #16, practice the follows.  You can reuse the code of 16. 
+
+- Create a categorical variable from a continuous variable
+- From one categorical variable, create a new categorical variable with fewer categories

@@ -222,6 +222,7 @@ df$New_cases2 <- ifelse(df$New_cases==0,
 
 ---
 ```{r}
+library(dplyr)
 df$New_cases2 <- case_when(df$New_cases==0 ~ 'No_new_cases', 
                             TRUE ~ 'Has_new_cases') 
 ```
