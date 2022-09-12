@@ -252,8 +252,17 @@ table(df$New_deaths2)
 - If a variable has too many categories, we may want to group those categories to fewer categories
 
 ```{r}
-# Create 
 
+# Create a variable month
+library(lubridate)
+df$month <- month(df$Date_report, label = TRUE)
+
+
+# group months into fewer categories
+df$month2 <- case_when(df$month %in% c('Sep','Oct','Nov','Dec') ~ 'fall_semester',
+                       df$month %in% c('Feb','Mar','Apr','May') ~ 'spring_semester',
+                       TRUE~'break')
+  
 ```
 
 
