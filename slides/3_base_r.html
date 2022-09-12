@@ -33,7 +33,7 @@ class: center, middle, inverse, title-slide
 
 
 
----
+
 class: middle, center
 # Data Frame
 
@@ -61,7 +61,6 @@ class: middle, center
 ---
 class: center, middle
 
-# Live Code
 # Creating a Data Frame
 
 ---
@@ -92,7 +91,6 @@ df
 
 ---
 class: middle, center
-# Live Code
 
 Import a data frame using `read.csv` 
 
@@ -260,6 +258,10 @@ df$Date_report = as.Date(df$Date_report)
 ```
 
 ---
+class: middle, center
+# Simple Data Exploration
+
+---
 # Statistics of continuous/date variable
 
 
@@ -329,7 +331,7 @@ cor(df$Cumulative_cases, df$Cumulative_deaths)
 ```
 
 ---
-# 1 continuous by 1 categorical
+# Calculate a continuous by a categorical
 
 
 ```r
@@ -359,8 +361,16 @@ by(df$New_deaths, df$WHO_region, FUN = mean)
 ## [1] 7.685539
 ```
 
+
 ---
-# Binning Continuous variable
+class: middle, center
+
+# Create new variables
+
+*It is common that to create new variables to analyze the data better*
+
+---
+# Binning Continuous variable to a categorical variable
 
 Create the categorical variable `New_cases2` variable taking the values as follows
 
@@ -373,6 +383,35 @@ Create the categorical variable `New_cases2` variable taking the values as follo
 df$New_cases2 &lt;- ifelse(df$New_cases==0, 
                         'No_new_cases','Has_new_cases') 
 ```
+
+---
+
+```r
+library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
+df$New_cases2 &lt;- case_when(df$New_cases==0 ~ 'No_new_cases', 
+                            TRUE ~ 'Has_new_cases') 
+```
+
 
 ---
 # Binning Continuous variable
@@ -388,16 +427,48 @@ Create the categorical variable `New_deaths2` variable taking the values as foll
 ---
 
 ```r
-df$New_deaths2 &lt;- cut(df$New_deaths, 
-                      breaks = c(-Inf, 2, 5,Inf), 
-                      labels=c('low_death','mid_death','high_death'))
+df$New_deaths2 &lt;- case_when(df$New_deaths&lt;2 ~ 'low_death',
+                             df$New_deaths&lt;5 ~ 'mid_death',
+                             TRUE~'high_death')
 table(df$New_deaths2)
 ```
 
 ```
 ## 
-##  low_death  mid_death high_death 
-##     160122      14768      57133
+## high_death  low_death  mid_death 
+##      61023     151654      19346
+```
+
+---
+# Binning categories of a categorical variable
+
+- If a variable has too many categories, we may want to group those categories to fewer categories
+
+
+```r
+# Create a variable month
+library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
+```
+
+```r
+df$month &lt;- month(df$Date_report, label = TRUE)
+
+
+# group months into fewer categories
+df$month2 &lt;- case_when(df$month %in% c('Sep','Oct','Nov','Dec') ~ 'fall_semester',
+                       df$month %in% c('Feb','Mar','Apr','May') ~ 'spring_semester',
+                       TRUE~'break')
 ```
 
 
@@ -458,12 +529,12 @@ head(df1)
 ## 3  2020-01-05           AF Afghanistan       EMRO         0                0
 ## 4  2020-01-06           AF Afghanistan       EMRO         0                0
 ## 5  2020-01-07           AF Afghanistan       EMRO         0                0
-##   New_deaths Cumulative_deaths   New_cases2 New_deaths2
-## 1          0                 0 No_new_cases   low_death
-## 2          0                 0 No_new_cases   low_death
-## 3          0                 0 No_new_cases   low_death
-## 4          0                 0 No_new_cases   low_death
-## 5          0                 0 No_new_cases   low_death
+##   New_deaths Cumulative_deaths   New_cases2 New_deaths2 month month2
+## 1          0                 0 No_new_cases   low_death   Jan  break
+## 2          0                 0 No_new_cases   low_death   Jan  break
+## 3          0                 0 No_new_cases   low_death   Jan  break
+## 4          0                 0 No_new_cases   low_death   Jan  break
+## 5          0                 0 No_new_cases   low_death   Jan  break
 ```
 
 ---

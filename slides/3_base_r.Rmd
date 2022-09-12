@@ -204,7 +204,7 @@ class: middle, center
 
 # Create new variables
 
-- It is common that to create new variables to analyze the data better
+*It is common that to create new variables to analyze the data better*
 
 ---
 # Binning Continuous variable to a categorical variable
@@ -247,7 +247,7 @@ df$New_deaths2 <- case_when(df$New_deaths<2 ~ 'low_death',
 table(df$New_deaths2)
 ```
 
---
+---
 # Binning categories of a categorical variable
 
 - If a variable has too many categories, we may want to group those categories to fewer categories
