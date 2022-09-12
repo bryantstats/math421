@@ -36,7 +36,7 @@ Problems
 | 2    	| 29  	| Steve 	|
 | 3    	| 42  	| Ricky 	|
 
-2. Use `read.csv` to import the Covid19 Vaccination data from WHO: [link](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv)
+2. Use `read.csv` to import the Covid19 Vaccination data from WHO: [link](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv).
 
 Show the names of the variables in the data
 
