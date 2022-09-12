@@ -31,7 +31,7 @@ xaringanExtra::use_webcam()
 xaringanExtra::use_fit_screen()
 ```
 
----
+
 class: middle, center
 # Data Frame
 
@@ -59,7 +59,6 @@ class: middle, center
 ---
 class: center, middle
 
-# Live Code
 # Creating a Data Frame
 
 ---
@@ -82,7 +81,6 @@ df
 
 ---
 class: middle, center
-# Live Code
 
 Import a data frame using `read.csv` 
 
@@ -95,7 +93,7 @@ Check missing data with `sum(is.na())`, `colSums((is.na))`
 ---
 # Read (Import) a Data Frame using `read.csv`
 
-- Method 1: Download the file to your computer and read it
+- Method 1: Download the file to your computer and read it. Usually the code and the data are in the same folder. 
 
 ```{r, eval=FALSE}
 setwd("C:/Users/sonou/Downloads")
@@ -190,14 +188,20 @@ cor(df$Cumulative_cases, df$Cumulative_deaths)
 ```
 
 ---
-# 1 continuous by 1 categorical
+# Calculate a continuous by a categorical
 
 ```{r}
-by(df$New_deaths, df$WHO_region, mean)
+by(df$New_deaths, df$WHO_region, FUN = mean)
 ```
 
+
 ---
-# Binning Continuous variable
+# Create new variables
+
+- It is common that to create new variables to analyze the data better
+
+---
+# Binning Continuous variable to a categorical variable
 
 Create the categorical variable `New_cases2` variable taking the values as follows
 
@@ -209,6 +213,13 @@ Create the categorical variable `New_cases2` variable taking the values as follo
 df$New_cases2 <- ifelse(df$New_cases==0, 
                         'No_new_cases','Has_new_cases') 
 ```
+
+---
+```{r}
+df$New_cases2 <- case_when(df$New_cases==0 ~ 'No_new_cases', 
+                            TRUE ~ 'Has_new_cases') 
+```
+
 
 ---
 # Binning Continuous variable
@@ -223,10 +234,20 @@ Create the categorical variable `New_deaths2` variable taking the values as foll
 
 ---
 ```{r}
-df$New_deaths2 <- cut(df$New_deaths, 
-                      breaks = c(-Inf, 2, 5,Inf), 
-                      labels=c('low_death','mid_death','high_death'))
+df$New_deaths2 <- case_when(df$New_deaths<2 ~ 'low_death',
+                             df$New_deaths<5 ~ 'mid_death',
+                             TRUE~'high_death')
 table(df$New_deaths2)
+```
+
+--
+# Binning categories of a categorical variable
+
+- If a variable has too many categories, we may want to group those categories to fewer categories
+
+```{r}
+# Create 
+
 ```
 
 

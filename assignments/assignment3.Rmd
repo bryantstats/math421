@@ -11,7 +11,7 @@ title: "Assignment 3.  Working with Data Frame. Base R Style"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment3.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment3.Rmd)) in Rstudio. 
 
 - Right under each question, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
