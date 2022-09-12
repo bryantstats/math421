@@ -161,6 +161,10 @@ df$Date_report = as.Date(df$Date_report)
 ```
 
 ---
+class: middle, center
+# Simple Data Exploration
+
+---
 # Statistics of continuous/date variable
 
 ```{r}
@@ -196,6 +200,8 @@ by(df$New_deaths, df$WHO_region, FUN = mean)
 
 
 ---
+class: middle, center
+
 # Create new variables
 
 - It is common that to create new variables to analyze the data better
