@@ -14,3 +14,10 @@
 - [Slides](slides/2_r_basics.html)
 
 - [Assignment 2](assignments/assignment2.html)
+
+### 3. R Basics: Data Wrangling with Base R
+
+- [Slides](slides/3_base_r.html)
+
+- [Assignment 3](assignments/assignment3.html)
+

@@ -97,4 +97,4 @@ Find the frequency and relative frequency of `no_death` and `has_death`.
 - Create a categorical variable from a continuous variable
 - From one categorical variable, create a new categorical variable with fewer categories
 
-If you do not have a data, you can use [the titanic dataset](https://www.kaggle.com/competitions/titanic/data?select=train.csv), which can be downloaded at [this link](../data/titanic.csv)
+If you do not have a data, you can use [the titanic dataset](https://www.kaggle.com/competitions/titanic/overview), which can be downloaded at [this link](../data/titanic.csv)
