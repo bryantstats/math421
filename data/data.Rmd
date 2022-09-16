@@ -1,0 +1,20 @@
+---
+title: "Math 421 - Dataset"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+- [WHO Covid19](WHO-COVID-19-global-data.csv), [Source](https://covid19.who.int/WHO-COVID-19-global-data.csv)
+
+- [NY Times Covid19](us-states.csv), [Source](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv)
+
+- [Covid Tracking Project Data](all-states-history.csv), [Source](https://covidtracking.com/data)
+
+- [Adult Census Income](adult_census.csv), [Source](https://archive.ics.uci.edu/ml/datasets/census+income)
+
+- [Titanic](titanic.csv), [Source](https://www.kaggle.com/competitions/titanic/data)

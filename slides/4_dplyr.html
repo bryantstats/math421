@@ -6,6 +6,13 @@
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
   </head>
   <body>
     <textarea id="source">
@@ -28,21 +35,10 @@ class: inverse
 
 
 
-# Agenda
 
-1. `tidyverse` package
-
-2. `tibble` vs. `data frame`
-
-3. read_csv vs read.csv
-
-3. Subset by `select`, `filter` functions
-
-4. Combo 1: `group_by` and `summarise`
-
-5. Pipe operator (%&gt;%) 
-
-6. Combo 2: `filter`, `group_by`, `summarise`
+---
+class: inverse, center, middle
+# tidyverse
 
 ---
 class: inverse
@@ -76,15 +72,23 @@ library(tidyverse)
 ```
 
 
+```r
+library(tidyverse)
+```
+
+---
+class: inverse, center, middle
+
+# read_csv
 
 ---
 class: inverse
 
-# Tibble 
+# read_csv 
 
-- A tibble  is a data frame and MORE
+Use `read_csv` instead of `read.csv` to read the data 
 
-- `read_csv` returns a tibble
+- `read_csv` 
 
 
 ```r
@@ -92,32 +96,6 @@ library(tidyverse)
 df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
 ```
 
----
-class: inverse
-
-# Tibble 
-
-- Use it like a data frame
-
-
-
-```r
-names(df)
-
-table(df$dataQualityGrade)
-```
-
----
-class: inverse
-
-# Tibble 
-
-- Print out the data more nicely
-
-
-```r
-df
-```
 
 ---
 class: inverse
@@ -136,7 +114,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 1.172959 mins
+## Time difference of 2.413997 mins
 ```
 
 
@@ -158,14 +136,12 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 20.58847 secs
+## Time difference of 7.581324 secs
 ```
 
 
 ---
 class: inverse
-
-# read_csv vs. read.csv
 
 - read_csv recognize the types of data better
 
@@ -177,7 +153,7 @@ str(df)
 ```
 
 ```
-## 'data.frame':	1735384 obs. of  6 variables:
+## 'data.frame':	2502832 obs. of  6 variables:
 ##  $ date  : chr  "2020-01-21" "2020-01-22" "2020-01-23" "2020-01-24" ...
 ##  $ county: chr  "Snohomish" "Snohomish" "Snohomish" "Cook" ...
 ##  $ state : chr  "Washington" "Washington" "Washington" "Illinois" ...
@@ -189,8 +165,6 @@ str(df)
 ---
 class: inverse
 
-# read_csv vs. read.csv
-
 - read_csv recognize the types of data better
 
 
@@ -201,13 +175,13 @@ str(df)
 ```
 
 ```
-## spec_tbl_df [1,735,384 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ date  : Date[1:1735384], format: "2020-01-21" "2020-01-22" ...
-##  $ county: chr [1:1735384] "Snohomish" "Snohomish" "Snohomish" "Cook" ...
-##  $ state : chr [1:1735384] "Washington" "Washington" "Washington" "Illinois" ...
-##  $ fips  : chr [1:1735384] "53061" "53061" "53061" "17031" ...
-##  $ cases : num [1:1735384] 1 1 1 1 1 1 1 1 1 1 ...
-##  $ deaths: num [1:1735384] 0 0 0 0 0 0 0 0 0 0 ...
+## spec_tbl_df [2,502,832 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ date  : Date[1:2502832], format: "2020-01-21" "2020-01-22" ...
+##  $ county: chr [1:2502832] "Snohomish" "Snohomish" "Snohomish" "Cook" ...
+##  $ state : chr [1:2502832] "Washington" "Washington" "Washington" "Illinois" ...
+##  $ fips  : chr [1:2502832] "53061" "53061" "53061" "17031" ...
+##  $ cases : num [1:2502832] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ deaths: num [1:2502832] 0 0 0 0 0 0 0 0 0 0 ...
 ##  - attr(*, "spec")=
 ##   .. cols(
 ##   ..   date = col_date(format = ""),
@@ -223,42 +197,45 @@ str(df)
 ---
 class: inverse
 
-# select and filter function
+- Data prints out nicely with read_csv
 
 
 ```r
 df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
 
-# Select variable state and date for df1
-df1 &lt;-  select(df, state, date)
-
-# Deselect variable state from df
-df2 &lt;-  select(df, -state)
-
-# Select rows or days with no deaths
-df3 &lt;- filter(df, deaths==0, )
+df
 ```
+
+```
+## # A tibble: 2,502,832 x 6
+##    date       county      state      fips  cases deaths
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0
+##  2 2020-01-22 Snohomish   Washington 53061     1      0
+##  3 2020-01-23 Snohomish   Washington 53061     1      0
+##  4 2020-01-24 Cook        Illinois   17031     1      0
+##  5 2020-01-24 Snohomish   Washington 53061     1      0
+##  6 2020-01-25 Orange      California 06059     1      0
+##  7 2020-01-25 Cook        Illinois   17031     1      0
+##  8 2020-01-25 Snohomish   Washington 53061     1      0
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0
+## 10 2020-01-26 Los Angeles California 06037     1      0
+## # ... with 2,502,822 more rows
+```
+
 
 ---
-class: inverse
+class: inverse, center, middle
 
-# Combo 1: group_by + summarise
+# Pipe (%&gt;%) 
 
+# Hotkey: Ctrl + Shift + M
 
-```r
-# Group by dataQualityGrade
-df1 = group_by(df, state)
-
-# Calculate something for each group
-summarise(df1, mean(deaths))
-```
 
 ---
 class: inverse
 
 # Pipe operator (%&gt;%) 
-
-- Pipe operator will make `tidyverse` much more attractive!
 
 - `\(x\)` %&gt;% `\(f\)` is the same `\(f(x)\)`
 
@@ -282,14 +259,6 @@ x %&gt;% sum
 ```
 ## [1] 55
 ```
-
----
-class: inverse
-
-class: center, middle
-# (%&gt;%) 
-
-# Hotkey: Ctrl + Shift + M
 
 
 ---
@@ -320,24 +289,461 @@ x %&gt;% sum %&gt;% log
 ## [1] 4.007333
 ```
 
+---
+class: inverse, center, middle
+
+# dplyr
+
+---
+class: inverse
+
+# Five verbs of dplyr
+
+- `select()` selects columns from data
+- `filter()` filter rows of data
+- `summarise()` summarises data (calculating summary statistics)
+- `arrange()` arrange data
+- `mutate()` creates new variables
+
+---
+class: inverse, center, middle
+# select
 
 
 ---
 class: inverse
 
-# Pipe operator (%&gt;%)
-
-- `\(x\)` %&gt;% `\(f(y)\)` is the same `\(f(x, y)\)`
+# select: select columns
 
 
 ```r
-# conventional way
-filter(df, state =='Rhode Island')
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
 
-# pipe
-df %&gt;% filter(state=='Rhode Island')
+df1 &lt;-  select(df, state, date)
 ```
 
+---
+class: inverse
+
+# select with pipe
+
+
+```r
+df %&gt;% select(state, date)
+```
+
+```
+## # A tibble: 2,502,832 x 2
+##    state      date      
+##    &lt;chr&gt;      &lt;date&gt;    
+##  1 Washington 2020-01-21
+##  2 Washington 2020-01-22
+##  3 Washington 2020-01-23
+##  4 Illinois   2020-01-24
+##  5 Washington 2020-01-24
+##  6 California 2020-01-25
+##  7 Illinois   2020-01-25
+##  8 Washington 2020-01-25
+##  9 Arizona    2020-01-26
+## 10 California 2020-01-26
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse
+
+
+```r
+# Deselect date from the data
+df %&gt;% select(-date)
+```
+
+```
+## # A tibble: 2,502,832 x 5
+##    county      state      fips  cases deaths
+##    &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Snohomish   Washington 53061     1      0
+##  2 Snohomish   Washington 53061     1      0
+##  3 Snohomish   Washington 53061     1      0
+##  4 Cook        Illinois   17031     1      0
+##  5 Snohomish   Washington 53061     1      0
+##  6 Orange      California 06059     1      0
+##  7 Cook        Illinois   17031     1      0
+##  8 Snohomish   Washington 53061     1      0
+##  9 Maricopa    Arizona    04013     1      0
+## 10 Los Angeles California 06037     1      0
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse
+
+
+```r
+# select only numeric variables
+df %&gt;% select_if(is.numeric)
+```
+
+```
+## # A tibble: 2,502,832 x 2
+##    cases deaths
+##    &lt;dbl&gt;  &lt;dbl&gt;
+##  1     1      0
+##  2     1      0
+##  3     1      0
+##  4     1      0
+##  5     1      0
+##  6     1      0
+##  7     1      0
+##  8     1      0
+##  9     1      0
+## 10     1      0
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse
+
+
+```r
+# select only non-numeric variables
+df %&gt;% select_if(~!is.numeric(.))
+```
+
+```
+## # A tibble: 2,502,832 x 4
+##    date       county      state      fips 
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;
+##  1 2020-01-21 Snohomish   Washington 53061
+##  2 2020-01-22 Snohomish   Washington 53061
+##  3 2020-01-23 Snohomish   Washington 53061
+##  4 2020-01-24 Cook        Illinois   17031
+##  5 2020-01-24 Snohomish   Washington 53061
+##  6 2020-01-25 Orange      California 06059
+##  7 2020-01-25 Cook        Illinois   17031
+##  8 2020-01-25 Snohomish   Washington 53061
+##  9 2020-01-26 Maricopa    Arizona    04013
+## 10 2020-01-26 Los Angeles California 06037
+## # ... with 2,502,822 more rows
+```
+
+
+---
+class: inverse, center, middle
+# filter
+
+---
+class: inverse
+
+# filter
+
+
+```r
+# Select rows or days with no deaths
+df %&gt;% filter(deaths==0)
+```
+
+```
+## # A tibble: 262,872 x 6
+##    date       county      state      fips  cases deaths
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0
+##  2 2020-01-22 Snohomish   Washington 53061     1      0
+##  3 2020-01-23 Snohomish   Washington 53061     1      0
+##  4 2020-01-24 Cook        Illinois   17031     1      0
+##  5 2020-01-24 Snohomish   Washington 53061     1      0
+##  6 2020-01-25 Orange      California 06059     1      0
+##  7 2020-01-25 Cook        Illinois   17031     1      0
+##  8 2020-01-25 Snohomish   Washington 53061     1      0
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0
+## 10 2020-01-26 Los Angeles California 06037     1      0
+## # ... with 262,862 more rows
+```
+
+---
+class: inverse
+
+# filter
+
+
+```r
+# Select rows or days with no deaths
+df %&gt;% filter(state=='Rhode Island',deaths==0)
+```
+
+```
+## # A tibble: 182 x 6
+##    date       county  state        fips  cases deaths
+##    &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 2020-03-01 Unknown Rhode Island &lt;NA&gt;      2      0
+##  2 2020-03-02 Unknown Rhode Island &lt;NA&gt;      2      0
+##  3 2020-03-03 Unknown Rhode Island &lt;NA&gt;      2      0
+##  4 2020-03-04 Unknown Rhode Island &lt;NA&gt;      2      0
+##  5 2020-03-05 Unknown Rhode Island &lt;NA&gt;      2      0
+##  6 2020-03-06 Unknown Rhode Island &lt;NA&gt;      3      0
+##  7 2020-03-07 Unknown Rhode Island &lt;NA&gt;      3      0
+##  8 2020-03-08 Unknown Rhode Island &lt;NA&gt;      3      0
+##  9 2020-03-09 Unknown Rhode Island &lt;NA&gt;      3      0
+## 10 2020-03-10 Unknown Rhode Island &lt;NA&gt;      5      0
+## # ... with 172 more rows
+```
+
+---
+class: inverse, center, middle
+# mutate
+
+---
+class: inverse
+
+# mutate:  Create new columns
+
+
+```r
+df %&gt;% mutate(cases_minus_deaths = cases - deaths)
+```
+
+```
+## # A tibble: 2,502,832 x 7
+##    date       county      state      fips  cases deaths cases_minus_deaths
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;              &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0                  1
+##  2 2020-01-22 Snohomish   Washington 53061     1      0                  1
+##  3 2020-01-23 Snohomish   Washington 53061     1      0                  1
+##  4 2020-01-24 Cook        Illinois   17031     1      0                  1
+##  5 2020-01-24 Snohomish   Washington 53061     1      0                  1
+##  6 2020-01-25 Orange      California 06059     1      0                  1
+##  7 2020-01-25 Cook        Illinois   17031     1      0                  1
+##  8 2020-01-25 Snohomish   Washington 53061     1      0                  1
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0                  1
+## 10 2020-01-26 Los Angeles California 06037     1      0                  1
+## # ... with 2,502,822 more rows
+```
+
+
+---
+class: inverse
+
+# mutate
+
+- If you want to add the new columns to the original data
+
+
+```r
+df &lt;- df %&gt;% mutate(non_death = cases - deaths)
+```
+
+
+---
+class: inverse
+
+# mutate
+
+
+```r
+df %&gt;% mutate(deaths2 = ifelse(deaths==0,'No_deaths','Has_deaths'))
+```
+
+```
+## # A tibble: 2,502,832 x 8
+##    date       county      state      fips  cases deaths non_death deaths2  
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;    
+##  1 2020-01-21 Snohomish   Washington 53061     1      0         1 No_deaths
+##  2 2020-01-22 Snohomish   Washington 53061     1      0         1 No_deaths
+##  3 2020-01-23 Snohomish   Washington 53061     1      0         1 No_deaths
+##  4 2020-01-24 Cook        Illinois   17031     1      0         1 No_deaths
+##  5 2020-01-24 Snohomish   Washington 53061     1      0         1 No_deaths
+##  6 2020-01-25 Orange      California 06059     1      0         1 No_deaths
+##  7 2020-01-25 Cook        Illinois   17031     1      0         1 No_deaths
+##  8 2020-01-25 Snohomish   Washington 53061     1      0         1 No_deaths
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0         1 No_deaths
+## 10 2020-01-26 Los Angeles California 06037     1      0         1 No_deaths
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse, middle, center
+# arrange
+
+
+---
+class: inverse
+
+# arrange
+
+
+```r
+df %&gt;% arrange(deaths)
+```
+
+```
+## # A tibble: 2,502,832 x 7
+##    date       county      state      fips  cases deaths non_death
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0         1
+##  2 2020-01-22 Snohomish   Washington 53061     1      0         1
+##  3 2020-01-23 Snohomish   Washington 53061     1      0         1
+##  4 2020-01-24 Cook        Illinois   17031     1      0         1
+##  5 2020-01-24 Snohomish   Washington 53061     1      0         1
+##  6 2020-01-25 Orange      California 06059     1      0         1
+##  7 2020-01-25 Cook        Illinois   17031     1      0         1
+##  8 2020-01-25 Snohomish   Washington 53061     1      0         1
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0         1
+## 10 2020-01-26 Los Angeles California 06037     1      0         1
+## # ... with 2,502,822 more rows
+```
+---
+class: inverse
+
+# arrange
+
+
+```r
+df %&gt;% arrange(-deaths)
+```
+
+```
+## # A tibble: 2,502,832 x 7
+##    date       county        state    fips    cases deaths non_death
+##    &lt;date&gt;     &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+##  1 2022-05-13 New York City New York &lt;NA&gt;  2422658  40267   2382391
+##  2 2022-05-12 New York City New York &lt;NA&gt;  2417909  40261   2377648
+##  3 2022-05-11 New York City New York &lt;NA&gt;  2411431  40256   2371175
+##  4 2022-05-10 New York City New York &lt;NA&gt;  2408357  40248   2368109
+##  5 2022-05-09 New York City New York &lt;NA&gt;  2406070  40240   2365830
+##  6 2022-05-06 New York City New York &lt;NA&gt;  2392182  40232   2351950
+##  7 2022-05-07 New York City New York &lt;NA&gt;  2392182  40232   2351950
+##  8 2022-05-08 New York City New York &lt;NA&gt;  2392903  40232   2352671
+##  9 2022-05-05 New York City New York &lt;NA&gt;  2387684  40227   2347457
+## 10 2022-05-04 New York City New York &lt;NA&gt;  2383719  40220   2343499
+## # ... with 2,502,822 more rows
+```
+
+
+---
+class: inverse, center, middle
+# summarise
+
+---
+class: inverse
+
+# summarise: Calculations on continuous variables
+
+
+```r
+df %&gt;% summarise(mean_death = mean(deaths, na.rm=TRUE))
+```
+
+```
+## # A tibble: 1 x 1
+##   mean_death
+##        &lt;dbl&gt;
+## 1       162.
+```
+
+---
+class: inverse
+
+# summarise: Calculations on continuous variables
+
+
+```r
+df %&gt;% summarise(mean_death = mean(deaths, na.rm=TRUE), 
+                 median_cases=median(cases, na.rm=TRUE), 
+                 max_death=max(deaths, na.rm=TRUE))
+```
+
+```
+## # A tibble: 1 x 3
+##   mean_death median_cases max_death
+##        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;
+## 1       162.         1773     40267
+```
+
+---
+class: inverse, middle, center
+# Some Other Functions
+
+---
+class: inverse
+
+# Use `count` for categorical variables
+
+
+```r
+df %&gt;% count(state)
+```
+
+```
+## # A tibble: 56 x 2
+##    state                    n
+##    &lt;chr&gt;                &lt;int&gt;
+##  1 Alabama              52312
+##  2 Alaska               20568
+##  3 American Samoa         239
+##  4 Arizona              11934
+##  5 Arkansas             59032
+##  6 California           45693
+##  7 Colorado             49527
+##  8 Connecticut           7091
+##  9 Delaware              3131
+## 10 District of Columbia   798
+## # ... with 46 more rows
+```
+
+
+---
+class: inverse
+
+
+```r
+df %&gt;% 
+  count(state) %&gt;% 
+  arrange(-n)
+```
+
+```
+## # A tibble: 56 x 2
+##    state               n
+##    &lt;chr&gt;           &lt;int&gt;
+##  1 Texas          193519
+##  2 Georgia        124889
+##  3 Virginia       103128
+##  4 Kentucky        92572
+##  5 Missouri        89600
+##  6 Illinois        79502
+##  7 Kansas          79294
+##  8 North Carolina  77809
+##  9 Iowa            77070
+## 10 Tennessee       74719
+## # ... with 46 more rows
+```
+
+---
+class: inverse
+
+# n_distinct
+
+
+```r
+df %&gt;% 
+  summarise(n_distinct(state))
+```
+
+```
+## # A tibble: 1 x 1
+##   `n_distinct(state)`
+##                 &lt;int&gt;
+## 1                  56
+```
+
+```r
+# OR
+n_distinct(df$state)
+```
+
+```
+## [1] 56
+```
 
 ---
 class: inverse
@@ -345,15 +751,28 @@ class: inverse
 # Combo 1: group_by + summarise
 
 
-```r
-# conventional way
-df1 = group_by(df, state)
-summarise(df1, summarise(mean(deaths)))
 
-# Pipe
+```r
 df %&gt;% 
   group_by(state) %&gt;% 
-  summarise(mean(deaths))
+  summarise(mean_deaths = mean(deaths))
+```
+
+```
+## # A tibble: 56 x 2
+##    state                mean_deaths
+##    &lt;chr&gt;                      &lt;dbl&gt;
+##  1 Alabama                   139.  
+##  2 Alaska                     15.8 
+##  3 American Samoa              2.61
+##  4 Arizona                   951.  
+##  5 Arkansas                   68.7 
+##  6 California                808.  
+##  7 Colorado                   95.5 
+##  8 Connecticut               772.  
+##  9 Delaware                  362.  
+## 10 District of Columbia      907.  
+## # ... with 46 more rows
 ```
 
 ---
@@ -363,17 +782,27 @@ class: inverse
 
 
 ```r
-# conventional way
-df1 = filter(df, date&gt;'01-01-2021')
-df2 = group_by(df1, state )
-summarise(df2, summarise(mean(deaths)))
-
-
-# Pipe
 df %&gt;% 
   filter(date&gt;'01-01-2021') %&gt;% 
   group_by(state) %&gt;% 
-  summarise(mean(deaths))
+  summarise(mean_deaths = mean(deaths))
+```
+
+```
+## # A tibble: 56 x 2
+##    state                mean_deaths
+##    &lt;chr&gt;                      &lt;dbl&gt;
+##  1 Alabama                   139.  
+##  2 Alaska                     15.8 
+##  3 American Samoa              2.61
+##  4 Arizona                   951.  
+##  5 Arkansas                   68.7 
+##  6 California                808.  
+##  7 Colorado                   95.5 
+##  8 Connecticut               772.  
+##  9 Delaware                  362.  
+## 10 District of Columbia      907.  
+## # ... with 46 more rows
 ```
 
 ---
@@ -383,28 +812,30 @@ class: inverse
 
 
 ```r
-# Pipe
-df %&gt;% 
-  filter(date&gt;'01-01-2021') %&gt;% 
-  group_by(state) %&gt;% 
-  summarise(average_deaths = mean(deaths)) %&gt;% 
-  arrange(average_deaths)
-```
-
----
-class: inverse
-
-# Combo 3: filter + group_by + summarise + arrange
-
-
-```r
-# Pipe
 df %&gt;% 
   filter(date&gt;'01-01-2021') %&gt;% 
   group_by(state) %&gt;% 
   summarise(average_deaths = mean(deaths)) %&gt;% 
   arrange(-average_deaths)
 ```
+
+```
+## # A tibble: 56 x 2
+##    state                average_deaths
+##    &lt;chr&gt;                         &lt;dbl&gt;
+##  1 New Jersey                    1006.
+##  2 Massachusetts                  964.
+##  3 Arizona                        951.
+##  4 District of Columbia           907.
+##  5 California                     808.
+##  6 New York                       787.
+##  7 Connecticut                    772.
+##  8 Florida                        510.
+##  9 Delaware                       362.
+## 10 Rhode Island                   359.
+## # ... with 46 more rows
+```
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

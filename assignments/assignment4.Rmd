@@ -9,7 +9,7 @@ title: "Assignment 4 - Data Wrangging with `dplyr`"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment4.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment4.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -47,17 +47,10 @@ Use `read_csv` function to import the US Covid 19 data at [link](https://covidtr
 
 `lubridate` is a package of the `tidyverse` packages.  We will make uses of `lubridate` in this question.
 
-- Use the following codes to change the type of the `date` column to `date`. 
-
-```{r, eval=FALSE}
-library(lubridate)
-df$date <- ymd(df$date)
-```
-
 - Use the below codes to create `month`, `weekday` and `monthday` variables
 
 ```{r, eval=FALSE}
-
+library(lubridate)
 df$month = month(df$date)
 
 # day of the week
@@ -95,7 +88,7 @@ Use the select function to deselect the column `totalTestsViral` from the data.
 
 #### 6. Pipe Operator ( %>% )
 
-Pipe operator offers another way to write R codes. Many times, it makes the codes more readable.  Pipe works very well with all the `tidyverse` packages. Refer to [these slides](file:///C:/Users/sonou/Dropbox/git/math421/slides/dplyr.html#15) (slide 15, 16, 17 and 18) to rewrite the below codes using pipe operator
+Pipe operator offers another way to write R codes. Many times, it makes the codes more readable.  Pipe works very well with all the `tidyverse` packages. Refer to [these slides](../slides/4_dplyr.html#15) (slide 15, 16, 17 and 18) to rewrite the below codes using pipe operator
 
 ```{r, eval=FALSE}
 x <- c(1:10)
@@ -150,10 +143,26 @@ df %>%
 
 - Compare the average number of hospitalizations between weekdays and weekends in Summer 2020
 
-- Redo Questions 14 and 15 in [Assignment 3](fa2021_assignment3.html) using the combos.  Notice:  you also need to use the data used in Assignment 3.  
+- Redo Questions 14 and 15 in [Assignment 3](assignment3.html) using the combos.  Notice:  you also need to use the data used in Assignment 3.  
 
 -------
 
-#### 9. Combo 2: filter + group_by + summarise + arrange
+#### 9. Combo 3: filter + group_by + summarise + arrange
 
 Use the arrange function to find a month that has the highest number of deaths on the weekend. 
+
+-------
+
+#### 10. Use your own dataset and implement the follows functions or combos. You can use the [Adult Census Income](../data/adult_census.csv) or [Titanic data](../data/titanic.csv). 
+
+- select
+- filter
+- mutate
+- summarise
+- arrange
+- count
+- count + arrange
+- filter + count + arrange
+- group_by + summarise
+- filter + group_by + summarise
+- filter + group_by + summarise + arrange
