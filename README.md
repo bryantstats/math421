@@ -24,3 +24,8 @@
 
 - [Assignment 3](assignments/assignment3.html)
 
+### 4. Data Wrangling with dplr
+
+- [Slides](slides/4_dplyr.html)
+
+- [Assignment 4](assignments/assignment4.html)
