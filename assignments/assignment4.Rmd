@@ -31,7 +31,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 An R package can be installed by `install.packages` function. Install `tidyverse` if you have not done so. 
 
-```{r, eval=FALSE}
+```{r}
 install.packages('tidyverse')
 ```
 
@@ -49,7 +49,7 @@ Use `read_csv` function to import the US Covid 19 data at [link](https://covidtr
 
 - Use the below codes to create `month`, `weekday` and `monthday` variables
 
-```{r, eval=FALSE}
+```{r}
 library(lubridate)
 df$month = month(df$date)
 
@@ -66,7 +66,7 @@ df$monthday <- mday(df$date)
 
 The function `case_when` is a good option to create a new variable from existing variable.  For example, this below codes create a new variable, `daily_death`, from `deathIncrease` variable.  `deathIncrease` is the number of daily new death by Covid19.  The new variable `daily_death` takes three values:  low (if `deathIncrease` less than 3), medium (`deathIncrease` from 3 to 14), and high (`deathIncrease` more than 14).  Please notice that this can also be done in a different way as shown in Assignment 3. 
 
-```{r, eval=FALSE}
+```{r}
 df$daily_death <- case_when(
   df$deathIncrease <3 ~ 'low',
   df$deathIncrease <=14 ~ 'medium',
@@ -90,7 +90,7 @@ Use the select function to deselect the column `totalTestsViral` from the data.
 
 Pipe operator offers another way to write R codes. Many times, it makes the codes more readable.  Pipe works very well with all the `tidyverse` packages. Refer to [these slides](../slides/4_dplyr.html#15) (slide 15, 16, 17 and 18) to rewrite the below codes using pipe operator
 
-```{r, eval=FALSE}
+```{r}
 x <- c(1:10)
 
 # square root of x
@@ -111,7 +111,7 @@ log(16, 2)
 
 This combo is used when you want to apply a function/calculation to different groups of the data. For example, to calculate the average number of cases (`positiveIncrease`) by `dataQualityGrade`, we use:
 
-```{r, eval=FALSE}
+```{r}
 df %>% 
   group_by(weekday) %>% 
   summarise(mean(positiveIncrease))
@@ -130,7 +130,7 @@ df %>%
 
 An example: to calculate the average number of cases (`positiveIncrease`) in January and February separately, we use:
 
-```{r, eval=FALSE}
+```{r}
 df %>% 
   filter(month==1|month==2) %>% 
   group_by(month) %>% 

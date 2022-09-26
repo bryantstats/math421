@@ -18,3 +18,5 @@ knitr::opts_chunk$set(echo = TRUE)
 - [Adult Census Income](adult_census.csv), [Source](https://archive.ics.uci.edu/ml/datasets/census+income)
 
 - [Titanic](titanic.csv), [Source](https://www.kaggle.com/competitions/titanic/data)
+
+- [IMDB Top 1000](imdb_top_1000.csv), [Source](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows)

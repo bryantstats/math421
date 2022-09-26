@@ -29,3 +29,5 @@
 - [Slides](slides/4_dplyr.html)
 
 - [Assignment 4](assignments/assignment4.html)
+
+- [Extra Credits](assignments/assignment4_extra_credits.html)
