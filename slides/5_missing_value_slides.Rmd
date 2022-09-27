@@ -154,10 +154,19 @@ class: inverse
 - Sometime the missing values are not in `NA`
 
 ```{r}
-
+colSums(df=='Missing', na.rm = TRUE)
 ```
 
-- Notice: You can download the `cars.csv` dataset at: [this link](car.csv).  This data records vehicle accidents in the US in 2015. 
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+```{r}
+vis_expect(df, ~.x == 'Missing')
+```
+
 
 ---
 class: inverse

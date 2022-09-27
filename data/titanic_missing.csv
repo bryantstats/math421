@@ -96,21 +96,21 @@ PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
 95,0,3,"Coxon, Mr. Daniel",male,59,0,0,364500,7.25,,S
 96,0,3,"Shorney, Mr. Charles Joseph",male,,0,0,374910,8.05,,S
 97,0,1,"Goldschmidt, Mr. George B",male,71,0,0,PC 17754,34.6542,A5,C
-98,1,1,"Greenfield, Mr. William Bertram",male,23,0,1,PC 17759,63.3583,D10 D12,C
-99,1,2,"Doling, Mrs. John T (Ada Julia Bone)",female,34,0,1,231919,Missing,,S
-100,0,2,"Kantor, Mr. Sinai",male,34,1,0,244367,Missing,,S
-101,0,3,"Petranec, Miss. Matilda",female,28,0,0,349245,Missing,,S
-102,0,3,"Petroff, Mr. Pastcho (""Pentcho"")",male,,0,0,349215,Missing,,S
-103,0,1,"White, Mr. Richard Frasar",male,21,0,1,35281,Missing,D26,S
-104,0,3,"Johansson, Mr. Gustaf Joel",male,33,0,0,7540,Missing,,S
-105,0,3,"Gustafsson, Mr. Anders Vilhelm",male,37,2,0,3101276,Missing,,S
-106,0,3,"Mionoff, Mr. Stoytcho",male,28,0,0,349207,Missing,,S
-107,1,3,"Salkjelsvik, Miss. Anna Kristine",female,21,0,0,343120,Missing,,S
-108,1,3,"Moss, Mr. Albert Johan",male,,0,0,312991,7.775,,S
-109,0,3,"Rekic, Mr. Tido",male,38,0,0,349249,7.8958,,S
-110,1,3,"Moran, Miss. Bertha",female,,1,0,371110,24.15,,Q
-111,0,1,"Porter, Mr. Walter Chamberlain",male,47,0,0,110465,52,C110,S
-112,0,3,"Zabour, Miss. Hileni",female,14.5,1,0,2665,14.4542,,C
+98,1,Not Available,"Greenfield, Mr. William Bertram",male,23,0,1,PC 17759,63.3583,D10 D12,C
+99,1,Not Available,"Doling, Mrs. John T (Ada Julia Bone)",female,34,0,1,231919,Missing,,S
+100,0,Not Available,"Kantor, Mr. Sinai",male,34,1,0,244367,Missing,,S
+101,0,Not Available,"Petranec, Miss. Matilda",female,28,0,0,349245,Missing,,S
+102,0,Not Available,"Petroff, Mr. Pastcho (""Pentcho"")",male,,0,0,349215,Missing,,S
+103,0,Not Available,"White, Mr. Richard Frasar",male,21,0,1,35281,Missing,D26,S
+104,0,Not Available,"Johansson, Mr. Gustaf Joel",male,33,0,0,7540,Missing,,S
+105,0,Not Available,"Gustafsson, Mr. Anders Vilhelm",male,37,2,0,3101276,Missing,,S
+106,0,Not Available,"Mionoff, Mr. Stoytcho",male,28,0,0,349207,Missing,,S
+107,1,Not Available,"Salkjelsvik, Miss. Anna Kristine",female,21,0,0,343120,Missing,,S
+108,1,Not Available,"Moss, Mr. Albert Johan",male,,0,0,312991,7.775,,S
+109,0,Not Available,"Rekic, Mr. Tido",male,38,0,0,349249,7.8958,,S
+110,1,Not Available,"Moran, Miss. Bertha",female,,1,0,371110,24.15,,Q
+111,0,Not Available,"Porter, Mr. Walter Chamberlain",male,47,0,0,110465,52,C110,S
+112,0,Not Available,"Zabour, Miss. Hileni",female,14.5,1,0,2665,14.4542,,C
 113,0,3,"Barton, Mr. David John",male,22,0,0,324669,8.05,,S
 114,0,3,"Jussila, Miss. Katriina",female,20,1,0,4136,9.825,,S
 115,0,3,"Attalah, Miss. Malake",female,17,0,0,2627,14.4583,,C
@@ -133,17 +133,17 @@ PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
 132,0,3,"Coelho, Mr. Domingos Fernandeo",male,20,0,0,SOTON/O.Q. 3101307,7.05,,S
 133,0,3,"Robins, Mrs. Alexander A (Grace Charity Laury)",female,47,1,0,A/5. 3337,14.5,,S
 134,1,2,"Weisz, Mrs. Leopold (Mathilde Francoise Pede)",female,29,1,0,228414,26,,S
-135,0,2,"Sobey, Mr. Samuel James Hayden",male,25,0,0,C.A. 29178,13,,S
-136,0,2,"Richard, Mr. Emile",male,23,0,0,SC/PARIS 2133,15.0458,,C
-137,1,1,"Newsom, Miss. Helen Monypeny",female,19,0,2,11752,26.2833,D47,S
-138,0,1,"Futrelle, Mr. Jacques Heath",male,37,1,0,113803,53.1,C123,S
-139,0,3,"Osen, Mr. Olaf Elon",male,16,0,0,7534,9.2167,,S
-140,0,1,"Giglio, Mr. Victor",male,24,0,0,PC 17593,79.2,B86,C
-141,0,3,"Boulos, Mrs. Joseph (Sultana)",female,,0,2,2678,15.2458,,C
-142,1,3,"Nysten, Miss. Anna Sofia",female,22,0,0,347081,7.75,,S
-143,1,3,"Hakkarainen, Mrs. Pekka Pietari (Elin Matilda Dolck)",female,24,1,0,STON/O2. 3101279,15.85,,S
-144,0,3,"Burke, Mr. Jeremiah",male,19,0,0,365222,6.75,,Q
-145,0,2,"Andrew, Mr. Edgardo Samuel",male,18,0,0,231945,11.5,,S
+135,0,2,"Sobey, Mr. Samuel James Hayden",Unknown,25,0,0,C.A. 29178,13,,S
+136,0,2,"Richard, Mr. Emile",Unknown,23,0,0,SC/PARIS 2133,15.0458,,C
+137,1,1,"Newsom, Miss. Helen Monypeny",Unknown,19,0,2,11752,26.2833,D47,S
+138,0,1,"Futrelle, Mr. Jacques Heath",Unknown,37,1,0,113803,53.1,C123,S
+139,0,3,"Osen, Mr. Olaf Elon",Unknown,16,0,0,7534,9.2167,,S
+140,0,1,"Giglio, Mr. Victor",Unknown,24,0,0,PC 17593,79.2,B86,C
+141,0,3,"Boulos, Mrs. Joseph (Sultana)",Unknown,,0,2,2678,15.2458,,C
+142,1,3,"Nysten, Miss. Anna Sofia",Unknown,22,0,0,347081,7.75,,S
+143,1,3,"Hakkarainen, Mrs. Pekka Pietari (Elin Matilda Dolck)",Unknown,24,1,0,STON/O2. 3101279,15.85,,S
+144,0,3,"Burke, Mr. Jeremiah",Unknown,19,0,0,365222,6.75,,Q
+145,0,2,"Andrew, Mr. Edgardo Samuel",Unknown,18,0,0,231945,11.5,,S
 146,0,2,"Nicholls, Mr. Joseph Charles",male,19,1,1,C.A. 33112,36.75,,S
 147,1,3,"Andersson, Mr. August Edvard (""Wennerstrom"")",male,27,0,0,350043,7.7958,,S
 148,0,3,"Ford, Miss. Robina Maggie ""Ruby""",female,9,2,2,W./C. 6608,34.375,,S
@@ -169,27 +169,27 @@ PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
 168,0,3,"Skoog, Mrs. William (Anna Bernhardina Karlsson)",female,45,1,4,347088,27.9,,S
 169,0,1,"Baumann, Mr. John D",male,,0,0,PC 17318,25.925,,S
 170,0,3,"Ling, Mr. Lee",male,28,0,0,1601,56.4958,,S
-171,0,1,"Van der hoef, Mr. Wyckoff",male,61,0,0,111240,33.5,B19,S
-172,0,3,"Rice, Master. Arthur",male,4,4,1,382652,29.125,,Q
-173,1,3,"Johnson, Miss. Eleanor Ileen",female,1,1,1,347742,11.1333,,S
-174,0,3,"Sivola, Mr. Antti Wilhelm",male,21,0,0,STON/O 2. 3101280,7.925,,S
-175,0,1,"Smith, Mr. James Clinch",male,56,0,0,17764,30.6958,A7,C
-176,0,3,"Klasen, Mr. Klas Albin",male,18,1,1,350404,7.8542,,S
-177,0,3,"Lefebre, Master. Henry Forbes",male,,3,1,4133,25.4667,,S
-178,0,1,"Isham, Miss. Ann Elizabeth",female,50,0,0,PC 17595,28.7125,C49,C
-179,0,2,"Hale, Mr. Reginald",male,30,0,0,250653,13,,S
-180,0,3,"Leonard, Mr. Lionel",male,36,0,0,LINE,0,,S
-181,0,3,"Sage, Miss. Constance Gladys",female,,8,2,CA. 2343,69.55,,S
+171,0,1,"Van der hoef, Mr. Wyckoff",Unknown,61,0,0,111240,33.5,B19,S
+172,0,3,"Rice, Master. Arthur",Unknown,4,4,1,382652,29.125,,Q
+173,1,3,"Johnson, Miss. Eleanor Ileen",Unknown,1,1,1,347742,11.1333,,S
+174,0,3,"Sivola, Mr. Antti Wilhelm",Unknown,21,0,0,STON/O 2. 3101280,7.925,,S
+175,0,1,"Smith, Mr. James Clinch",Unknown,56,0,0,17764,30.6958,A7,C
+176,0,3,"Klasen, Mr. Klas Albin",Unknown,18,1,1,350404,7.8542,,S
+177,0,3,"Lefebre, Master. Henry Forbes",Unknown,,3,1,4133,25.4667,,S
+178,0,1,"Isham, Miss. Ann Elizabeth",Unknown,50,0,0,PC 17595,28.7125,C49,C
+179,0,2,"Hale, Mr. Reginald",Unknown,30,0,0,250653,13,,S
+180,0,3,"Leonard, Mr. Lionel",Unknown,36,0,0,LINE,0,,S
+181,0,3,"Sage, Miss. Constance Gladys",Unknown,,8,2,CA. 2343,69.55,,S
 182,0,2,"Pernot, Mr. Rene",male,,0,0,SC/PARIS 2131,15.05,,C
-183,0,3,"Asplund, Master. Clarence Gustaf Hugo",male,9,4,2,347077,31.3875,,S
-184,1,2,"Becker, Master. Richard F",male,1,2,1,230136,39,F4,S
-185,1,3,"Kink-Heilmann, Miss. Luise Gretchen",female,4,0,2,315153,22.025,,S
-186,0,1,"Rood, Mr. Hugh Roscoe",male,,0,0,113767,50,A32,S
-187,1,3,"O'Brien, Mrs. Thomas (Johanna ""Hannah"" Godfrey)",female,,1,0,370365,15.5,,Q
-188,1,1,"Romaine, Mr. Charles Hallace (""Mr C Rolmane"")",male,45,0,0,111428,26.55,,S
-189,0,3,"Bourke, Mr. John",male,40,1,1,364849,15.5,,Q
-190,0,3,"Turcin, Mr. Stjepan",male,36,0,0,349247,7.8958,,S
-191,1,2,"Pinsky, Mrs. (Rosa)",female,32,0,0,234604,13,,S
+183,0,3,"Asplund, Master. Clarence Gustaf Hugo",male,9,4,2,347077,Missing,,S
+184,1,2,"Becker, Master. Richard F",male,1,2,1,230136,Missing,F4,S
+185,1,3,"Kink-Heilmann, Miss. Luise Gretchen",female,4,0,2,315153,Missing,,S
+186,0,1,"Rood, Mr. Hugh Roscoe",male,,0,0,113767,Missing,A32,S
+187,1,3,"O'Brien, Mrs. Thomas (Johanna ""Hannah"" Godfrey)",female,,1,0,370365,Missing,,Q
+188,1,1,"Romaine, Mr. Charles Hallace (""Mr C Rolmane"")",male,45,0,0,111428,Missing,,S
+189,0,3,"Bourke, Mr. John",male,40,1,1,364849,Missing,,Q
+190,0,3,"Turcin, Mr. Stjepan",male,36,0,0,349247,Missing,,S
+191,1,2,"Pinsky, Mrs. (Rosa)",female,32,0,0,234604,Missing,,S
 192,0,2,"Carbines, Mr. William",male,19,0,0,28424,13,,S
 193,1,3,"Andersen-Jensen, Miss. Carla Christine Nielsine",female,19,1,0,350046,7.8542,,S
 194,1,2,"Navratil, Master. Michel M",male,3,1,1,230080,26,F2,S
@@ -255,15 +255,15 @@ PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
 254,0,3,"Lobb, Mr. William Arthur",male,30,1,0,A/5. 3336,16.1,,S
 255,0,3,"Rosblom, Mrs. Viktor (Helena Wilhelmina)",female,41,0,2,370129,20.2125,,S
 256,1,3,"Touma, Mrs. Darwis (Hanne Youssef Razi)",female,29,0,2,2650,15.2458,,C
-257,1,1,"Thorne, Mrs. Gertrude Maybelle",female,,0,0,PC 17585,79.2,,C
-258,1,1,"Cherry, Miss. Gladys",female,30,0,0,110152,86.5,B77,S
-259,1,1,"Ward, Miss. Anna",female,35,0,0,PC 17755,512.3292,,C
-260,1,2,"Parrish, Mrs. (Lutie Davis)",female,50,0,1,230433,26,,S
-261,0,3,"Smith, Mr. Thomas",male,,0,0,384461,7.75,,Q
-262,1,3,"Asplund, Master. Edvin Rojj Felix",male,3,4,2,347077,31.3875,,S
-263,0,1,"Taussig, Mr. Emil",male,52,1,1,110413,79.65,E67,S
-264,0,1,"Harrison, Mr. William",male,40,0,0,112059,0,B94,S
-265,0,3,"Henry, Miss. Delia",female,,0,0,382649,7.75,,Q
+257,1,1,"Thorne, Mrs. Gertrude Maybelle",female,,0,0,PC 17585,Missing,,C
+258,1,1,"Cherry, Miss. Gladys",female,30,0,0,110152,Missing,B77,S
+259,1,1,"Ward, Miss. Anna",female,35,0,0,PC 17755,Missing,,C
+260,1,2,"Parrish, Mrs. (Lutie Davis)",female,50,0,1,230433,Missing,,S
+261,0,3,"Smith, Mr. Thomas",male,,0,0,384461,Missing,,Q
+262,1,3,"Asplund, Master. Edvin Rojj Felix",male,3,4,2,347077,Missing,,S
+263,0,1,"Taussig, Mr. Emil",male,52,1,1,110413,Missing,E67,S
+264,0,1,"Harrison, Mr. William",male,40,0,0,112059,Missing,B94,S
+265,0,3,"Henry, Miss. Delia",female,,0,0,382649,Missing,,Q
 266,0,2,"Reeves, Mr. David",male,36,0,0,C.A. 17248,10.5,,S
 267,0,3,"Panula, Mr. Ernesti Arvid",male,16,4,1,3101295,39.6875,,S
 268,1,3,"Persson, Mr. Ernst Ulrik",male,25,1,0,347083,7.775,,S
