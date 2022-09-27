@@ -74,13 +74,13 @@ class: inverse, center, middle
 ---
 class: inverse
 ```{r}
-df %>% ggplot(aes(x=Age, y=Fare, color=Sex))+
-    geom_point()
+df %>% ggplot(aes(x=Age, color=Sex))+
+    geom_density()
 ```
 
 ---
 class: inverse
-# 2. When do you need to handle missing values
+When do you need to handle missing values
 
 - When you know the values of the missing values
 
@@ -93,11 +93,6 @@ class: inverse
 class: inverse
 # Checking 
 
-```{r}
-library(tidyverse)
-df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
-```
-
 ---
 class: inverse
 
@@ -105,43 +100,37 @@ class: inverse
 # Missing values by columns
 colSums(is.na(df))
 ```
-
-
----
-
-
-
-class: inverse
-# 3. Forms of missing values: Na, NaN and Inf
-
-```{r}
-# NaN = Not a Number
-0/0
-
-# Infinity
-1/0
-
-# NA = Missing value
-```
-
-
 ---
 class: inverse
-# Check for missing values
 
 ```{r}
-x <- c(1, 2, NA, NaN, Inf)
-
-# Check which one is missing
-is.na(x)
-
-# Check which one is infinity
-is.infinite(x)
+# Missing values by columns
+colMeans(is.na(df))
 ```
 
 ---
 class: inverse
-# 4. Steps to Handle missing values
+
+# Visualizing it
+
+```{r}
+library(visdat)
+vis_miss(df)
+```
+
+---
+class: inverse
+
+# Visualizing it
+
+```{r}
+library(visdat)
+vis_dat(df)
+```
+
+---
+class: inverse
+# Steps to Handle missing values
 
 - Step 1: Identify Missing Values (NA, 'Unknown', 'Missing','9999'...) and Convert them to `NA`
 
@@ -165,9 +154,7 @@ class: inverse
 - Sometime the missing values are not in `NA`
 
 ```{r}
-d <- read_csv('../data/car.csv')
 
-sum(is.na(d))
 ```
 
 - Notice: You can download the `cars.csv` dataset at: [this link](car.csv).  This data records vehicle accidents in the US in 2015. 
