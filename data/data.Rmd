@@ -19,4 +19,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - [Titanic](titanic.csv), [Source](https://www.kaggle.com/competitions/titanic/data)
 
+- [Titanic Missing Values](titanic_missing.csv)
+
 - [IMDB Top 1000](imdb_top_1000.csv), [Source](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows)
