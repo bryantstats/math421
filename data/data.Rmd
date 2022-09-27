@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - [Adult Census Income](adult_census.csv), [Source](https://archive.ics.uci.edu/ml/datasets/census+income)
 
+- [Adult Census Income Missing Values](adult_census_missing.csv)
+
 - [Titanic](titanic.csv), [Source](https://www.kaggle.com/competitions/titanic/data)
 
 - [Titanic Missing Values](titanic_missing.csv)
