@@ -49,44 +49,6 @@ xaringanExtra::use_fit_screen()
 
 - is.infinite
 
----
-class: inverse
-# Agenda
-
-1. Do you need to handle missing values?
-
-2. When do you need to handle missing values?
-
-3. Forms of missing values: Na, NaN, and Inf
-
-4. Steps to Handle missing values
-
-5. Identify Missing Values and Convert them to `NA`
-
-6. Remove missing values with drop_na
-
-7. Replace Missing values with replace_na
-
----
-class: inverse
-# Checking 
-
-```{r}
-library(tidyverse)
-df <- read_csv('')
-df <- df %>% filter(date>='2020-01-01', date<'2021-01-01')
-# Total missing values
-sum(is.na(df))
-```
-
----
-class: inverse
-
-```{r}
-# Missing values by columns
-colSums(is.na(df))
-```
-
 
 ---
 class: inverse, center, middle
@@ -100,8 +62,9 @@ class: inverse, center, middle
 class: inverse
 
 ```{r}
-d <- read_csv('../data/car.csv')
-df %>% summarise(average_death = mean(death, na.rm = TRUE))
+library(tidyverse)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df %>% summarise(mean_age=mean(Age, na.rm=TRUE))
 ```
 
 ---
@@ -111,9 +74,8 @@ class: inverse, center, middle
 ---
 class: inverse
 ```{r}
-df$quarters = quarters(df$date)
-df %>% ggplot(aes(x=quarters, y=average_death))+
-    geom_bar(stat = 'identity')
+df %>% ggplot(aes(x=Age, y=Fare, color=Sex))+
+    geom_point()
 ```
 
 ---
@@ -128,6 +90,27 @@ class: inverse
 - Other cases?
 
 ---
+class: inverse
+# Checking 
+
+```{r}
+library(tidyverse)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+```
+
+---
+class: inverse
+
+```{r}
+# Missing values by columns
+colSums(is.na(df))
+```
+
+
+---
+
+
+
 class: inverse
 # 3. Forms of missing values: Na, NaN and Inf
 
