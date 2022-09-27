@@ -29,21 +29,21 @@ knitr::opts_chunk$set(message = FALSE)
 
 **The data:** 
 
-This assignment works with the Adult Census Data that can be downloaded at [this link.]()
+This assignment works with the Adult Census Data that can be downloaded at [this link.](https://bryantstats.github.io/math421/data/adult_census_missing.csv)
 
 -------
 
 **Questions**
 
-1. Use read_csv to import the [titanic data](titanic.csv). 
+1. Use read_csv to import the data.  Show the number of missing values (NA) for each columns.   
 
 -------
 
-2. How many missing values in total?  Which columns has the most number if missing values?
+2. Using function `aggr` the VIM package to plot the number of missing values for each column. 
 
 -------
 
-3. Remove the column with the most number of missing value
+3. Find 
 
 -------
 
