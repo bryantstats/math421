@@ -11,7 +11,7 @@ title: "Assignment 5: Handle Missing Values"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment5.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment5.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -19,7 +19,7 @@ title: "Assignment 5: Handle Missing Values"
 
 -  Publish the html file to your Githiub Page. 
 
-***Submission***: Submit the link on Github of the assignment to Canvas under Assignment 5. 
+***Submission***: Submit the link on Github of the assignment to Canvas. 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE)
@@ -35,48 +35,23 @@ This assignment works with the Adult Census Data that can be downloaded at [this
 
 **Questions**
 
-1. Use read_csv to import the data.  Show the number of missing values (NA) for each columns.   
+1. Use `read_csv` to import the data.  Show the number of NAs for each columns.   
 
--------
+2. Using function `aggr` the VIM package to plot the number of NAs for each column. 
 
-2. Using function `aggr` the VIM package to plot the number of missing values for each column. 
+3. Find other forms of missing values. Hint: You can use the `table` function to check if there are suspicious categories (Unknown, for example) in a variable. What all other forms of missing values shown in the data. 
 
--------
+4. Replace all the forms of missing values found to NA
 
-3. Find 
+5. Replot the number of NAs for each column. 
 
--------
+6. Approach 1 to handle NAs: remove all rows that have any NAs. Save the dataset after removing as a different data. The original data is unchanged (still have NAs).  How many rows left after removing?
 
-4.  Create a dataset where the rows with missing data are removed. The original dataset remains unchanged by this action.
+7. Approach 2 to handle NAs:  Fill all the NAs with the previous or next value. (Hint: Using `fill` function).  Save the dataset after filling as a different data. The original data is unchanged (still have NAs). 
 
--------
-
-5.  Replace the missing values of numeric variables with the corresponding average of the columns.
+8. Approach 3 to handle NAs: For numeric variable, replace the NAs by the median.  For categorical variables, replace the NAs to the majority. 
 
 
--------
 
-6.  Replace the missing values of categorical variables with the corresponding mode (most frequent value) of the columns. Hint:  You can use the `table` function to see what is the mode of the variable. 
 
--------
-
-7.  The `Survived` column records whether a passenger is survived or not. `Survived = 1` means the passenger survived. Thus, the chance of survived for a random passenger can be estimated by
-
-```{r, eval=FALSE}
-mean(df$Survived)
-```
-
-Compare the chance of survived between male and female.  *Hint (Use group_by + summarise combo)*
-
--------
-
-8.  Use the `summary` function to find the first quartile (Q1) and the thrid quartile(Q3) of variable `Age`. Create a new variable taking values of `young` (Age < Q1), `middle` (Age from Q1 to Q3), and `old`(Age > Q3). Compare the chance of survived between these three groups of age. 
-
--------
-
-9.  This dataset ([link](data/Vehicle.CSV)) records the vehicles in car accident in 2019. The variable information can be found at [this link.](data/Fatality Analysis Reporting System (FARS) Analytical User’s Manual, 1975-2019.pdf) Import the data using `read_csv`. Let `d` be the data containing only accidents happened in Rhode Island.  Is there any missing values in `d`? 
-
--------
-
-10. Continue with the dataset `d` in Question 9. We will analyze the traveling speed variable (`TRAV_SP`). This variable records the travel speeds (miles per hours) when the accident happened. Use the `table` function to check all the values of this variable.  Do you observe any unexpected values?  These unexpected values are actually the codes for missing values.  Use the `na_if` function to changes the unexpected values to `NA`.  Then replace the NAs by the average speed. 
 

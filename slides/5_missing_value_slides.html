@@ -37,8 +37,6 @@ class: inverse
 
 # New Functions
 
-- colSums(is.na()), colMeans(is.na())
-
 - na_if
 
 - drop_na
@@ -51,7 +49,7 @@ class: inverse
 
 ---
 class: inverse, center, middle
-# 1. Do you need to handle missing values?
+# Do we need to handle missing values?
 
 ---
 class: inverse, center, middle
@@ -86,15 +84,11 @@ df %&gt;% ggplot(aes(x=Age, color=Sex))+
     geom_density()
 ```
 
-```
-## Warning: Removed 177 rows containing non-finite values (stat_density).
-```
-
 ![](5_missing_value_slides_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse
-When do you need to handle missing values
+# When do we need to handle missing values
 
 - When you know the values of the missing values
 
@@ -104,8 +98,8 @@ When do you need to handle missing values
 - Other cases?
 
 ---
-class: inverse
-# Checking 
+class: inverse, middle, center
+# Checking the NAs
 
 ---
 class: inverse
@@ -117,10 +111,10 @@ colSums(is.na(df))
 ```
 
 ```
-## PassengerId    Survived      Pclass        Name         Sex         Age 
-##           0           0           0           0           0         177 
-##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
-##           0           0           0           0         687           2
+## Survived   Pclass      Sex      Age    SibSp    Parch     Fare    Cabin 
+##        0        0        0      177        0        0        0      687 
+## Embarked 
+##        2
 ```
 ---
 class: inverse
@@ -132,69 +126,32 @@ colMeans(is.na(df))
 ```
 
 ```
-## PassengerId    Survived      Pclass        Name         Sex         Age 
-## 0.000000000 0.000000000 0.000000000 0.000000000 0.000000000 0.198653199 
-##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
-## 0.000000000 0.000000000 0.000000000 0.000000000 0.771043771 0.002244669
+##    Survived      Pclass         Sex         Age       SibSp       Parch 
+## 0.000000000 0.000000000 0.000000000 0.198653199 0.000000000 0.000000000 
+##        Fare       Cabin    Embarked 
+## 0.000000000 0.771043771 0.002244669
 ```
 
----
-class: inverse
-
-# Visualizing it
-
-
-```r
-library(visdat)
-```
-
-```
-## Warning: package 'visdat' was built under R version 4.1.3
-```
-
-```r
-vis_miss(df)
-```
-
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
-
----
-class: inverse
-
-# Visualizing it
-
-
-```r
-library(visdat)
-vis_dat(df)
-```
-
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse
 # Steps to Handle missing values
 
-- Step 1: Identify Missing Values (NA, 'Unknown', 'Missing','9999'...) and Convert them to `NA`
+- Step 1: Identify all the forms of Missing Values ('Unknown', 'Missing','9999'...) 
 
-- Step 2:  Either 
+- Step 2: Convert them to `NA`
 
-  - Remove them
-  - Replace them 
+- Step 3:  Handle it
+
+  - Approach 1: Remove rows that have any NAs
   
-     - Numeric Variables: 
-          - (1) by the mean/ median 
-          - (2) predicted values by some models
-          
-     - Categorical Variables: 
-          - (1) the mode or make it a new category
-          - (2) predicted values by some models    
+  - Approach 2: Fill NAs with the previous or next value of the column
+  
+  - Approach 3: Replace by the mean, majority or a predicted value. 
 
 ---
 class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
+# Step 1: Identify forms of missing
 
 
 ```r
@@ -202,20 +159,15 @@ colSums(df=='Missing', na.rm = TRUE)
 ```
 
 ```
-## PassengerId    Survived      Pclass        Name         Sex         Age 
-##           0           0           0           0           0           0 
-##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
-##           0           0           0          27           0           0
+## Survived   Pclass      Sex      Age    SibSp    Parch     Fare    Cabin 
+##        0        0        0        0        0        0       27        0 
+## Embarked 
+##        0
 ```
-
-
----
-class: inverse, middle, center
-# Handle it
 
 ---
 class: inverse
-# Convert all missing to NA 
+# Step 2: Convert all missing to NA 
 
 
 ```r
@@ -229,9 +181,9 @@ df &lt;- df %&gt;% na_if('Unknown') %&gt;% na_if('Missing') %&gt;% na_if('Not Av
 
 ---
 class: inverse
-# Drop rows with missing values with drop_na
+# Approach 1: Drop rows
 
-- Drop rows without `hospitalized` data
+- Drop rows that have any NAs
 
 
 ```r
@@ -239,44 +191,47 @@ drop_na(df)
 ```
 
 ```
-## # A tibble: 167 x 12
-##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket Fare  Cabin
-##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
-##  1           2        1 1      Cumin~ fema~    38     1     0 PC 17~ 71.2~ C85  
-##  2           4        1 1      Futre~ fema~    35     1     0 113803 53.1  C123 
-##  3           7        0 1      McCar~ male     54     0     0 17463  51.8~ E46  
-##  4          11        1 3      Sands~ fema~     4     1     1 PP 95~ 16.7  G6   
-##  5          12        1 1      Bonne~ fema~    58     0     0 113783 26.55 C103 
-##  6          22        1 2      Beesl~ male     34     0     0 248698 13    D56  
-##  7          24        1 1      Slope~ male     28     0     0 113788 35.5  A6   
-##  8          28        0 1      Fortu~ male     19     3     2 19950  263   C23 ~
-##  9          67        1 2      Nye, ~ fema~    29     0     0 C.A. ~ 10.5  F33  
-## 10          76        0 3      Moen,~ male     25     0     0 348123 7.65  F G73
-## # ... with 157 more rows, and 1 more variable: Embarked &lt;chr&gt;
+## # A tibble: 167 x 9
+##    Survived Pclass Sex      Age SibSp Parch Fare    Cabin       Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;   
+##  1        1 1      female    38     1     0 71.2833 C85         C       
+##  2        1 1      female    35     1     0 53.1    C123        S       
+##  3        0 1      male      54     0     0 51.8625 E46         S       
+##  4        1 3      female     4     1     1 16.7    G6          S       
+##  5        1 1      female    58     0     0 26.55   C103        S       
+##  6        1 2      male      34     0     0 13      D56         S       
+##  7        1 1      male      28     0     0 35.5    A6          S       
+##  8        0 1      male      19     3     2 263     C23 C25 C27 S       
+##  9        1 2      female    29     0     0 10.5    F33         S       
+## 10        0 3      male      25     0     0 7.65    F G73       S       
+## # ... with 157 more rows
 ```
 
 ---
 class: inverse
+
+- Drop rows that have any NAs in Age or Sex
+
 
 ```r
 drop_na(df, Age, Sex)
 ```
 
 ```
-## # A tibble: 689 x 12
-##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket Fare  Cabin
-##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
-##  1           1        0 3      Braun~ male     22     1     0 A/5 2~ 7.25  &lt;NA&gt; 
-##  2           2        1 1      Cumin~ fema~    38     1     0 PC 17~ 71.2~ C85  
-##  3           3        1 3      Heikk~ fema~    26     0     0 STON/~ 7.925 &lt;NA&gt; 
-##  4           4        1 1      Futre~ fema~    35     1     0 113803 53.1  C123 
-##  5           5        0 3      Allen~ male     35     0     0 373450 8.05  &lt;NA&gt; 
-##  6           7        0 1      McCar~ male     54     0     0 17463  51.8~ E46  
-##  7           8        0 3      Palss~ male      2     3     1 349909 21.0~ &lt;NA&gt; 
-##  8           9        1 3      Johns~ fema~    27     0     2 347742 11.1~ &lt;NA&gt; 
-##  9          10        1 2      Nasse~ fema~    14     1     0 237736 30.0~ &lt;NA&gt; 
-## 10          11        1 3      Sands~ fema~     4     1     1 PP 95~ 16.7  G6   
-## # ... with 679 more rows, and 1 more variable: Embarked &lt;chr&gt;
+## # A tibble: 689 x 9
+##    Survived Pclass Sex      Age SibSp Parch Fare    Cabin Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1        0 3      male      22     1     0 7.25    &lt;NA&gt;  S       
+##  2        1 1      female    38     1     0 71.2833 C85   C       
+##  3        1 3      female    26     0     0 7.925   &lt;NA&gt;  S       
+##  4        1 1      female    35     1     0 53.1    C123  S       
+##  5        0 3      male      35     0     0 8.05    &lt;NA&gt;  S       
+##  6        0 1      male      54     0     0 51.8625 E46   S       
+##  7        0 3      male       2     3     1 21.075  &lt;NA&gt;  S       
+##  8        1 3      female    27     0     2 11.1333 &lt;NA&gt;  S       
+##  9        1 2      female    14     1     0 30.0708 &lt;NA&gt;  C       
+## 10        1 3      female     4     1     1 16.7    G6    S       
+## # ... with 679 more rows
 ```
 
 ---
@@ -289,25 +244,25 @@ df %&gt;% select(-Age, -Sex)
 ```
 
 ```
-## # A tibble: 891 x 10
-##    PassengerId Survived Pclass Name      SibSp Parch Ticket Fare  Cabin Embarked
-##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   
-##  1           1        0 3      Braund, ~     1     0 A/5 2~ 7.25  &lt;NA&gt;  S       
-##  2           2        1 1      Cumings,~     1     0 PC 17~ 71.2~ C85   C       
-##  3           3        1 3      Heikkine~     0     0 STON/~ 7.925 &lt;NA&gt;  S       
-##  4           4        1 1      Futrelle~     1     0 113803 53.1  C123  S       
-##  5           5        0 3      Allen, M~     0     0 373450 8.05  &lt;NA&gt;  S       
-##  6           6        0 3      Moran, M~     0     0 330877 8.45~ &lt;NA&gt;  Q       
-##  7           7        0 1      McCarthy~     0     0 17463  51.8~ E46   S       
-##  8           8        0 3      Palsson,~     3     1 349909 21.0~ &lt;NA&gt;  S       
-##  9           9        1 3      Johnson,~     0     2 347742 11.1~ &lt;NA&gt;  S       
-## 10          10        1 2      Nasser, ~     1     0 237736 30.0~ &lt;NA&gt;  C       
+## # A tibble: 891 x 7
+##    Survived Pclass SibSp Parch Fare    Cabin Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1        0 3          1     0 7.25    &lt;NA&gt;  S       
+##  2        1 1          1     0 71.2833 C85   C       
+##  3        1 3          0     0 7.925   &lt;NA&gt;  S       
+##  4        1 1          1     0 53.1    C123  S       
+##  5        0 3          0     0 8.05    &lt;NA&gt;  S       
+##  6        0 3          0     0 8.4583  &lt;NA&gt;  Q       
+##  7        0 1          0     0 51.8625 E46   S       
+##  8        0 3          3     1 21.075  &lt;NA&gt;  S       
+##  9        1 3          0     2 11.1333 &lt;NA&gt;  S       
+## 10        1 2          1     0 30.0708 &lt;NA&gt;  C       
 ## # ... with 881 more rows
 ```
 
 ---
 class: inverse
-# Fill in missing values with previous or next value
+# Approach 2: Fill in missing values with previous or next value
 
 
 ```r
@@ -315,25 +270,25 @@ df %&gt;% fill(Age, Sex, Cabin, .direction = 'updown')
 ```
 
 ```
-## # A tibble: 891 x 12
-##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket Fare  Cabin
-##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
-##  1           1        0 3      Braun~ male     22     1     0 A/5 2~ 7.25  C85  
-##  2           2        1 1      Cumin~ fema~    38     1     0 PC 17~ 71.2~ C85  
-##  3           3        1 3      Heikk~ fema~    26     0     0 STON/~ 7.925 C123 
-##  4           4        1 1      Futre~ fema~    35     1     0 113803 53.1  C123 
-##  5           5        0 3      Allen~ male     35     0     0 373450 8.05  E46  
-##  6           6        0 3      Moran~ male     54     0     0 330877 8.45~ E46  
-##  7           7        0 1      McCar~ male     54     0     0 17463  51.8~ E46  
-##  8           8        0 3      Palss~ male      2     3     1 349909 21.0~ G6   
-##  9           9        1 3      Johns~ fema~    27     0     2 347742 11.1~ G6   
-## 10          10        1 2      Nasse~ fema~    14     1     0 237736 30.0~ G6   
-## # ... with 881 more rows, and 1 more variable: Embarked &lt;chr&gt;
+## # A tibble: 891 x 9
+##    Survived Pclass Sex      Age SibSp Parch Fare    Cabin Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1        0 3      male      22     1     0 7.25    C85   S       
+##  2        1 1      female    38     1     0 71.2833 C85   C       
+##  3        1 3      female    26     0     0 7.925   C123  S       
+##  4        1 1      female    35     1     0 53.1    C123  S       
+##  5        0 3      male      35     0     0 8.05    E46   S       
+##  6        0 3      male      54     0     0 8.4583  E46   Q       
+##  7        0 1      male      54     0     0 51.8625 E46   S       
+##  8        0 3      male       2     3     1 21.075  G6    S       
+##  9        1 3      female    27     0     2 11.1333 G6    S       
+## 10        1 2      female    14     1     0 30.0708 G6    C       
+## # ... with 881 more rows
 ```
 
 ---
 class: inverse
-# Replace Missing values with replace_na
+# Approach 3: Replace Missing values with replace_na
 
 
 ```r
@@ -364,48 +319,6 @@ class: inverse
 majority_class &lt;- names(which.max(table(df$Pclass)))
 df$Pclass &lt;- replace_na(df$Pclass, majority_class)
 ```
----
-class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
-
-
-```r
-vis_expect(df, ~.x == 'Missing')
-```
-
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
----
-class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
-
-
-```r
-colSums(df=='Missing'|df=='Unknown'|df=='Not Available'|is.na(df), na.rm = TRUE)
-```
-
-```
-## PassengerId    Survived      Pclass        Name         Sex         Age 
-##           0           0           0           0           0           0 
-##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
-##           0           0           0          27         687           2
-```
----
-class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
-
-
-```r
-vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'})
-```
-
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
-
 
 ---
 class: inverse, middle, center
@@ -427,7 +340,7 @@ df &lt;- na_if(df, 'Not Available')
 aggr(df)
 ```
 
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse, middle, center
@@ -437,12 +350,21 @@ class: inverse, middle, center
 
 
 ```r
-library(VIM)
+library(visdat)
 df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
-vis_expect(df, is.na)
+vis_miss(df)
 ```
 
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+---
+
+```r
+vis_dat(df)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
 
 ---
 
@@ -451,17 +373,17 @@ vis_expect(df, is.na)
 vis_expect(df, ~.x == 'Missing')
 ```
 
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 ---
 
 
 ```r
-library(VIM)
-vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'|is.na(x)})
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|
+    x=='Not Available'|is.na(x)})
 ```
 
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

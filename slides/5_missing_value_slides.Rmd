@@ -15,7 +15,7 @@ class: inverse
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 ```{r xaringan-tile-view, echo=FALSE}
@@ -37,8 +37,6 @@ xaringanExtra::use_fit_screen()
 
 # New Functions
 
-- colSums(is.na()), colMeans(is.na())
-
 - na_if
 
 - drop_na
@@ -51,7 +49,7 @@ xaringanExtra::use_fit_screen()
 
 ---
 class: inverse, center, middle
-# 1. Do you need to handle missing values?
+# Do we need to handle missing values?
 
 ---
 class: inverse, center, middle
@@ -79,7 +77,7 @@ df %>% ggplot(aes(x=Age, color=Sex))+
 
 ---
 class: inverse
-When do you need to handle missing values
+# When do we need to handle missing values
 
 - When you know the values of the missing values
 
@@ -89,8 +87,8 @@ When do you need to handle missing values
 - Other cases?
 
 ---
-class: inverse
-# Checking 
+class: inverse, middle, center
+# Checking the NAs
 
 ---
 class: inverse
@@ -107,63 +105,34 @@ class: inverse
 colMeans(is.na(df))
 ```
 
----
-class: inverse
-
-# Visualizing it
-
-```{r}
-library(visdat)
-vis_miss(df)
-```
-
----
-class: inverse
-
-# Visualizing it
-
-```{r}
-library(visdat)
-vis_dat(df)
-```
 
 ---
 class: inverse
 # Steps to Handle missing values
 
-- Step 1: Identify Missing Values (NA, 'Unknown', 'Missing','9999'...) and Convert them to `NA`
+- Step 1: Identify all the forms of Missing Values ('Unknown', 'Missing','9999'...) 
 
-- Step 2:  Either 
+- Step 2: Convert them to `NA`
 
-  - Remove them
-  - Replace them 
+- Step 3:  Handle it
+
+  - Approach 1: Remove rows that have any NAs
   
-     - Numeric Variables: 
-          - (1) by the mean/ median 
-          - (2) predicted values by some models
-          
-     - Categorical Variables: 
-          - (1) the mode or make it a new category
-          - (2) predicted values by some models    
+  - Approach 2: Fill NAs with the previous or next value of the column
+  
+  - Approach 3: Replace by the mean, majority or a predicted value. 
 
 ---
 class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
+# Step 1: Identify forms of missing
 
 ```{r}
 colSums(df=='Missing', na.rm = TRUE)
 ```
 
-
----
-class: inverse, middle, center
-# Handle it
-
 ---
 class: inverse
-# Convert all missing to NA 
+# Step 2: Convert all missing to NA 
 
 ```{r}
 df <- na_if(df, 'Unknown')
@@ -176,9 +145,9 @@ df <- df %>% na_if('Unknown') %>% na_if('Missing') %>% na_if('Not Available')
 
 ---
 class: inverse
-# Drop rows with missing values with drop_na
+# Approach 1: Drop rows
 
-- Drop rows without `hospitalized` data
+- Drop rows that have any NAs
 
 ```{r}
 drop_na(df)
@@ -186,6 +155,9 @@ drop_na(df)
 
 ---
 class: inverse
+
+- Drop rows that have any NAs in Age or Sex
+
 ```{r}
 drop_na(df, Age, Sex)
 ```
@@ -200,7 +172,7 @@ df %>% select(-Age, -Sex)
 
 ---
 class: inverse
-# Fill in missing values with previous or next value
+# Approach 2: Fill in missing values with previous or next value
 
 ```{r}
 df %>% fill(Age, Sex, Cabin, .direction = 'updown')
@@ -208,7 +180,7 @@ df %>% fill(Age, Sex, Cabin, .direction = 'updown')
 
 ---
 class: inverse
-# Replace Missing values with replace_na
+# Approach 3: Replace Missing values with replace_na
 
 ```{r}
 # Replace by the mean (numeric variable)
@@ -236,36 +208,6 @@ class: inverse
 majority_class <- names(which.max(table(df$Pclass)))
 df$Pclass <- replace_na(df$Pclass, majority_class)
 ```
----
-class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
-
-```{r}
-
-
-vis_expect(df, ~.x == 'Missing')
-```
----
-class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
-
-```{r}
-colSums(df=='Missing'|df=='Unknown'|df=='Not Available'|is.na(df), na.rm = TRUE)
-```
----
-class: inverse
-# Step 1: Identify Missing Values and Convert them to `NA`
-
-- Sometime the missing values are not in `NA`
-
-```{r}
-vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'})
-```
-
 
 ---
 class: inverse, middle, center
@@ -292,10 +234,16 @@ class: inverse, middle, center
 ---
 
 ```{r}
-library(VIM)
+library(visdat)
 df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
-vis_expect(df, is.na)
+vis_miss(df)
 ```
+
+---
+```{r}
+vis_dat(df)
+```
+
 
 ---
 
@@ -306,6 +254,6 @@ vis_expect(df, ~.x == 'Missing')
 ---
 
 ```{r}
-library(VIM)
-vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'|is.na(x)})
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|
+    x=='Not Available'|is.na(x)})
 ```
