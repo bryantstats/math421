@@ -39,112 +39,15 @@ class: inverse
 
 - colSums(is.na()), colMeans(is.na())
 
-- mean(x, na.rm=TRUE)
-
 - na_if
 
 - drop_na
 
+- fill
+
 - replace_na
 
-- is.infinite
-
----
-class: inverse
-# Agenda
-
-1. Do you need to handle missing values?
-
-2. When do you need to handle missing values?
-
-3. Forms of missing values: Na, NaN, and Inf
-
-4. Steps to Handle missing values
-
-5. Identify Missing Values and Convert them to `NA`
-
-6. Remove missing values with drop_na
-
-7. Replace Missing values with replace_na
-
----
-class: inverse
-# Checking missing values
-
-
-```r
-library(tidyverse)
-df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
-```
-
-```
-## Warning: One or more parsing issues, see `problems()` for details
-```
-
-```r
-df &lt;- df %&gt;% filter(date&gt;='2020-01-01', date&lt;'2021-01-01')
-# Total missing values
-sum(is.na(df))
-```
-
-```
-## [1] 314903
-```
-
----
-class: inverse
-
-
-```r
-# Missing values by columns
-colSums(is.na(df))
-```
-
-```
-##                             date                            state 
-##                                0                                0 
-##                            death                   deathConfirmed 
-##                              850                             9587 
-##                    deathIncrease                    deathProbable 
-##                                0                            11273 
-##                     hospitalized           hospitalizedCumulative 
-##                             7078                             7078 
-##            hospitalizedCurrently             hospitalizedIncrease 
-##                             3243                                0 
-##                  inIcuCumulative                   inIcuCurrently 
-##                            14087                             8220 
-##                         negative                 negativeIncrease 
-##                             6104                                0 
-##            negativeTestsAntibody      negativeTestsPeopleAntibody 
-##                            15956                            17083 
-##               negativeTestsViral           onVentilatorCumulative 
-##                            13144                            16058 
-##            onVentilatorCurrently                         positive 
-##                            10070                              188 
-##               positiveCasesViral                 positiveIncrease 
-##                             5650                                0 
-##                    positiveScore            positiveTestsAntibody 
-##                                0                            14530 
-##             positiveTestsAntigen      positiveTestsPeopleAntibody 
-##                            15661                            17070 
-##       positiveTestsPeopleAntigen               positiveTestsViral 
-##                            16649                             9936 
-##                        recovered         totalTestEncountersViral 
-##                             7325                            12777 
-## totalTestEncountersViralIncrease                 totalTestResults 
-##                                0                              166 
-##         totalTestResultsIncrease               totalTestsAntibody 
-##                                0                            13351 
-##                totalTestsAntigen         totalTestsPeopleAntibody 
-##                            14959                            15412 
-##          totalTestsPeopleAntigen            totalTestsPeopleViral 
-##                            16415                             9669 
-##    totalTestsPeopleViralIncrease                  totalTestsViral 
-##                                0                             5314 
-##          totalTestsViralIncrease 
-##                                0
-```
-
+- package: vis_dat, VIM
 
 ---
 class: inverse, center, middle
@@ -159,15 +62,16 @@ class: inverse
 
 
 ```r
-# tidy
-df %&gt;% summarise(average_death = mean(death, na.rm = TRUE))
+library(tidyverse)
+df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df %&gt;% summarise(mean_age=mean(Age, na.rm=TRUE))
 ```
 
 ```
 ## # A tibble: 1 x 1
-##   average_death
-##           &lt;dbl&gt;
-## 1         2750.
+##   mean_age
+##      &lt;dbl&gt;
+## 1     29.7
 ```
 
 ---
@@ -178,19 +82,19 @@ class: inverse, center, middle
 class: inverse
 
 ```r
-df$quarters = quarters(df$date)
-
-df %&gt;% group_by(quarters) %&gt;% 
-    summarise(average_death = mean(death, na.rm = TRUE)) %&gt;% 
-    ggplot(aes(x=quarters, y=average_death))+
-    geom_bar(stat = 'identity')
+df %&gt;% ggplot(aes(x=Age, color=Sex))+
+    geom_density()
 ```
 
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+```
+## Warning: Removed 177 rows containing non-finite values (stat_density).
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse
-# 2. When do you need to handle missing values
+When do you need to handle missing values
 
 - When you know the values of the missing values
 
@@ -201,60 +105,75 @@ class: inverse
 
 ---
 class: inverse
-# 3. Forms of missing values: Na, NaN and Inf
-
-
-```r
-# NaN = Not a Number
-0/0
-```
-
-```
-## [1] NaN
-```
-
-```r
-# Infinity
-1/0
-```
-
-```
-## [1] Inf
-```
-
-```r
-# NA = Missing value
-```
-
+# Checking 
 
 ---
 class: inverse
-# Check for missing values
 
 
 ```r
-x &lt;- c(1, 2, NA, NaN, Inf)
-
-# Check which one is missing
-is.na(x)
+# Missing values by columns
+colSums(is.na(df))
 ```
 
 ```
-## [1] FALSE FALSE  TRUE  TRUE FALSE
+## PassengerId    Survived      Pclass        Name         Sex         Age 
+##           0           0           0           0           0         177 
+##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
+##           0           0           0           0         687           2
 ```
+---
+class: inverse
+
 
 ```r
-# Check which one is infinity
-is.infinite(x)
+# Missing values by columns
+colMeans(is.na(df))
 ```
 
 ```
-## [1] FALSE FALSE FALSE FALSE  TRUE
+## PassengerId    Survived      Pclass        Name         Sex         Age 
+## 0.000000000 0.000000000 0.000000000 0.000000000 0.000000000 0.198653199 
+##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
+## 0.000000000 0.000000000 0.000000000 0.000000000 0.771043771 0.002244669
 ```
 
 ---
 class: inverse
-# 4. Steps to Handle missing values
+
+# Visualizing it
+
+
+```r
+library(visdat)
+```
+
+```
+## Warning: package 'visdat' was built under R version 4.1.3
+```
+
+```r
+vis_miss(df)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+class: inverse
+
+# Visualizing it
+
+
+```r
+library(visdat)
+vis_dat(df)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+class: inverse
+# Steps to Handle missing values
 
 - Step 1: Identify Missing Values (NA, 'Unknown', 'Missing','9999'...) and Convert them to `NA`
 
@@ -279,176 +198,270 @@ class: inverse
 
 
 ```r
-d &lt;- read_csv('../data/car.csv')
-
-sum(is.na(d))
+colSums(df=='Missing', na.rm = TRUE)
 ```
 
 ```
-## [1] 37320
+## PassengerId    Survived      Pclass        Name         Sex         Age 
+##           0           0           0           0           0           0 
+##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
+##           0           0           0          27           0           0
 ```
 
-- Notice: You can download the `cars.csv` dataset at: [this link](car.csv).  This data records vehicle accidents in the US in 2015. 
+
+---
+class: inverse, middle, center
+# Handle it
 
 ---
 class: inverse
+# Convert all missing to NA 
+
 
 ```r
-sum(d=='Unknown', na.rm = TRUE)
-```
+df &lt;- na_if(df, 'Unknown')
+df &lt;- na_if(df, 'Missing')
+df &lt;- na_if(df, 'Not Available')
 
-```
-## [1] 18614
-```
-
----
-class: inverse
-
-```r
-sum(d=='Not Reported', na.rm = TRUE)
-```
-
-```
-## [1] 33992
+# OR Pipe
+df &lt;- df %&gt;% na_if('Unknown') %&gt;% na_if('Missing') %&gt;% na_if('Not Available')
 ```
 
 ---
 class: inverse
+# Drop rows with missing values with drop_na
 
-```r
-sum(d=='Not Rep', na.rm = TRUE)
-```
-
-```
-## [1] 37957
-```
-
----
-class: inverse
-# Convert values to NA 
+- Drop rows without `hospitalized` data
 
 
 ```r
-d$TRAV_SP &lt;- na_if(d$TRAV_SP, 'Unknown')
-sum(d$TRAV_SP=='Unknown', na.rm = TRUE)
+drop_na(df)
 ```
 
 ```
-## [1] 0
-```
-
----
-class: inverse
-# 5. Remove rows with missing values with drop_na
-
-- Remove rows without `hospitalized` data
-
-
-```r
-drop_na(df, hospitalized)
-```
-
-```
-## # A tibble: 10,006 x 42
-##    date       state death deathConfirmed deathIncrease deathProbable
-##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
-##  1 2020-12-31 AK      206            206             3            NA
-##  2 2020-12-31 AL     4827           4219            53           608
-##  3 2020-12-31 AR     3676           3088            39           588
-##  4 2020-12-31 AZ     8864           8006           146           858
-##  5 2020-12-31 CO     4814           4168            64           646
-##  6 2020-12-31 FL    21990             NA           133            NA
-##  7 2020-12-31 GA    10934           9872            88          1062
-##  8 2020-12-31 HI      288            288             3            NA
-##  9 2020-12-31 ID     1403           1240            10           163
-## 10 2020-12-31 IN     8263           7911           103           352
-## # ... with 9,996 more rows, and 36 more variables: hospitalized &lt;dbl&gt;,
-## #   hospitalizedCumulative &lt;dbl&gt;, hospitalizedCurrently &lt;dbl&gt;,
-## #   hospitalizedIncrease &lt;dbl&gt;, inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;,
-## #   negative &lt;dbl&gt;, negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
-## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
-## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, positive &lt;dbl&gt;,
-## #   positiveCasesViral &lt;dbl&gt;, positiveIncrease &lt;dbl&gt;, positiveScore &lt;dbl&gt;, ...
+## # A tibble: 167 x 12
+##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket Fare  Cabin
+##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
+##  1           2        1 1      Cumin~ fema~    38     1     0 PC 17~ 71.2~ C85  
+##  2           4        1 1      Futre~ fema~    35     1     0 113803 53.1  C123 
+##  3           7        0 1      McCar~ male     54     0     0 17463  51.8~ E46  
+##  4          11        1 3      Sands~ fema~     4     1     1 PP 95~ 16.7  G6   
+##  5          12        1 1      Bonne~ fema~    58     0     0 113783 26.55 C103 
+##  6          22        1 2      Beesl~ male     34     0     0 248698 13    D56  
+##  7          24        1 1      Slope~ male     28     0     0 113788 35.5  A6   
+##  8          28        0 1      Fortu~ male     19     3     2 19950  263   C23 ~
+##  9          67        1 2      Nye, ~ fema~    29     0     0 C.A. ~ 10.5  F33  
+## 10          76        0 3      Moen,~ male     25     0     0 348123 7.65  F G73
+## # ... with 157 more rows, and 1 more variable: Embarked &lt;chr&gt;
 ```
 
 ---
 class: inverse
 
 ```r
-drop_na(df, hospitalized, death)
+drop_na(df, Age, Sex)
 ```
 
 ```
-## # A tibble: 9,986 x 42
-##    date       state death deathConfirmed deathIncrease deathProbable
-##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
-##  1 2020-12-31 AK      206            206             3            NA
-##  2 2020-12-31 AL     4827           4219            53           608
-##  3 2020-12-31 AR     3676           3088            39           588
-##  4 2020-12-31 AZ     8864           8006           146           858
-##  5 2020-12-31 CO     4814           4168            64           646
-##  6 2020-12-31 FL    21990             NA           133            NA
-##  7 2020-12-31 GA    10934           9872            88          1062
-##  8 2020-12-31 HI      288            288             3            NA
-##  9 2020-12-31 ID     1403           1240            10           163
-## 10 2020-12-31 IN     8263           7911           103           352
-## # ... with 9,976 more rows, and 36 more variables: hospitalized &lt;dbl&gt;,
-## #   hospitalizedCumulative &lt;dbl&gt;, hospitalizedCurrently &lt;dbl&gt;,
-## #   hospitalizedIncrease &lt;dbl&gt;, inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;,
-## #   negative &lt;dbl&gt;, negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
-## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
-## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, positive &lt;dbl&gt;,
-## #   positiveCasesViral &lt;dbl&gt;, positiveIncrease &lt;dbl&gt;, positiveScore &lt;dbl&gt;, ...
-```
-
-```r
-# Pipe
-df %&gt;% drop_na(hospitalized, death)
-```
-
-```
-## # A tibble: 9,986 x 42
-##    date       state death deathConfirmed deathIncrease deathProbable
-##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
-##  1 2020-12-31 AK      206            206             3            NA
-##  2 2020-12-31 AL     4827           4219            53           608
-##  3 2020-12-31 AR     3676           3088            39           588
-##  4 2020-12-31 AZ     8864           8006           146           858
-##  5 2020-12-31 CO     4814           4168            64           646
-##  6 2020-12-31 FL    21990             NA           133            NA
-##  7 2020-12-31 GA    10934           9872            88          1062
-##  8 2020-12-31 HI      288            288             3            NA
-##  9 2020-12-31 ID     1403           1240            10           163
-## 10 2020-12-31 IN     8263           7911           103           352
-## # ... with 9,976 more rows, and 36 more variables: hospitalized &lt;dbl&gt;,
-## #   hospitalizedCumulative &lt;dbl&gt;, hospitalizedCurrently &lt;dbl&gt;,
-## #   hospitalizedIncrease &lt;dbl&gt;, inIcuCumulative &lt;dbl&gt;, inIcuCurrently &lt;dbl&gt;,
-## #   negative &lt;dbl&gt;, negativeIncrease &lt;dbl&gt;, negativeTestsAntibody &lt;dbl&gt;,
-## #   negativeTestsPeopleAntibody &lt;lgl&gt;, negativeTestsViral &lt;dbl&gt;,
-## #   onVentilatorCumulative &lt;dbl&gt;, onVentilatorCurrently &lt;dbl&gt;, positive &lt;dbl&gt;,
-## #   positiveCasesViral &lt;dbl&gt;, positiveIncrease &lt;dbl&gt;, positiveScore &lt;dbl&gt;, ...
+## # A tibble: 689 x 12
+##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket Fare  Cabin
+##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
+##  1           1        0 3      Braun~ male     22     1     0 A/5 2~ 7.25  &lt;NA&gt; 
+##  2           2        1 1      Cumin~ fema~    38     1     0 PC 17~ 71.2~ C85  
+##  3           3        1 3      Heikk~ fema~    26     0     0 STON/~ 7.925 &lt;NA&gt; 
+##  4           4        1 1      Futre~ fema~    35     1     0 113803 53.1  C123 
+##  5           5        0 3      Allen~ male     35     0     0 373450 8.05  &lt;NA&gt; 
+##  6           7        0 1      McCar~ male     54     0     0 17463  51.8~ E46  
+##  7           8        0 3      Palss~ male      2     3     1 349909 21.0~ &lt;NA&gt; 
+##  8           9        1 3      Johns~ fema~    27     0     2 347742 11.1~ &lt;NA&gt; 
+##  9          10        1 2      Nasse~ fema~    14     1     0 237736 30.0~ &lt;NA&gt; 
+## 10          11        1 3      Sands~ fema~     4     1     1 PP 95~ 16.7  G6   
+## # ... with 679 more rows, and 1 more variable: Embarked &lt;chr&gt;
 ```
 
 ---
 class: inverse
-# Remove columns with missing values
+# Drop columns with missing values
 
 
 ```r
-df$negativeTestsPeopleAntibody &lt;- NULL
+df %&gt;% select(-Age, -Sex)
+```
+
+```
+## # A tibble: 891 x 10
+##    PassengerId Survived Pclass Name      SibSp Parch Ticket Fare  Cabin Embarked
+##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   
+##  1           1        0 3      Braund, ~     1     0 A/5 2~ 7.25  &lt;NA&gt;  S       
+##  2           2        1 1      Cumings,~     1     0 PC 17~ 71.2~ C85   C       
+##  3           3        1 3      Heikkine~     0     0 STON/~ 7.925 &lt;NA&gt;  S       
+##  4           4        1 1      Futrelle~     1     0 113803 53.1  C123  S       
+##  5           5        0 3      Allen, M~     0     0 373450 8.05  &lt;NA&gt;  S       
+##  6           6        0 3      Moran, M~     0     0 330877 8.45~ &lt;NA&gt;  Q       
+##  7           7        0 1      McCarthy~     0     0 17463  51.8~ E46   S       
+##  8           8        0 3      Palsson,~     3     1 349909 21.0~ &lt;NA&gt;  S       
+##  9           9        1 3      Johnson,~     0     2 347742 11.1~ &lt;NA&gt;  S       
+## 10          10        1 2      Nasser, ~     1     0 237736 30.0~ &lt;NA&gt;  C       
+## # ... with 881 more rows
 ```
 
 ---
 class: inverse
-# 6. Replace Missing values with replace_na
+# Fill in missing values with previous or next value
 
 
 ```r
-# Replace by the mode for categorical variable
-average_death &lt;- mean(df$deathConfirmed, na.rm = TRUE)
-df$deathConfirmed &lt;- replace_na(df$deathConfirmed, average_death)
+df %&gt;% fill(Age, Sex, Cabin, .direction = 'updown')
 ```
 
+```
+## # A tibble: 891 x 12
+##    PassengerId Survived Pclass Name   Sex     Age SibSp Parch Ticket Fare  Cabin
+##          &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;
+##  1           1        0 3      Braun~ male     22     1     0 A/5 2~ 7.25  C85  
+##  2           2        1 1      Cumin~ fema~    38     1     0 PC 17~ 71.2~ C85  
+##  3           3        1 3      Heikk~ fema~    26     0     0 STON/~ 7.925 C123 
+##  4           4        1 1      Futre~ fema~    35     1     0 113803 53.1  C123 
+##  5           5        0 3      Allen~ male     35     0     0 373450 8.05  E46  
+##  6           6        0 3      Moran~ male     54     0     0 330877 8.45~ E46  
+##  7           7        0 1      McCar~ male     54     0     0 17463  51.8~ E46  
+##  8           8        0 3      Palss~ male      2     3     1 349909 21.0~ G6   
+##  9           9        1 3      Johns~ fema~    27     0     2 347742 11.1~ G6   
+## 10          10        1 2      Nasse~ fema~    14     1     0 237736 30.0~ G6   
+## # ... with 881 more rows, and 1 more variable: Embarked &lt;chr&gt;
+```
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+
+```r
+# Replace by the mean (numeric variable)
+mean_age &lt;- mean(df$Age, na.rm=TRUE)
+df$Age &lt;- replace_na(df$Age, mean_age)
+```
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+
+```r
+# Replace by the majority (categorical variable)
+majority_sex &lt;- names(which.max(table(df$Sex)))
+df$Sex &lt;- replace_na(df$Sex, majority_sex)
+```
+
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+
+```r
+# Replace by the majority (categorical variable)
+majority_class &lt;- names(which.max(table(df$Pclass)))
+df$Pclass &lt;- replace_na(df$Pclass, majority_class)
+```
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+
+```r
+vis_expect(df, ~.x == 'Missing')
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+
+```r
+colSums(df=='Missing'|df=='Unknown'|df=='Not Available'|is.na(df), na.rm = TRUE)
+```
+
+```
+## PassengerId    Survived      Pclass        Name         Sex         Age 
+##           0           0           0           0           0           0 
+##       SibSp       Parch      Ticket        Fare       Cabin    Embarked 
+##           0           0           0          27         687           2
+```
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+
+```r
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'})
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+
+---
+class: inverse, middle, center
+# Package VIM
+
+---
+
+```r
+library(VIM)
+df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df &lt;- na_if(df, 'Unknown')
+df &lt;- na_if(df, 'Missing')
+df &lt;- na_if(df, 'Not Available')
+```
+
+---
+
+```r
+aggr(df)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, middle, center
+# Package vis_dat
+
+---
+
+
+```r
+library(VIM)
+df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+vis_expect(df, is.na)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+vis_expect(df, ~.x == 'Missing')
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+library(VIM)
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'|is.na(x)})
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

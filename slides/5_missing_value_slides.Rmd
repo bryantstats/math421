@@ -43,12 +43,11 @@ xaringanExtra::use_fit_screen()
 
 - drop_na
 
-- replace_na
-
 - fill
 
-- is.infinite
+- replace_na
 
+- package: vis_dat, VIM
 
 ---
 class: inverse, center, middle
@@ -157,6 +156,86 @@ class: inverse
 colSums(df=='Missing', na.rm = TRUE)
 ```
 
+
+---
+class: inverse, middle, center
+# Handle it
+
+---
+class: inverse
+# Convert all missing to NA 
+
+```{r}
+df <- na_if(df, 'Unknown')
+df <- na_if(df, 'Missing')
+df <- na_if(df, 'Not Available')
+
+# OR Pipe
+df <- df %>% na_if('Unknown') %>% na_if('Missing') %>% na_if('Not Available')
+``` 
+
+---
+class: inverse
+# Drop rows with missing values with drop_na
+
+- Drop rows without `hospitalized` data
+
+```{r}
+drop_na(df)
+```
+
+---
+class: inverse
+```{r}
+drop_na(df, Age, Sex)
+```
+
+---
+class: inverse
+# Drop columns with missing values
+
+```{r}
+df %>% select(-Age, -Sex)
+```
+
+---
+class: inverse
+# Fill in missing values with previous or next value
+
+```{r}
+df %>% fill(Age, Sex, Cabin, .direction = 'updown')
+```
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+```{r}
+# Replace by the mean (numeric variable)
+mean_age <- mean(df$Age, na.rm=TRUE)
+df$Age <- replace_na(df$Age, mean_age)
+```
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+```{r}
+# Replace by the majority (categorical variable)
+majority_sex <- names(which.max(table(df$Sex)))
+df$Sex <- replace_na(df$Sex, majority_sex)
+```
+
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+```{r}
+# Replace by the majority (categorical variable)
+majority_class <- names(which.max(table(df$Pclass)))
+df$Pclass <- replace_na(df$Pclass, majority_class)
+```
 ---
 class: inverse
 # Step 1: Identify Missing Values and Convert them to `NA`
@@ -164,71 +243,69 @@ class: inverse
 - Sometime the missing values are not in `NA`
 
 ```{r}
+
+
+vis_expect(df, ~.x == 'Missing')
+```
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+```{r}
+colSums(df=='Missing'|df=='Unknown'|df=='Not Available'|is.na(df), na.rm = TRUE)
+```
+---
+class: inverse
+# Step 1: Identify Missing Values and Convert them to `NA`
+
+- Sometime the missing values are not in `NA`
+
+```{r}
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'})
+```
+
+
+---
+class: inverse, middle, center
+# Package VIM
+
+---
+```{r, warning=FALSE}
+library(VIM)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df <- na_if(df, 'Unknown')
+df <- na_if(df, 'Missing')
+df <- na_if(df, 'Not Available')
+```
+
+---
+```{r}
+aggr(df)
+```
+
+---
+class: inverse, middle, center
+# Package vis_dat
+
+---
+
+```{r}
+library(VIM)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+vis_expect(df, is.na)
+```
+
+---
+
+```{r}
 vis_expect(df, ~.x == 'Missing')
 ```
 
-
 ---
-class: inverse
+
 ```{r}
-sum(d=='Unknown', na.rm = TRUE)
+library(VIM)
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|x=='Not Available'|is.na(x)})
 ```
-
----
-class: inverse
-```{r}
-sum(d=='Not Reported', na.rm = TRUE)
-```
-
----
-class: inverse
-```{r}
-sum(d=='Not Rep', na.rm = TRUE)
-```
-
----
-class: inverse
-# Convert values to NA 
-
-```{r}
-d$TRAV_SP <- na_if(d$TRAV_SP, 'Unknown')
-sum(d$TRAV_SP=='Unknown', na.rm = TRUE)
-``` 
-
----
-class: inverse
-# 5. Remove rows with missing values with drop_na
-
-- Remove rows without `hospitalized` data
-
-```{r}
-drop_na(df, hospitalized)
-```
-
----
-class: inverse
-```{r}
-drop_na(df, hospitalized, death)
-
-# Pipe
-df %>% drop_na(hospitalized, death)
-```
-
----
-class: inverse
-# Remove columns with missing values
-
-```{r}
-df$negativeTestsPeopleAntibody <- NULL
-```
-
----
-class: inverse
-# 6. Replace Missing values with replace_na
-
-```{r}
-# Replace by the mode for categorical variable
-average_death <- mean(df$deathConfirmed, na.rm = TRUE)
-df$deathConfirmed <- replace_na(df$deathConfirmed, average_death)
-```
-
