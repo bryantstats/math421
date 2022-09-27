@@ -39,13 +39,13 @@ xaringanExtra::use_fit_screen()
 
 - colSums(is.na()), colMeans(is.na())
 
-- mean(x, na.rm=TRUE)
-
 - na_if
 
 - drop_na
 
 - replace_na
+
+- fill
 
 - is.infinite
 
@@ -69,11 +69,11 @@ class: inverse
 
 ---
 class: inverse
-# Checking missing values
+# Checking 
 
 ```{r}
 library(tidyverse)
-df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df <- read_csv('')
 df <- df %>% filter(date>='2020-01-01', date<'2021-01-01')
 # Total missing values
 sum(is.na(df))
@@ -100,36 +100,8 @@ class: inverse, center, middle
 class: inverse
 
 ```{r}
-# Calculate the average death
-mean(df$death)
-
-# na.rm = remove NA
-mean(df$death, na.rm = TRUE)
-```
-
----
-class: inverse
-
-```{r}
-# tidy
+d <- read_csv('../data/car.csv')
 df %>% summarise(average_death = mean(death, na.rm = TRUE))
-```
-
----
-class: inverse
-```{r}
-# Calculate death by dataQualityGrade
-df$quarters = quarters(df$date)
-by(df$death, df$quarters, mean, na.rm=TRUE)
-```
-
----
-class: inverse
-```{r}
-# Calculate death by dataQualityGrade
-df %>% 
-  group_by(quarters) %>% 
-  summarise(average_death = mean(death, na.rm = TRUE))
 ```
 
 ---
@@ -139,9 +111,8 @@ class: inverse, center, middle
 ---
 class: inverse
 ```{r}
-df %>% group_by(quarters) %>% 
-    summarise(average_death = mean(death, na.rm = TRUE)) %>% 
-    ggplot(aes(x=quarters, y=average_death))+
+df$quarters = quarters(df$date)
+df %>% ggplot(aes(x=quarters, y=average_death))+
     geom_bar(stat = 'identity')
 ```
 
@@ -185,21 +156,6 @@ is.na(x)
 is.infinite(x)
 ```
 
-
----
-class: inverse
-```{r}
-d1 <- read.csv('Book1.csv')
-d1
-```
-
----
-class: inverse
-```{r}
-d2 <- read_csv('Book1.csv')
-d2
-```
-
 ---
 class: inverse
 # 4. Steps to Handle missing values
@@ -210,19 +166,14 @@ class: inverse
 
   - Remove them
   - Replace them 
-
----
-class: inverse
-# Replace Missing values
-
-- Numeric Variables: 
-  - (1) by the mean/ median 
-  - (2) predicted values by some models
   
-- Categorical Variables: 
-  - (1) the mode or make it a new category
-  - (2) predicted values by some models    
-
+     - Numeric Variables: 
+          - (1) by the mean/ median 
+          - (2) predicted values by some models
+          
+     - Categorical Variables: 
+          - (1) the mode or make it a new category
+          - (2) predicted values by some models    
 
 ---
 class: inverse
@@ -231,7 +182,7 @@ class: inverse
 - Sometime the missing values are not in `NA`
 
 ```{r}
-d <- read_csv('car.csv')
+d <- read_csv('../data/car.csv')
 
 sum(is.na(d))
 ```

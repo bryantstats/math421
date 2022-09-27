@@ -159,28 +159,6 @@ class: inverse
 
 
 ```r
-# Calculate the average death
-mean(df$death)
-```
-
-```
-## [1] NA
-```
-
-```r
-# na.rm = remove NA
-mean(df$death, na.rm = TRUE)
-```
-
-```
-## [1] 2749.944
-```
-
----
-class: inverse
-
-
-```r
 # tidy
 df %&gt;% summarise(average_death = mean(death, na.rm = TRUE))
 ```
@@ -193,49 +171,6 @@ df %&gt;% summarise(average_death = mean(death, na.rm = TRUE))
 ```
 
 ---
-class: inverse
-
-```r
-# Calculate death by dataQualityGrade
-df$quarters = quarters(df$date)
-by(df$death, df$quarters, mean, na.rm=TRUE)
-```
-
-```
-## df$quarters: Q1
-## [1] 24.74821
-## ------------------------------------------------------------ 
-## df$quarters: Q2
-## [1] 1352.309
-## ------------------------------------------------------------ 
-## df$quarters: Q3
-## [1] 2859.466
-## ------------------------------------------------------------ 
-## df$quarters: Q4
-## [1] 4465.048
-```
-
----
-class: inverse
-
-```r
-# Calculate death by dataQualityGrade
-df %&gt;% 
-  group_by(quarters) %&gt;% 
-  summarise(average_death = mean(death, na.rm = TRUE))
-```
-
-```
-## # A tibble: 4 x 2
-##   quarters average_death
-##   &lt;chr&gt;            &lt;dbl&gt;
-## 1 Q1                24.7
-## 2 Q2              1352. 
-## 3 Q3              2859. 
-## 4 Q4              4465.
-```
-
----
 class: inverse, center, middle
 # No if just doing Visualization
 
@@ -243,13 +178,15 @@ class: inverse, center, middle
 class: inverse
 
 ```r
+df$quarters = quarters(df$date)
+
 df %&gt;% group_by(quarters) %&gt;% 
     summarise(average_death = mean(death, na.rm = TRUE)) %&gt;% 
     ggplot(aes(x=quarters, y=average_death))+
     geom_bar(stat = 'identity')
 ```
 
-![](5_missing_value_slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse
@@ -315,51 +252,6 @@ is.infinite(x)
 ## [1] FALSE FALSE FALSE FALSE  TRUE
 ```
 
-
----
-class: inverse
-
-```r
-d1 &lt;- read.csv('Book1.csv')
-d1
-```
-
-```
-##   ï..Number Letter
-## 1         1      a
-## 2         2      b
-## 3         3       
-## 4        NA      d
-## 5         4       
-## 6        NA      e
-## 7         7       
-## 8        NA       
-## 9         9      h
-```
-
----
-class: inverse
-
-```r
-d2 &lt;- read_csv('Book1.csv')
-d2
-```
-
-```
-## # A tibble: 9 x 2
-##   Number Letter
-##    &lt;dbl&gt; &lt;chr&gt; 
-## 1      1 a     
-## 2      2 b     
-## 3      3 &lt;NA&gt;  
-## 4     NA d     
-## 5      4 &lt;NA&gt;  
-## 6     NA e     
-## 7      7 &lt;NA&gt;  
-## 8     NA &lt;NA&gt;  
-## 9      9 h
-```
-
 ---
 class: inverse
 # 4. Steps to Handle missing values
@@ -370,19 +262,14 @@ class: inverse
 
   - Remove them
   - Replace them 
-
----
-class: inverse
-# Replace Missing values
-
-- Numeric Variables: 
-  - (1) by the mean/ median 
-  - (2) predicted values by some models
   
-- Categorical Variables: 
-  - (1) the mode or make it a new category
-  - (2) predicted values by some models    
-
+     - Numeric Variables: 
+          - (1) by the mean/ median 
+          - (2) predicted values by some models
+          
+     - Categorical Variables: 
+          - (1) the mode or make it a new category
+          - (2) predicted values by some models    
 
 ---
 class: inverse
@@ -392,7 +279,7 @@ class: inverse
 
 
 ```r
-d &lt;- read_csv('car.csv')
+d &lt;- read_csv('../data/car.csv')
 
 sum(is.na(d))
 ```
