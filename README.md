@@ -31,3 +31,9 @@
 - [Assignment 4](assignments/assignment4.html)
 
 - [Extra Credits](assignments/assignment4_extra_credits.html)
+
+### 5. Handle Missing Values
+
+- [Slides](slides/5_missing_value_slides.html)
+
+- [Assignment 5](assignments/assignment5.html)
