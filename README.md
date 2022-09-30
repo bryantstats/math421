@@ -37,3 +37,5 @@
 - [Slides](slides/5_missing_value_slides.html)
 
 - [Assignment 5](assignments/assignment5.html)
+
+- [Assignment 5 - Extra Credits](assignments/assignment5_extra_credits.html)
