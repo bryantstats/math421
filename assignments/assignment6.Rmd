@@ -9,7 +9,7 @@ title: "Assignment 6: Visualization - Aesthetic Mapping"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment6.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment6.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -71,46 +71,53 @@ Choose a dataset and produce the following types of plots and comment on each pl
 
 ### Questions on Covid Vaccination Data
 
-In this section of questions, we will use  the covid vaccination data for the US. The data and data dictionary can be found at the below link:
+In this section of questions, we will use  the Covid19 vaccination data for the US. The data and data dictionary can be found at the below link:
 
-- [Data](https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/us_data/time_series/vaccine_data_us_timeline.csv)
-
-- [Data Dictionary](https://github.com/govex/COVID-19/blob/master/data_tables/vaccine_data/us_data/data_dictionary.csv)
+- [Data](https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv)
 
 
 ```{r}
 library(tidyverse)
-df <- read_csv('https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/us_data/time_series/vaccine_data_us_timeline.csv')
+
+df <- read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv')
 ```
 
-1. `Geom_point` makes scatter plots, which plot two numeric (or Date) variables. A third categorical variable is often brought in for color. For example, we can compare different vaccine types in Rhode Island by
+1. `Geom_point` makes scatter plots, which plot two numeric (or Date) variables. A third categorical variable is often brought in for color. For example, we can compare different vaccine types used in the US by
 
 ```{r}
-df %>% filter(Province_State=='Rhode Island') %>% ggplot()+geom_point(mapping = aes(x = Date, y = Doses_admin, color = Vaccine_Type))
+df %>% filter(location=='United States') %>% 
+  ggplot()+geom_point(mapping = aes(x = date, 
+                                    y = total_vaccinations, 
+                                    color = vaccine))
 ```
 
 Do the follows. 
 
-  - Use `geom_point` to compare the the Moderna and Pfizer vaccine administered in California  
-  - Use `geom_point` to compare the totall vaccine administered in Rhode Island and Massachusetts
+  - Use `geom_point` to compare the vaccines used by date in Argentina in 2022. 
+  
   - Change `geom_point` to `geom_line` in the above codes to have the corresponding line plots. 
 
-2. Sometime we need to do some calculations on the data before plotting. For example, to compare the popularity of two vaccine `Moderna` and `Pfizer` by date, we can use. 
+2. Sometime we need to do some calculations on the data before plotting. For example, the follows is to compare the total vaccines (including all types of vaccines) by date between the US and the EU
 
 ```{r}
-# Create a dataset recording these two vaccine administered by date
-d1 <- df %>% filter(Vaccine_Type==c('Moderna','Pfizer')) %>% group_by(Date, Vaccine_Type) %>% summarise(vac_admin=mean(Doses_admin, na.rm=TRUE))
+# the total vaccines (including all types of vaccines) by date
+d1 <- df %>% filter(location %in% c('United States', 'European Union')) %>% group_by(date, location) %>% summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE))
 
-# Plot from the newly create data
-d1 %>% ggplot()+geom_point(mapping=aes(x=Date, y=vac_admin, color=Vaccine_Type))
+# Plot
+d1 %>% ggplot()+geom_point(mapping=aes(x=date, y=total_vac2, color=location))
 ```
+
+Notice, the above codes could be piped in one 
+
+```{r}
+df %>% filter(location %in% c('United States', 'European Union')) %>% group_by(date, location) %>% summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE)) %>% ggplot()+geom_point(mapping=aes(x=date, y=total_vac2, color=location))
+```
+
 
 Do the follows. 
 
-- Use `geom_point` to compare the popularity of all vaccines by date. 
-- Use `geom_line` to compare the popularity of all vaccines in New England by date.
-- Use `geom_line` to compare the popularity of all vaccines in New England by month. 
-- Use `geom_line` to compare states in New England in term of the total vaccine administered by date. 
-- Use `geom_line` to compare states in New England in term of the total vaccine administered by date. 
+- Use `geom_point` compare the total vaccines (including all types of vaccines) by date between countries/regions in Asia
+- Use `geom_point` compare the total vaccines (including all types of vaccines) by date between countries/regions in South America in 2021
+
 
 

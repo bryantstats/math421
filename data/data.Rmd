@@ -24,3 +24,5 @@ knitr::opts_chunk$set(echo = TRUE)
 - [Titanic Missing Values](titanic_missing.csv)
 
 - [IMDB Top 1000](imdb_top_1000.csv), [Source](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows)
+
+- [vaccinations-by-manufacturer](vaccinations-by-manufacturer.csv), [Source](https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv)

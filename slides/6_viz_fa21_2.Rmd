@@ -14,7 +14,7 @@ class: inverse, middle, center
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 ```{r xaringan-tile-view, echo=FALSE}
@@ -99,59 +99,64 @@ class: inverse, middle, center
 library(tidyverse)
 library(knitr)    # For knitting document and include_graphics function
 df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
-
-df <- df %>% filter(positiveIncrease>0)
-
 library(lubridate)
 
-df$year <- year(df$date)
-
-df$quarters <- as.factor(quarter(df$date))
-
-df$month <- factor(month(df$date))
-
-df$day <- wday(df$date)
-df$day_type <- case_when(df$day < 6 ~ 'weekday',
-                         TRUE~'weekend')
-
+df <- df %>% 
+    filter(positiveIncrease>0) %>% 
+    mutate(year = year(date),
+           quarters = quarters(date),
+           month = month(date),
+           day = wday(date),
+           day_type = case_when(day < 6 ~ 'weekday',
+                                TRUE~'weekend'))
 ```
 
 
 ---
 ```{r, message=FALSE}
 df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
-  geom_point(mapping = aes(x = date, y = positiveIncrease, color = state))
+  geom_point(mapping = aes(x = date, 
+                           y = positiveIncrease, 
+                           color = state))
 ```
 
 ---
 ```{r, message=FALSE}
 df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
-  geom_line(mapping = aes(x = date, y = positiveIncrease, color = state))
+  geom_line(mapping = aes(x = date, 
+                          y = positiveIncrease, 
+                          color = state))
 ```
 
 ---
 ```{r, message=FALSE}
 df %>% ggplot()+
-  geom_smooth(mapping = aes(x = positiveIncrease, y = deathIncrease, color = day_type))
+  geom_smooth(mapping = aes(x = positiveIncrease, 
+                            y = deathIncrease, 
+                            color = day_type))
 ```
 
 ---
 ```{r, message=FALSE}
-df %>% filter(month %in% c('9','10','11','12'), year==2020) %>% ggplot()+
-  geom_smooth(mapping = aes(x = positiveIncrease, y = deathIncrease, color = day_type))
+df %>% filter(month >8, year==2020) %>% ggplot()+
+  geom_smooth(mapping = aes(x = positiveIncrease, 
+                            y = deathIncrease, 
+                            color = day_type))
 ```
 
 
 ---
 ```{r, message=FALSE}
 df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
-  geom_density(mapping = aes(x = positiveIncrease, color = state))
+  geom_density(mapping = aes(x = positiveIncrease, 
+                             color = state))
 
 ```
 ---
 ```{r, message=FALSE}
 df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
-  geom_bar(mapping = aes(x = day_type, fill = state))
+  geom_bar(mapping = aes(x = day_type, 
+                         fill = state))
 
 ```
 ---
@@ -170,7 +175,9 @@ class: inverse, middle, center
 ---
 ```{r, message=FALSE}
 df %>% filter(state=='RI'|state=='MA') %>% ggplot()+
-  geom_point(mapping = aes(x = date, y = positiveIncrease, color = state))
+  geom_point(mapping = aes(x = date, 
+                           y = positiveIncrease, 
+                           color = state))
 
 ```
 ---
@@ -298,5 +305,5 @@ df %>% ggplot()+
 ---
 # More
 
-- [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization.pdf)
+- [ggplot cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-visualization.pdf)
 
