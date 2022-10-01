@@ -78,15 +78,16 @@ In this section of questions, we will use  the Covid19 vaccination data for the 
 
 ```{r}
 library(tidyverse)
-
 df <- read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv')
 ```
 
 1. `Geom_point` makes scatter plots, which plot two numeric (or Date) variables. A third categorical variable is often brought in for color. For example, we can compare different vaccine types used in the US by
 
 ```{r}
-df %>% filter(location=='United States') %>% 
-  ggplot()+geom_point(mapping = aes(x = date, 
+df %>% 
+  filter(location=='United States') %>% 
+  ggplot()+
+  geom_point(mapping = aes(x = date, 
                                     y = total_vaccinations, 
                                     color = vaccine))
 ```
@@ -101,16 +102,30 @@ Do the follows.
 
 ```{r}
 # the total vaccines (including all types of vaccines) by date
-d1 <- df %>% filter(location %in% c('United States', 'European Union')) %>% group_by(date, location) %>% summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE))
+d1 <- df %>% 
+  filter(location %in% c('United States', 'European Union')) %>% 
+  group_by(date, location) %>% 
+  summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE))
 
 # Plot
-d1 %>% ggplot()+geom_point(mapping=aes(x=date, y=total_vac2, color=location))
+d1 %>% 
+  ggplot()+
+  geom_point(mapping=aes(x=date, 
+                         y=total_vac2, 
+                         color=location))
 ```
 
-Notice, the above codes could be piped in one 
+Notice that the above codes could be piped in one 
 
-```{r}
-df %>% filter(location %in% c('United States', 'European Union')) %>% group_by(date, location) %>% summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE)) %>% ggplot()+geom_point(mapping=aes(x=date, y=total_vac2, color=location))
+```{r, eval=FALSE}
+df %>% 
+  filter(location %in% c('United States', 'European Union')) %>% 
+  group_by(date, location) %>% 
+  summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE)) %>% 
+  ggplot()+
+  geom_point(mapping=aes(x=date, 
+                         y=total_vac2, 
+                         color=location))
 ```
 
 
