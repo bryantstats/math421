@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Visualization - Aesthetic Mapping</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Visualization - Aesthetic Mapping
+
+---
+
+class: inverse, middle, center
+
+
+
+
+
+
+
+
+
+
+
+---
+# A visualization:
+
+--
+
+- is a geometry object (a geom)
+
+--
+
+- whose aesthetics
+
+--
+
+- represents variables
+
+--
+
+- from a data set
+
+
+---
+# Aesthetics mean
+
+--
+
+- “something you can see”. 
+
+--
+
+Examples include:
+
+- position (i.e., on the x and y axes)
+- color (“outside” color)
+- fill (“inside” color)
+- shape (of points)
+- size
+
+---
+# Aesthetics Mapping
+
+--
+
+- map
+
+--
+
+- variables
+
+--
+
+- to aesthetics
+
+---
+class: inverse, middle, center
+# Examples
+
+---
+
+
+
+```r
+library(tidyverse)
+library(knitr)    # For knitting document and include_graphics function
+df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+library(lubridate)
+
+df &lt;- df %&gt;% 
+    filter(positiveIncrease&gt;0) %&gt;% 
+    mutate(year = year(date),
+           quarters = quarters(date),
+           month = month(date),
+           day = wday(date),
+           day_type = case_when(day &lt; 6 ~ 'weekday',
+                                TRUE~'weekend'))
+```
+
+
+---
+
+```r
+df %&gt;% filter(state=='RI'|state=='MA') %&gt;% ggplot()+
+  geom_point(mapping = aes(x = date, 
+                           y = positiveIncrease, 
+                           color = state))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+
+```r
+df %&gt;% filter(state=='RI'|state=='MA') %&gt;% ggplot()+
+  geom_line(mapping = aes(x = date, 
+                          y = positiveIncrease, 
+                          color = state))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+```r
+df %&gt;% ggplot()+
+  geom_smooth(mapping = aes(x = positiveIncrease, 
+                            y = deathIncrease, 
+                            color = day_type))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+```r
+df %&gt;% filter(month &gt;8, year==2020) %&gt;% ggplot()+
+  geom_smooth(mapping = aes(x = positiveIncrease, 
+                            y = deathIncrease, 
+                            color = day_type))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+---
+
+```r
+df %&gt;% filter(state=='RI'|state=='MA') %&gt;% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease, 
+                             color = state))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+---
+
+```r
+df %&gt;% filter(state=='RI'|state=='MA') %&gt;% ggplot()+
+  geom_bar(mapping = aes(x = day_type, 
+                         fill = state))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+---
+# Aesthetic of a geom
+
+- A geom has its list of own aesthetics
+
+- Use `?geom_point()` to check for the list of `geom_point`
+
+- Some aesthetics are required, some are not
+
+---
+class: inverse, middle, center
+# Required Aesthetics
+
+---
+
+```r
+df %&gt;% filter(state=='RI'|state=='MA') %&gt;% ggplot()+
+  geom_point(mapping = aes(x = date, 
+                           y = positiveIncrease, 
+                           color = state))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+---
+
+```r
+df %&gt;% filter(state=='RI'|state=='MA') %&gt;% ggplot()+
+  geom_point(mapping = aes(x = date, y = positiveIncrease))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+
+```r
+df %&gt;% filter(state=='RI'|state=='MA') %&gt;% ggplot()+
+  geom_point(mapping = aes(x = date))
+```
+
+- Will produce an error since `y` aesthetic is required for `geom_point`. 
+
+---
+class: inverse, middle, center
+# Common Visualization Practices
+
+---
+# One Continuous Variable
+
+- Density: `geom_density`
+
+- Histogram: `geom_histogram`
+
+- Boxplot: `geom_boxplot`
+
+---
+**One Continuous Variable: Density**
+
+
+```r
+df %&gt;% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+**One Continuous Variable: Histogram**
+
+
+```r
+df %&gt;% ggplot()+
+  geom_histogram(mapping = aes(x = positiveIncrease))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+---
+**One Continuous Variable: Boxplot**
+
+
+```r
+df %&gt;% ggplot()+
+  geom_boxplot(mapping = aes(y = positiveIncrease))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+---
+**One Continuous Variable: Boxplot**
+
+
+```r
+df %&gt;% filter(positiveIncrease&lt;1000) %&gt;% ggplot()+
+  geom_boxplot(mapping = aes(y = positiveIncrease))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+---
+**One Categorical Variable: Bar chart**
+
+
+```r
+df %&gt;% ggplot()+
+  geom_bar(mapping = aes(x = day_type))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+# Two Continuous Variables
+
+- Scatter Plot: `geom_point`
+- Line Plot: `geom_line`
+- Smooth Plot: `geom_smooth`
+
+---
+# One Continuous Variable + One Categorical Variable
+
+- Density
+- BoxPlot
+
+---
+**One Continuous + One Categorical: Density**
+
+
+```r
+df %&gt;% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease, color = day_type))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+---
+**One Continuous + One Categorical: Density**
+
+
+```r
+df %&gt;% filter(positiveIncrease&lt;1000) %&gt;% ggplot()+
+  geom_density(mapping = aes(x = positiveIncrease, color = day_type))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+**One Continuous + One Categorical: Boxplot**
+
+
+```r
+df %&gt;% ggplot()+
+  geom_boxplot(mapping = aes(x = positiveIncrease, y = day_type))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+---
+**One Continuous + One Categorical: Boxplot**
+
+
+```r
+df %&gt;% filter(positiveIncrease&lt;1000) %&gt;% ggplot()+
+  geom_boxplot(mapping = aes(x = positiveIncrease, y = day_type))
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+---
+# One Categorical Variable + One Categorical Variable
+
+- Barplot
+
+---
+**One Categorical + One Categorical: Barplot**
+
+
+```r
+df %&gt;% ggplot()+
+  geom_bar(mapping=aes(x=month, fill=day_type), position='dodge')
+```
+
+![](6_viz_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+---
+# More
+
+- [ggplot cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-visualization.pdf)
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

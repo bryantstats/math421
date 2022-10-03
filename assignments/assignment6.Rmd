@@ -47,7 +47,7 @@ Choose a dataset and produce the following types of plots and comment on each pl
 
 -------
 
-3. For one two continuous variables
+3. For two continuous variables
 
 - Scatter Plot
 
@@ -67,72 +67,9 @@ Choose a dataset and produce the following types of plots and comment on each pl
 
 5. For two categorical variables: barplot
 
+
 -------
 
-### Questions on Covid Vaccination Data
-
-In this section of questions, we will use  the Covid19 vaccination data for the US. The data and data dictionary can be found at the below link:
-
-- [Data](https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv)
-
-
-```{r}
-library(tidyverse)
-df <- read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv')
-```
-
-1. `Geom_point` makes scatter plots, which plot two numeric (or Date) variables. A third categorical variable is often brought in for color. For example, we can compare different vaccine types used in the US by
-
-```{r}
-df %>% 
-  filter(location=='United States') %>% 
-  ggplot()+
-  geom_point(mapping = aes(x = date, 
-                                    y = total_vaccinations, 
-                                    color = vaccine))
-```
-
-Do the follows. 
-
-  - Use `geom_point` to compare the vaccines used by date in Argentina in 2022. 
-  
-  - Change `geom_point` to `geom_line` in the above codes to have the corresponding line plots. 
-
-2. Sometime we need to do some calculations on the data before plotting. For example, the follows is to compare the total vaccines (including all types of vaccines) by date between the US and the EU
-
-```{r}
-# the total vaccines (including all types of vaccines) by date
-d1 <- df %>% 
-  filter(location %in% c('United States', 'European Union')) %>% 
-  group_by(date, location) %>% 
-  summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE))
-
-# Plot
-d1 %>% 
-  ggplot()+
-  geom_point(mapping=aes(x=date, 
-                         y=total_vac2, 
-                         color=location))
-```
-
-Notice that the above codes could be piped in one 
-
-```{r, eval=FALSE}
-df %>% 
-  filter(location %in% c('United States', 'European Union')) %>% 
-  group_by(date, location) %>% 
-  summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE)) %>% 
-  ggplot()+
-  geom_point(mapping=aes(x=date, 
-                         y=total_vac2, 
-                         color=location))
-```
-
-
-Do the follows. 
-
-- Use `geom_point` compare the total vaccines (including all types of vaccines) by date between countries/regions in Asia
-- Use `geom_point` compare the total vaccines (including all types of vaccines) by date between countries/regions in South America in 2021
-
+6. A plot that contains three variables
 
 

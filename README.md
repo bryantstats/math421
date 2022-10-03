@@ -39,3 +39,11 @@
 - [Assignment 5](assignments/assignment5.html)
 
 - [Assignment 5 - Extra Credits](assignments/assignment5_extra_credits.html)
+
+### 6. Visualization - Aesthetic Mapping
+
+- [Titanic Version](slides/6_viz_titanic.html)
+
+- [Covid Version](slides/6_viz.html)
+
+- [Assignment 6](assignments/assignment6.html)

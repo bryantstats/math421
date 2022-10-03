@@ -9,7 +9,7 @@ title: "Assignment 7: Visualization - Some aspects of ggplot2"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment7.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment7.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -20,12 +20,10 @@ title: "Assignment 7: Visualization - Some aspects of ggplot2"
 ***Submission***: Submit the link on Github of the assignment to Canvas
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 -------
-
-### I. Questions on Your Selected Data
 
 Use the data of your own.  Produce the following types of plots and comment on each plot. Plots should be meaningful. If you use the data we used in class, make sure the plots are not the same as the ones in the slides. All plots should have title, caption, appropriate labels on x and y-axis. 
 
@@ -33,49 +31,86 @@ Use the data of your own.  Produce the following types of plots and comment on e
 
 1. Make a plot using `facet_wrap` by one categorical variable (`facet_wrap(~variable1)`)
 
-2. Make a plot using `facet_wrap` by two categorical variables (`facet_wrap(variable1~variable2)`)
+2. Make a plot using `facet_wrap` by two categorical variables (`facet_wrap(~variable1+variable2)`)
 
-3. Make a plot using `position ='jitter'`. 
+3. Make a plot using `position ='dodge'`.
 
-4. Make a plot using `position ='dodge'`.
+4. Make a plot using `position ='fill'`. 
 
-5. Make a plot using `position ='fill'`. 
+5. Make a plot using `geom_col`.
 
-6. Make a plot using `geom_col`.
+6. Change the theme of one of your plots. 
 
-7. Change the theme of one of your plots. 
+7. Make a plot using combo filter + ggplot
 
-8. Save a plot and put a link of the plot to your Github Webpage.  To link a plot `abc.png` you just need to insert the following on the README.md
+8. Make a plot using combo group_by + summarise + geom_col
+
+9. Save a plot and put a link of the plot to your Github Webpage.  To link a plot `abc.png` you just need to insert the following on the README.md
 
 ```{r, eval=FALSE}
 [Link to the plot](abc.png)
 ```
 
+10. In this question, we will use  the Covid19 vaccination data for the US. The data and data dictionary can be found at the below link:
 
-### II. Questions on Covid Vaccination Data
-
-In this section of questions, we will use  the covid vaccination data for the US. The data and data dictionary can be found at the below link:
-
-- [Data](https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/us_data/time_series/vaccine_data_us_timeline.csv)
-
-- [Data Dictionary](https://github.com/govex/COVID-19/blob/master/data_tables/vaccine_data/us_data/data_dictionary.csv)
-
+- [Data](https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv)
 
 ```{r}
 library(tidyverse)
-df <- read_csv('https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/us_data/time_series/vaccine_data_us_timeline.csv')
+df <- read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv')
 ```
 
-1. Put titles, captions, appropriate labels on x and y-axis for the last two questions in Assignments 6.
+`Geom_point` makes scatter plots, which plot two numeric (or Date) variables. A third categorical variable is often brought in for color. For example, we can compare different vaccine types used in the US by
 
-2. Since the data seems lack of categorical variables, we will create a few categorical variables for easier visualization. From the `Date` variable create three categorical variables to record weekdays, months and quarters. You could also create a categorical variable to record the state regions (South, North East, Midwest, West) or other new categorical variables.
+```{r}
+df %>% 
+  filter(location=='United States') %>% 
+  ggplot()+
+  geom_point(mapping = aes(x = date, 
+                                    y = total_vaccinations, 
+                                    color = vaccine))
+```
 
-3. With the updated data after question 2.  Create at least 7 new meaningful graphs.  Your graphs should have titles, captions, appropriate labels on x and y-axis. You should also make use of the follows. 
+Do the follows. 
 
- - geom_point
- - geom_line
- - geom_smooth
- _ geom_bar
- - geom_col
- - facet_wrap
- - combination of geom_point and geom_smooth 
+  - Use `geom_point` to compare the vaccines used by date in Argentina in 2022. 
+  
+  - Change `geom_point` to `geom_line` in the above codes to have the corresponding line plots. 
+
+11. (Using the same dataset as 11) Sometime we need to do some calculations on the data before plotting. For example, the below codes is to compare the total vaccines (including all types of vaccines) by date between the US and the EU
+
+```{r}
+# the total vaccines (including all types of vaccines) by date
+d1 <- df %>% 
+  filter(location %in% c('United States', 'European Union')) %>% 
+  group_by(date, location) %>% 
+  summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE))
+
+# Plot
+d1 %>% 
+  ggplot()+
+  geom_point(mapping=aes(x=date, 
+                         y=total_vac2, 
+                         color=location))
+```
+
+Notice that the above codes could be piped in one 
+
+```{r, eval=FALSE}
+df %>% 
+  filter(location %in% c('United States', 'European Union')) %>% 
+  group_by(date, location) %>% 
+  summarise(total_vac2=sum(total_vaccinations, na.rm=TRUE)) %>% 
+  ggplot()+
+  geom_point(mapping=aes(x=date, 
+                         y=total_vac2, 
+                         color=location))
+```
+
+
+Do the follows. 
+
+- Use `geom_point` compare the total vaccines (including all types of vaccines) by date between countries/regions in Asia
+
+- Use `geom_point` compare the total vaccines (including all types of vaccines) by date between countries/regions in South America in 2021
+
