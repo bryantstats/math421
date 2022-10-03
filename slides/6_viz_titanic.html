@@ -96,7 +96,7 @@ class: inverse, middle, center
 ```r
 library(tidyverse)
 library(ggplot2)
-df &lt;- read_csv('../data/titanic.csv')
+df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
 df &lt;- df %&gt;% 
   mutate(Survived = as.character(Survived),
          Pclass = as.character(Pclass))
