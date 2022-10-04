@@ -77,7 +77,7 @@ Do the follows.
   
   - Change `geom_point` to `geom_line` in the above codes to have the corresponding line plots. 
 
-11. (Using the same dataset as 11) Sometime we need to do some calculations on the data before plotting. For example, the below codes is to compare the total vaccines (including all types of vaccines) by date between the US and the EU
+11. (Using the same dataset as in 10.) Sometime we need to do some calculations on the data before plotting. For example, the below codes is to compare the total vaccines (including all types of vaccines) by date between the US and the EU
 
 ```{r}
 # the total vaccines (including all types of vaccines) by date
