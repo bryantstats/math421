@@ -4,7 +4,7 @@ output:
   html_document:
   pdf_document: default
   word_document: default
-title: "Assignment 7 Extra Credits: Practice dplyr and ggplot2"
+title: "Assignment 7 - Extra Credits: Practice dplyr and ggplot2"
 ---
 
 ***How to do it?***: 
