@@ -34,11 +34,11 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
 2. Is there any column that contains NAs?
 
-3. What are the most frequent job titles in the data?  
+3. What is the most frequent job title in the data?  
 
 4. Find the average salary data of the three most frequent job titles in the data. 
 
-5. What are the job title that have the highest average salary?
+5. What is the job title that have the highest average salary?
 
 6. Which country gives the highest salary on average? 
 
