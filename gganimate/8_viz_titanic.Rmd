@@ -224,8 +224,6 @@ df %>% ggplot(aes(x = Fare,
 ```
 ]
 
-
-
 ---
 
 # Dynamic Plot
@@ -246,7 +244,6 @@ df %>% ggplot(aes(x = Fare,
 
 ```
 ]
-
 
 ---
 
