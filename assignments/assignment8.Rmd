@@ -9,7 +9,7 @@ title: "Assignment 8: Visualization - Making a bar race"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment8.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment8.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -26,7 +26,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 -------
 
-1. Install two packages `gganimate` and `gifski` then restart Rstudio. Use the WHO's dataset at [this link](https://covid19.who.int/WHO-COVID-19-global-data.csv). Make a top-10 bar race by months between countries on the number of deaths by Covid 19.  
+1. Install two packages `gganimate` and `gifski` then restart Rstudio. Use the WHO's dataset at [this link](https://covid19.who.int/WHO-COVID-19-global-data.csv). Follow the below step to make a top-10 bar race by months between countries on the number of deaths by Covid 19 in 2021.
 
 2. Make another bar race using that dataset.  
 
