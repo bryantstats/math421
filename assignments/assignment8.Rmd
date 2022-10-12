@@ -26,9 +26,11 @@ knitr::opts_chunk$set(message = FALSE)
 
 -------
 
-1. Install two packages `gganimate` and `gifski` then restart Rstudio. Use the WHO's dataset at [this link](https://covid19.who.int/WHO-COVID-19-global-data.csv). Follow the below step to make a top-10 bar race by months between countries on the number of deaths by Covid 19 in 2021.
+1. Install two packages `gganimate` and `gifski` then restart Rstudio. Using the `Adult Census Income` data, make an animation using `geom_point` and `transition_states`.
 
-2. Make another bar race using that dataset.  
+2. Using the `Adult Census Income` data, make an animation using `geom_bar` and `transition_states`.
 
-3. Make a bar race using a dataset of your own interest. You may use the dataset that we use in class (https://covidtracking.com/data/download/all-states-history.csv) but you should make a different bar racev from ones in the slides. 
+3. Use the WHO's dataset at [this link](https://covid19.who.int/WHO-COVID-19-global-data.csv). Make a top-10 bar race by months between countries on the number of deaths by Covid 19 in 2021.
+
+4. Make a bar race using a dataset of your own interest. You may use the dataset that we use in class (https://covidtracking.com/data/download/all-states-history.csv) but you should make a different bar racev from ones in the slides. 
 
