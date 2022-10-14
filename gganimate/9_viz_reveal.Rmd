@@ -292,24 +292,3 @@ df %>%
 ```{r, ref.label = "step112811101211", echo = FALSE, cache = TRUE, fig.height = 6, fig.width = 7}
 ```
 ]
-
----
-
-```{r, eval=FALSE, echo=FALSE}
-library(tidyverse)
-library(gganimate)
-library(lubridate)
-df <- read_csv('https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/us_data/time_series/vaccine_data_us_timeline.csv')
-df$month <- month(df$Date)
-df %>% 
-    filter(Province_State %in% c('New York','Florida'), Vaccine_Type=='All') %>% 
-    ggplot(aes(y=Doses_admin,
-               x=Date,
-               color=Province_State))+ 
-    geom_line()+
-    geom_point(size=3)+
-    geom_text(aes(label = Doses_admin), 
-              hjust = -.1, size=5) + #<<
-    transition_reveal(Date)
-```
-
