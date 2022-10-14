@@ -1,8 +1,6 @@
 # Math 421. Statistical Analysis with R. 
 
-[Syllabus](Syllabus_421.pdf)
-
-[Data](data/data.html)
+[Syllabus,](Syllabus_421.pdf) [Data](data/data.html)
 
 
 |Topics| Slides |Assignments |Extra Credits | 
