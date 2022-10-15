@@ -41,7 +41,7 @@ Hint:
 
 3. Create the new variable (column) `death_per_cases` recording the number of deaths per cases (Hint: divide cumulative deaths by cumulative cases).  What are the three countries with the highest deaths per cases? 
 
-4.Use `transition_reveal` to make a plot revealing the number of deaths per cases of the US, Italy and Mexico. 
+4. Use `transition_reveal` to make a plot revealing the number of deaths per cases of the US, Italy and Mexico. 
 
 5. Import the following data https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv
                       
