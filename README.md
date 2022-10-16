@@ -13,11 +13,7 @@
 |6. Visualization:  Aesthetic Mapping| [Titanic](slides/6_viz_titanic.html),  [Covid ](slides/6_viz.html) |[Assignment 6](assignments/assignment6.html) | | 
 |7. Visualization: Some aspects of ggplot2| [Titanic](slides/7_viz_titanic.html),  [Covid ](slides/7_viz.html) |[Assignment 7](assignments/assignment7.html) | [Extra Credits](assignments/assignment7_extra_credits.html)| 
 |8. Animated Graphics: Bar Races | [Titanic,](gganimate/8_viz_titanic.html) [Bar Races](gganimate/8_viz_bar_race.html) |[Assignment 8](assignments/assignment8.html) | | 
-|9. Animated Graphics: Time Revealing| [Slides](gganimate/9_viz_reveal.html) |[Assignment 9](assignments/assignment9.html) || 
-
- 
-
- 
+|9. Animated Graphics: Time Revealing| [Slides](gganimate/9_viz_reveal.html) |[Assignment 9](assignments/assignment9.html) ||  
 
  
 
