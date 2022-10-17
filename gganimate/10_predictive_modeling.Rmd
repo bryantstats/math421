@@ -194,6 +194,8 @@ df <- df %>% rename(target=Survived)
 df <- df %>% 
   mutate(target = as.factor(target),
          Pclass = as.factor(Pclass),
+         Embarked = as.factor(Embarked),
+         Sex = as.factor(Sex)
          )
 
 ```

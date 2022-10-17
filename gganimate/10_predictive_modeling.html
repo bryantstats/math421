@@ -173,6 +173,8 @@ df &lt;- df %&gt;% rename(target=Survived)
 df &lt;- df %&gt;% 
   mutate(target = as.factor(target),
          Pclass = as.factor(Pclass),
+         Embarked = as.factor(Embarked),
+         Sex = as.factor(Sex)
          )
 ```
 
@@ -382,6 +384,8 @@ importance(forest_model)
 |Detection Rate       | 0.2556391|
 |Detection Prevalence | 0.3007519|
 |Balanced Accuracy    | 0.7967480|
+
+
 
 
 
