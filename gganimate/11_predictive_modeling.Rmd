@@ -1,0 +1,262 @@
+---
+title: "![](./figures/bat-cartoon.png) Modeling: Universal Framework"
+author: <font size="5"> Son Nguyen </font>
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>`
+---
+
+<style>
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide > h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide > h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide > h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+</style>
+
+```{css, echo=FALSE}
+.left-code {
+  color: #777;
+  width: 48%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 51%;
+  float: right;
+  padding-left: 1%;
+}
+```
+
+```{r setup, include = FALSE}
+
+# R markdown options
+knitr::opts_chunk$set(echo = TRUE, 
+                      
+                      fig.width = 10,
+                      fig.height = 5,
+                      fig.align = "center", 
+                      message = FALSE,
+                      warning = FALSE)
+
+```
+
+
+# Other packages for Trees and Forests
+
+- Decision Tree can be implemented by `C50`, `RWeka`, `party`... packages
+
+- Random Forest can be implemented by `ranger`, `foreach`,`e1071`... packages
+
+---
+# Consistency Issue in R
+
+- Modeling Packages are made by different people
+
+
+---
+# Consistency Issue in R
+
+- Modeling Packages are made by different people
+
+- They have slightly different interfaces
+
+
+---
+# Consistency Issue in R
+
+- Modeling Packages are made by different people
+
+- They have slightly different interfaces
+
+- Trying to keep everything in line can be frustrating
+
+---
+# Unified Interface
+
+- A package to unify all the model interfaces is needed
+
+- This is called a `wrapper`
+
+- There are several wrappers for machine learning in R:
+
+  - caret
+  
+  - mlr3
+  
+  - tidymodels
+
+---
+# CARET
+
+- Short for Classification And REgression Training 
+
+- Attempt to streamline the process for creating predictive models. 
+
+- Created by Max Kuhn
+
+---
+# Data Preparation
+
+```{r}
+library(tidyverse)
+library(caret)
+library(tidyverse)
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
+
+# Remove some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+
+
+# Set the target variable
+df <- df %>% rename(target=Survived)
+
+# Correct variables' types
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
+
+
+# Handle missing values
+df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+
+df = drop_na(df)
+
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+```
+
+---
+# Create a Decision Tree with Caret
+
+```{r}
+model1 <- train(target~., data=df_train, 
+                method = "rpart2", #<<
+                maxdepth=3)
+
+pred <- predict(model1, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+---
+# Create a Random Forest with Caret
+
+```{r}
+model2 <- train(target~., data=df_train, 
+                method = "rf", #<< 
+                ntree = 1000) 
+
+pred <- predict(model2, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+---
+# Variable Importance
+
+```{r}
+# Tree
+varImp(model1)
+```
+
+---
+# Variable Importance
+
+```{r}
+# Forest
+varImp(model2)
+```
+
+---
+# Plot Variable Importance
+```{r}
+# Tree
+plot(varImp(model1)) #<<
+```
+
+---
+# Plot Variable Importance
+```{r}
+# Forest
+plot(varImp(model2)) #<<
+```
+
+
+

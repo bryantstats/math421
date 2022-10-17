@@ -4,8 +4,7 @@
     <title> Predictive Modeling - Part 1</title>
     <meta charset="utf-8" />
     <meta name="author" content=" Son Nguyen " />
-    <meta name="date" content="2020-09-28" />
-    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.16/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
@@ -14,9 +13,12 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # <img src="figures/bat-cartoon.png" /> Predictive Modeling - Part 1
+]
+.author[
 ### <font size="5"> Son Nguyen </font>
-### <font size="5"> September 28, 2020 </font>
+]
 
 ---
 
@@ -109,14 +111,14 @@ class: center, middle, inverse, title-slide
 
 
 
-|Pclass |Sex    |      Age| SibSp| Parch|    Fare|Embarked |target |
-|:------|:------|--------:|-----:|-----:|-------:|:--------|:------|
-|3      |male   | 22.00000|     1|     0|  7.2500|S        |0      |
-|1      |female | 38.00000|     1|     0| 71.2833|C        |1      |
-|3      |female | 26.00000|     0|     0|  7.9250|S        |1      |
-|1      |female | 35.00000|     1|     0| 53.1000|S        |1      |
-|3      |male   | 35.00000|     0|     0|  8.0500|S        |0      |
-|3      |male   | 29.69912|     0|     0|  8.4583|Q        |0      |
+|target |Pclass |Sex    |      Age| SibSp| Parch|    Fare|Embarked |
+|:------|:------|:------|--------:|-----:|-----:|-------:|:--------|
+|0      |3      |male   | 22.00000|     1|     0|  7.2500|S        |
+|1      |1      |female | 38.00000|     1|     0| 71.2833|C        |
+|1      |3      |female | 26.00000|     0|     0|  7.9250|S        |
+|1      |1      |female | 35.00000|     1|     0| 53.1000|S        |
+|0      |3      |male   | 35.00000|     0|     0|  8.0500|S        |
+|0      |3      |male   | 29.69912|     0|     0|  8.4583|Q        |
 
 - Passengers in the Titanic
 - `Target = 1` means the passenger was survived
@@ -126,14 +128,14 @@ class: center, middle, inverse, title-slide
 # Prediction Problem
 
 
-|Pclass |Sex    |      Age| SibSp| Parch|    Fare|Embarked |target |
-|:------|:------|--------:|-----:|-----:|-------:|:--------|:------|
-|3      |male   | 22.00000|     1|     0|  7.2500|S        |0      |
-|1      |female | 38.00000|     1|     0| 71.2833|C        |1      |
-|3      |female | 26.00000|     0|     0|  7.9250|S        |1      |
-|1      |female | 35.00000|     1|     0| 53.1000|S        |1      |
-|3      |male   | 35.00000|     0|     0|  8.0500|S        |0      |
-|3      |male   | 29.69912|     0|     0|  8.4583|Q        |0      |
+|target |Pclass |Sex    |      Age| SibSp| Parch|    Fare|Embarked |
+|:------|:------|:------|--------:|-----:|-----:|-------:|:--------|
+|0      |3      |male   | 22.00000|     1|     0|  7.2500|S        |
+|1      |1      |female | 38.00000|     1|     0| 71.2833|C        |
+|1      |3      |female | 26.00000|     0|     0|  7.9250|S        |
+|1      |1      |female | 35.00000|     1|     0| 53.1000|S        |
+|0      |3      |male   | 35.00000|     0|     0|  8.0500|S        |
+|0      |3      |male   | 29.69912|     0|     0|  8.4583|Q        |
 
 - We want to predict the `target` given the information of other variables.
 
@@ -144,7 +146,7 @@ class: center, middle, inverse, title-slide
 ```r
 # Read in the data
 library(tidyverse)
-df = read_csv("titanic.csv")
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
 ```
 ---
 # Set the Target Variable
@@ -153,15 +155,11 @@ df = read_csv("titanic.csv")
 
 
 ```r
-# The target variable is the variable at column 8. 
+# Take out some columns
+df &lt;- df %&gt;% select(-PassengerId, -Ticket, -Name, -Cabin)
 
-names(df)[8] &lt;- 'target'
-
-# Remove some columns
-df$PassengerId =  NULL
-df$Ticket =  NULL
-df$Name = NULL
-df$Cabin = NULL
+# Set the target variable
+df &lt;- df %&gt;% rename(target=Survived)
 ```
 
 ---
@@ -171,10 +169,11 @@ df$Cabin = NULL
 
 
 ```r
-df$target &lt;- factor(df$target)
-df$Pclass = factor(df$Pclass)
-df$Sex &lt;- factor(df$Sex)
-df$Embarked &lt;- factor(df$Embarked)
+# Correct variables' types
+df &lt;- df %&gt;% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
 ```
 
 ---
@@ -184,7 +183,11 @@ df$Embarked &lt;- factor(df$Embarked)
 
 
 ```r
-df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+# Replace NA of Age by its mean
+mean_age &lt;- mean(df$Age, na.rm=TRUE)
+df$Age &lt;- replace_na(df$Age, mean_age)
+
+# Drop all rows that has an NA
 df = drop_na(df)
 ```
 
@@ -236,7 +239,6 @@ tree_model$variable.importance
 ##       Sex      Fare    Pclass       Age     SibSp     Parch  Embarked 
 ## 83.761904 32.854400 28.807881 19.954127 19.287469 14.431109  7.625484
 ```
-
 
 ---
 # Variable importances
@@ -299,6 +301,19 @@ cm$overall[1]
 |Balanced Accuracy    | 0.8151602|
 
 ---
+# Random Forest 
+
+- Random Forest is a collection of decision trees
+
+- Random Forest predict by the majority vote between the trees
+
+- For example:  if 51 trees in a forest of 100 trees predict passenger A `survived`, then the forest also predict passenger A `survived`
+
+- Trees are trained only a subset of the original data 
+
+- Only random of few variables are considered at each split
+
+---
 # Random Forest
 
 
@@ -314,9 +329,8 @@ cm$overall[1]
 
 ```
 ##  Accuracy 
-## 0.8421053
+## 0.8270677
 ```
-
 
 ---
 # Variable importances
@@ -328,13 +342,13 @@ importance(forest_model)
 
 ```
 ##          MeanDecreaseGini
-## Pclass          22.816745
-## Sex             67.882267
-## Age             38.066271
-## SibSp           11.464391
-## Parch           10.109353
-## Fare            50.905132
-## Embarked         8.835307
+## Pclass          23.497310
+## Sex             69.014066
+## Age             38.661926
+## SibSp           10.796182
+## Parch            9.727980
+## Fare            49.767591
+## Embarked         7.816245
 ```
 
 ---
@@ -343,13 +357,13 @@ importance(forest_model)
 
 |               |    Metric|
 |:--------------|---------:|
-|Accuracy       | 0.8421053|
-|Kappa          | 0.6518759|
-|AccuracyLower  | 0.7926243|
-|AccuracyUpper  | 0.8837721|
+|Accuracy       | 0.8270677|
+|Kappa          | 0.6187212|
+|AccuracyLower  | 0.7761558|
+|AccuracyUpper  | 0.8705225|
 |AccuracyNull   | 0.6165414|
 |AccuracyPValue | 0.0000000|
-|McnemarPValue  | 0.0011937|
+|McnemarPValue  | 0.0019596|
 
 ---
 # Evaluate the Forest
@@ -357,181 +371,20 @@ importance(forest_model)
 
 |                     |    Metric|
 |:--------------------|---------:|
-|Sensitivity          | 0.6862745|
-|Specificity          | 0.9390244|
-|Pos Pred Value       | 0.8750000|
-|Neg Pred Value       | 0.8279570|
-|Precision            | 0.8750000|
-|Recall               | 0.6862745|
-|F1                   | 0.7692308|
+|Sensitivity          | 0.6666667|
+|Specificity          | 0.9268293|
+|Pos Pred Value       | 0.8500000|
+|Neg Pred Value       | 0.8172043|
+|Precision            | 0.8500000|
+|Recall               | 0.6666667|
+|F1                   | 0.7472527|
 |Prevalence           | 0.3834586|
-|Detection Rate       | 0.2631579|
+|Detection Rate       | 0.2556391|
 |Detection Prevalence | 0.3007519|
-|Balanced Accuracy    | 0.8126495|
-
----
-# Other packages for Trees and Forests
-
-- Decision Tree can be implemented by `C50`, `RWeka`, `party`... packages
-
-- Random Forest can be implemented by `ranger`, `foreach`,`e1071`... packages
-
----
-# Consistency Issue in R
-
-- Modeling Packages are made by different people
+|Balanced Accuracy    | 0.7967480|
 
 
----
-# Consistency Issue in R
 
-- Modeling Packages are made by different people
-
-- They have slightly different interfaces
-
-
----
-# Consistency Issue in R
-
-- Modeling Packages are made by different people
-
-- They have slightly different interfaces
-
-- Trying to keep everything in line can be frustrating
-
----
-# Unified Interface
-
-- A package to unify all the model interfaces is needed
-
-- This is called a `wrapper`
-
-- There are several wrappers for machine learning in R:
-
-  - caret
-  
-  - mlr3
-  
-  - tidymodels
-
----
-# CARET
-
-- Short for Classification And REgression Training 
-
-- Attempt to streamline the process for creating predictive models. 
-
-- Created by Max Kuhn
-
----
-# Create a Decision Tree with Caret
-
-
-```r
-model1 &lt;- train(target~., data=df_train, 
-*               method = "rpart2",
-                maxdepth=3)
-
-pred &lt;- predict(model1, df_test)
-
-cm &lt;- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
-
-cm$overall[1]
-```
-
-```
-##  Accuracy 
-## 0.8383459
-```
-
----
-# Create a Random Forest with Caret
-
-
-```r
-model2 &lt;- train(target~., data=df_train, 
-*               method = "rf",
-                ntree = 1000) 
-
-pred &lt;- predict(model2, df_test)
-
-cm &lt;- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
-
-cm$overall[1]
-```
-
-```
-##  Accuracy 
-## 0.8308271
-```
-
----
-# Variable Importance
-
-
-```r
-# Tree
-varImp(model1)
-```
-
-```
-## rpart2 variable importance
-## 
-##           Overall
-## Sexmale   100.000
-## Pclass3    71.396
-## Fare       65.386
-## Age        19.806
-## SibSp      15.846
-## Parch       9.523
-## EmbarkedS   7.882
-## Pclass2     4.249
-## EmbarkedQ   0.000
-```
-
----
-# Variable Importance
-
-
-```r
-# Forest
-varImp(model2)
-```
-
-```
-## rf variable importance
-## 
-##           Overall
-## Sexmale   100.000
-## Fare       62.752
-## Age        40.963
-## Pclass3    24.169
-## SibSp      11.175
-## Parch      10.185
-## EmbarkedS   3.747
-## Pclass2     2.634
-## EmbarkedQ   0.000
-```
-
----
-# Plot Variable Importance
-
-```r
-# Tree
-*plot(varImp(model1))
-```
-
-&lt;img src="10_predictive_modeling_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Plot Variable Importance
-
-```r
-# Forest
-*plot(varImp(model2))
-```
-
-&lt;img src="10_predictive_modeling_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -580,6 +433,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

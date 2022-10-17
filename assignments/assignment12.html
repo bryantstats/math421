@@ -60,6 +60,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -80,6 +81,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -170,48 +174,18 @@ pre code {
 
 <p><strong><em>How to do it?</em></strong>:</p>
 <ul>
-<li><p>Open the Rmarkdown file of this assignment (<a href="fa2021_assignment12.Rmd">link</a>) in Rstudio.</p></li>
+<li><p>Open the Rmarkdown file of this assignment (<a href="assignment12.Rmd">link</a>) in Rstudio.</p></li>
 <li><p>Right under each <strong>question</strong>, insert a code chunk (you can use the hotkey <code>Ctrl + Alt + I</code> to add a code chunk) and code the solution for the question.</p></li>
 <li><p><code>Knit</code> the rmarkdown file (hotkey: <code>Ctrl + Alt + K</code>) to export an html.</p></li>
 <li><p>Publish the html file to your Githiub Page.</p></li>
 </ul>
 <p><strong><em>Submission</em></strong>: Submit the link on Github of the assignment to Blackboard.</p>
-<hr />
 <ol style="list-style-type: decimal">
-<li>Install the package <code>mlbench</code> and use the follows to import the data</li>
+<li><p>Use the <code>PimaIndiansDiabetes</code> dataset. Use 15% data for testing. Use cross-validation with of 7 folds to tune random forest <code>(method=&#39;ranger&#39;)</code>. What are the parameters that produce the greatest accuracy? What is the testing accuracy.</p></li>
+<li><p>Use the <code>PimaIndiansDiabetes</code> dataset. Go to <a href="https://topepo.github.io/caret/available-models.html" class="uri">https://topepo.github.io/caret/available-models.html</a> and pick a classification model. Tune the classification model using cross-validation of 7 folds.</p></li>
+<li><p>Use the <code>PimaIndiansDiabetes</code> dataset. Pick three models at <a href="https://topepo.github.io/caret/available-models.html">this link</a> to compare using 7-fold cross validation method. Evaluate the accuracy of the final model on the test data. What is the best model?</p></li>
+<li><p>Redo 1-3 using the dataset of your own or the <code>Adult Census Income</code> dataset. If you use the <code>Adult Census Income</code> dataset, you may want to filter the data and remove some variables to speed up the training time.</p></li>
 </ol>
-<pre class="r"><code>library(mlbench)
-data(PimaIndiansDiabetes)
-df &lt;- PimaIndiansDiabetes</code></pre>
-<ul>
-<li>Set seed to be 2020.</li>
-<li>The target variable is <code>diabetes</code></li>
-<li>Partition the data into 80% training and 20% testing.</li>
-</ul>
-<hr />
-<ol start="2" style="list-style-type: decimal">
-<li>Use cross-validation of 30 folds to tune random forest (method=‘rf’). What is the <code>mtry</code> value that produces the greatest accuracy?</li>
-</ol>
-<hr />
-<ol start="3" style="list-style-type: decimal">
-<li>Use cross-validation with of 30 folds to tune random forest (method=‘ranger’). What are the parameters that produce the greatest accuracy?</li>
-</ol>
-<hr />
-<ol start="4" style="list-style-type: decimal">
-<li>Go to <a href="https://topepo.github.io/caret/available-models.html" class="uri">https://topepo.github.io/caret/available-models.html</a> and pick a classification model. Tune the classification model using cross-validation of 30 folds.</li>
-</ol>
-<hr />
-<ol start="5" style="list-style-type: decimal">
-<li>Pick three models at <a href="https://topepo.github.io/caret/available-models.html">this link</a> to compare using 15-fold cross validation method. Evaluate the accuracy of the final model on the test data. What is the best model?</li>
-</ol>
-<hr />
-<ol start="6" style="list-style-type: decimal">
-<li>(Optional) Redo Question 5 on this following dataset.</li>
-</ol>
-<ul>
-<li><p><code>Adult Census Income</code> dataset (<a href="https://www.kaggle.com/uciml/adult-census-income">Link</a>) where the target variable is <code>income</code></p></li>
-<li><p><code>Credit card default</code> dataset (<a href="https://www.kaggle.com/uciml/default-of-credit-card-clients-dataset">link</a>) where the target variable is <code>default.payment.next.month</code></p></li>
-</ul>
 
 
 

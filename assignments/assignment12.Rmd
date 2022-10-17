@@ -9,7 +9,7 @@ title: "Assignment 12: Predictive Modeling - Part 3"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment12.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment12.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -24,40 +24,8 @@ knitr::opts_chunk$set(message = FALSE)
 ```
 
 
--------
+1. Use the `PimaIndiansDiabetes` dataset. Use 15% data for testing. Use cross-validation with of 7 folds to tune random forest `(method='ranger')`.  What are the parameters that produce the greatest accuracy? What is the testing accuracy. 
 
-1. Install the package `mlbench` and use the follows to import the data
+2. Use the `PimaIndiansDiabetes` dataset. Go to https://topepo.github.io/caret/available-models.html and pick a classification model.  Tune the classification model using cross-validation of 7 folds. 
 
-```{r}
-library(mlbench)
-data(PimaIndiansDiabetes)
-df <- PimaIndiansDiabetes
-```
-
-- Set seed to be 2020. 
-- The target variable is `diabetes`
-- Partition the data into 80% training and 20% testing.  
-
--------
-
-2. Use cross-validation of 30 folds to tune random forest (method='rf').  What is the `mtry` value that produces the greatest accuracy?
- 
--------
-
-3. Use cross-validation with of 30 folds to tune random forest (method='ranger').  What are the parameters that produce the greatest accuracy?
-
--------
-
-4. Go to https://topepo.github.io/caret/available-models.html and pick a classification model.  Tune the classification model using cross-validation of 30 folds. 
-
--------
-
-5. Pick three models at [this link](https://topepo.github.io/caret/available-models.html) to compare using 15-fold cross validation method. Evaluate the accuracy of the final model on the test data. What is the best model?
-
--------
-
-6. (Optional) Redo Question 5 on this following dataset. 
-
- - `Adult Census Income` dataset ([Link](https://www.kaggle.com/uciml/adult-census-income)) where the target variable is `income`
- 
- -  `Credit card default` dataset ([link](https://www.kaggle.com/uciml/default-of-credit-card-clients-dataset)) where the target variable is `default.payment.next.month`
+3. Use the `PimaIndiansDiabetes` dataset. Pick three models at [this link](https://topepo.github.io/caret/available-models.html) to compare using 7-fold cross validation method. Evaluate the accuracy of the final model on the test data. What is the best model?

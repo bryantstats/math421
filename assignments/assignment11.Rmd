@@ -4,12 +4,12 @@ output:
   html_document:
   pdf_document: default
   word_document: default
-title: "Assignment 11: Predictive Modeling - Part 2"
+title: "Assignment 11: Predictive Modeling - Universal Framework"
 ---
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment11.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment11.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -26,22 +26,17 @@ knitr::opts_chunk$set(message = FALSE)
 
 -------
 
-1. Install the package `mlbench` and use the follows to import the data
+1. Install the package mlbench and use the follows to import the data
 
 ```{r}
 library(mlbench)
+library(tidyverse)
 data(PimaIndiansDiabetes)
-df <- PimaIndiansDiabetes
+df <- tibble(PimaIndiansDiabetes)
 ```
 
-- Set seed to be 2020. 
-- The target variable is `diabetes`
-- Partition the data into 80% training and 20% testing.  
+Train and Test a decision tree and a random forest with caret. Plot the variable importance of these models. 
 
--------
+2. Train and Test a `glmnet` model. Plot the variable importance of the model. 
 
-2. Tuning Decision Tree:  Use cross-validation with 10 k-folds to find the maxdepth with the greatest accuracy. Plot the accuracy associated with different maxdepths against the maxdepths. The range to search for maxdepth is from 1 to 10. What is the selected maxdepth?
-
--------
-
-3. Calculate the accuracy of the tuned decision tree in 2. on the test data. 
+3. Train and test two models that are not `ranger`, `glmnet` or `rpart`  with caret. Plot the variable importance of the model. 

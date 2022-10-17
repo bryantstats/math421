@@ -1,7 +1,6 @@
 ---
 title: "![](./figures/bat-cartoon.png) Predictive Modeling - Part 1"
 author: <font size="5"> Son Nguyen </font>
-date: <font size="5"> September 28, 2020 </font>
 output:
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
@@ -109,39 +108,37 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE)
 
 # Load packages
-library(gapminder)
-library(gganimate)
 library(ggplot2)
 library(tidyverse)
 library(lubridate)
 library(knitr)
-
 ```
 
 # Data
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 # Read in the data
 library(tidyverse)
-df = read_csv("titanic.csv")
-
-# Set the target variable
-names(df)[8] <- 'target'
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
 
 # Remove some columns
-df$PassengerId =  NULL
-df$Ticket =  NULL
-df$Name = NULL
-df$Cabin = NULL
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+
+
+# Set the target variable
+df <- df %>% rename(target=Survived)
 
 # Correct variables' types
-df$target <- factor(df$target)
-df$Pclass = factor(df$Pclass)
-df$Sex <- factor(df$Sex)
-df$Embarked <- factor(df$Embarked)
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
+
 
 # Handle missing values
-df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+# Replace NA of Age by its mean
+mean_age <- mean(df$Age, na.rm=TRUE)
+df$Age <- replace_na(df$Age, mean_age)
 
 df = drop_na(df)
 ```
@@ -167,11 +164,11 @@ kable(head(df))
 ---
 # Import and Clean the data
 
-```{r, eval=FALSE}
+```{r}
 
 # Read in the data
 library(tidyverse)
-df = read_csv("titanic.csv")
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
 ```
 ---
 # Set the Target Variable
@@ -179,15 +176,12 @@ df = read_csv("titanic.csv")
 - It's a common practice that the target variable named `target`
 
 ```{r}
-# The target variable is the variable at column 8. 
+# Take out some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
 
-names(df)[8] <- 'target'
+# Set the target variable
+df <- df %>% rename(target=Survived)
 
-# Remove some columns
-df$PassengerId =  NULL
-df$Ticket =  NULL
-df$Name = NULL
-df$Cabin = NULL
 ```
 
 ---
@@ -196,10 +190,12 @@ df$Cabin = NULL
 - Make sure all categorical variables are factors. 
 
 ```{r}
-df$target <- factor(df$target)
-df$Pclass = factor(df$Pclass)
-df$Sex <- factor(df$Sex)
-df$Embarked <- factor(df$Embarked)
+# Correct variables' types
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
+
 ```
 
 ---
@@ -208,7 +204,11 @@ df$Embarked <- factor(df$Embarked)
 - Make sure there are no missing values
 
 ```{r}
-df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+# Replace NA of Age by its mean
+mean_age <- mean(df$Age, na.rm=TRUE)
+df$Age <- replace_na(df$Age, mean_age)
+
+# Drop all rows that has an NA
 df = drop_na(df)
 ```
 
@@ -253,7 +253,6 @@ fancyRpartPlot(tree_model)
 tree_model$variable.importance
 ```
 
-
 ---
 # Variable importances
 
@@ -296,7 +295,9 @@ kable(data.frame(Metric = cm$byClass))
 
 - For example:  if 51 trees in a forest of 100 trees predict passenger A `survived`, then the forest also predict passenger A `survived`
 
-- A tree in a subset only consider a few variables at each split. 
+- Trees are trained only a subset of the original data 
+
+- Only random of few variables are considered at each split
 
 ---
 # Random Forest
@@ -310,7 +311,6 @@ cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
 
 cm$overall[1]
 ```
-
 
 ---
 # Variable importances
@@ -334,116 +334,73 @@ kable(data.frame(Metric = cm$overall))
 kable(data.frame(Metric = cm$byClass))
 ```
 
----
-# Other packages for Trees and Forests
+```{r, echo=FALSE, eval=FALSE}
+# On Adult data
 
-- Decision Tree can be implemented by `C50`, `RWeka`, `party`... packages
+library(tidyverse)
+library(caret)
 
-- Random Forest can be implemented by `ranger`, `foreach`,`e1071`... packages
+df <- read_csv('https://bryantstats.github.io/math421/data/adult_census.csv')
 
----
-# Consistency Issue in R
-
-- Modeling Packages are made by different people
-
-
----
-# Consistency Issue in R
-
-- Modeling Packages are made by different people
-
-- They have slightly different interfaces
+df <- df %>% rename(target = income)
+df <- df %>% mutate(target = as.factor(target))
 
 
----
-# Consistency Issue in R
+set.seed(2020)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
 
-- Modeling Packages are made by different people
+library(rpart) #load the rpart package
 
-- They have slightly different interfaces
+# Create a tree
+tree_model <- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
 
-- Trying to keep everything in line can be frustrating
+library(rattle)
+fancyRpartPlot(tree_model)
 
----
-# Unified Interface
+barplot(tree_model$variable.importance)
 
-- A package to unify all the model interfaces is needed
+#predict on testing data
+pred <- predict(tree_model, df_test, type = "class")
 
-- This is called a `wrapper`
+#Evaluate the predictions
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
+cm$overall[1]
 
-- There are several wrappers for machine learning in R:
+library(randomForest)
+forest_model = randomForest(target ~ ., data=df_train, ntree = 500)
+pred <- predict(forest_model, df_test, type = "class")
 
-  - caret
-  
-  - mlr3
-  
-  - tidymodels
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
 
----
-# CARET
+cm$overall[1]
 
-- Short for Classification And REgression Training 
+```
 
-- Attempt to streamline the process for creating predictive models. 
-
-- Created by Max Kuhn
-
----
-# Create a Decision Tree with Caret
-
-```{r}
+```{r, eval=FALSE, echo=FALSE}
 model1 <- train(target~., data=df_train, 
                 method = "rpart2", #<<
                 maxdepth=3)
 
 pred <- predict(model1, df_test)
 
-cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
 
 cm$overall[1]
-```
 
----
-# Create a Random Forest with Caret
 
-```{r}
-model2 <- train(target~., data=df_train, 
-                method = "rf", #<< 
-                ntree = 1000) 
+model1 <- train(target~., data=df_train, 
+                method = "ranger", #<<
+                num_trees=30)
 
-pred <- predict(model2, df_test)
+pred <- predict(model1, df_test)
 
-cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
 
 cm$overall[1]
+
 ```
 
----
-# Variable Importance
-
-```{r}
-# Tree
-varImp(model1)
-```
-
----
-# Variable Importance
-
-```{r}
-# Forest
-varImp(model2)
-```
-
----
-# Plot Variable Importance
-```{r}
-# Tree
-plot(varImp(model1)) #<<
-```
-
----
-# Plot Variable Importance
-```{r}
-# Forest
-plot(varImp(model2)) #<<
-```

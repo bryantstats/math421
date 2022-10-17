@@ -1,5 +1,5 @@
 ---
-title: "![](./figures/bat-cartoon.png) Hyperparameters Tuning: Random Forest"
+title: "![](./figures/bat-cartoon.png) Predictive Modeling: Tuning"
 author: <font size="5"> Son Nguyen </font>
 output:
   xaringan::moon_reader:
@@ -108,14 +108,268 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE)
 
 # Load packages
-library(gapminder)
-library(gganimate)
-library(ggplot2)
 library(tidyverse)
-library(lubridate)
-library(knitr)
+```
+
+
+---
+# Model Tuning
+
+---
+# Data Preparation
+
+```{r}
+library(tidyverse)
+library(caret)
+
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
+
+# Remove some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+
+
+# Set the target variable
+df <- df %>% rename(target=Survived)
+
+# Correct variables' types
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
+
+
+# Handle missing values
+df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+
+df = drop_na(df)
+
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+```
+
+---
+# Tree 1
+
+.left-code[
+```{r step7, eval=FALSE}
+library(rpart)
+tree1<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=2))#<<
+
+# Plot the tree
+library(rattle)
+fancyRpartPlot(tree1)
+```
+]
+.right-plot[
+```{r, ref.label = "step7", echo = FALSE, fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Tree 2
+
+.left-code[
+```{r step71, eval=FALSE}
+library(rpart)
+tree2<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=3))#<<
+
+# Plot the tree
+library(rattle)
+fancyRpartPlot(tree2)
+```
+]
+.right-plot[
+```{r, ref.label = "step71", echo = FALSE, cache = FALSE, fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Tree 3
+
+.left-code[
+```{r step7111, eval=FALSE}
+library(rpart)
+tree3<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=5))#<<
+
+# Plot the tree
+library(rattle)
+fancyRpartPlot(tree3)
+```
+]
+.right-plot[
+```{r, ref.label = "step7111", echo = FALSE, cache = FALSE, fig.height = 6, fig.width = 7}
+```
+]
+
+
+
+---
+# What value maxdepth should be?
+
+- maxdepth is called hyperparameter
+
+---
+# What value maxdepth should be?
+
+- maxdepth is called hyperparameter
+
+- The modeler must decide the values of hyperparameter
+
+---
+# What value maxdepth should be?
+
+- maxdepth is called hyperparameter
+
+- The modeler must decide the values of hyperparameter
+
+- What is the best value for maxdepth? 
+
+
+---
+# Approach 1:  Test them on the test
+
+```{r, echo=FALSE, eval=FALSE}
+pred1 <- predict(tree1, df_test, type = "class")
+cm1 <- confusionMatrix(data = pred1, reference = df_test$target, positive = "1")
+
+pred2 <- predict(tree2, df_test, type = "class")
+cm2 <- confusionMatrix(data = pred2, reference = df_test$target, positive = "1")
+
+pred3 <- predict(tree3, df_test, type = "class")
+cm3 <- confusionMatrix(data = pred3, reference = df_test$target, positive = "1")
+
+tree4<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=4))#<<
+
+pred4 <- predict(tree4, df_test, type = "class")
+cm4 <- confusionMatrix(data = pred4, reference = df_test$target, positive = "1")
+
+kable(data.frame(maxdepth = c(2,3, 4,5), Accuracy=c(cm1$overall[1],
+                                                 cm2$overall[1],
+                                                 cm4$overall[1],
+                                                 cm3$overall[1])))
 
 ```
+
+
+- We cheated a little bit by using the test data for hyperparameter tuning
+
+- This is not recommended! 
+
+---
+# Approach 2: Cross validation
+
+![](grid_search_cross_validation.png)
+
+---
+# Approach 2 with Caret
+
+```{r}
+# Decide the range of the maxdepth to search for the best
+tuneGrid = expand.grid(maxdepth = 2:10)
+
+# Tell caret to do Approach 2, i.e. Cross-Validation
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+
+# Do Approach 2 
+tree_approach2 <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl,
+                                tuneGrid = tuneGrid)
+```
+
+---
+# Approach 2 with Caret
+
+```{r}
+# Plot the results
+plot(tree_approach2)
+```
+
+---
+# Approach 2 with Caret
+
+```{r}
+# Plot the results
+print(tree_approach2)
+```
+
+---
+# Evaluate the tuned model
+
+- By default, the tuned model will go with the `maxdepth` that gives the highest accuracy. 
+
+```{r}
+pred <- predict(tree_approach2, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+---
+- Caret tunes models by default even if you don't set the tuneGrid
+
+```{r, eval=FALSE}
+# Tell caret to do Approach 2, i.e. Cross-Validation
+trControl = trainControl(method = "cv",
+                         number = 10)
+# Do Approach 2 
+tree_approach2_new <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl,
+                                tuneGrid = tuneGrid)
+# Plot the results
+plot(tree_approach2_new)
+```
+
+---
+- Caret tunes models by default even if you don't set the tuneGrid, for example:
+
+```{r, echo=FALSE}
+# Tell caret to do Approach 2, i.e. Cross-Validation
+trControl = trainControl(method = "cv",
+                         number = 10)
+# Do Approach 2 
+tree_approach2_new <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+# Plot the results
+plot(tree_approach2_new)
+```
+
+---
+# What are other approaches?
+
+```{r, eval=FALSE}
+?trainControl
+```
+
+---
+# What other hyperparameters I can tune?
+
+- Go to https://topepo.github.io/caret/available-models.html
+
+- Then search for the name of the method. 
+
+- OR
+
+
+```{r}
+getModelInfo('rpart2')$rpart$parameters
+```
+
 
 # Data Preparation
 
