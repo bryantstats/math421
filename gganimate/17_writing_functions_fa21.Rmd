@@ -1,3 +1,4 @@
+
 ---
 title: "![](./figures/Thanksgiving-Day.jpg) Writing Functions - Basic"
 author: <font size="5"> Son Nguyen </font>
