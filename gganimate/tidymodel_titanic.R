@@ -1,3 +1,49 @@
+####################### MODELing
+library(tidyverse)
+library(tidymodels)
+
+
+titanic_train <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+library(tidymodels)
+
+# Setup the model
+model1 <- 
+  rand_forest() %>% 
+  set_engine("ranger") %>% 
+  set_mode("classification")
+
+
+# preprocessing
+titanic_recipe <- 
+  recipe(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+         data = titanic_train) %>% # keep variables we want
+  step_impute_median(Age,Fare) %>% # imputation
+  step_impute_mode(Embarked) %>% # imputation
+  step_mutate_at(Survived, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
+  step_mutate(Travelers = SibSp + Parch + 1) %>% # new variable
+  step_rm(SibSp, Parch) %>% # remove variables
+  step_dummy(all_nominal_predictors()) %>% # create indicator variables
+  step_normalize(all_numeric_predictors()) # normalize numerical variables
+
+
+doParallel::registerDoParallel()
+
+# Train + Tune
+results <- 
+  workflow() %>% 
+  add_recipe(titanic_recipe) %>% 
+  add_model(model1)
+  
+
+# Plot the result
+autoplot(results)
+
+results %>% 
+  collect_metrics()
+
+results %>%
+  select_best("accuracy")
+
 
 ####################### MODEL TUNING
 library(tidyverse)
@@ -64,9 +110,6 @@ library(tidymodels)
 
 titanic_train <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
 library(tidymodels)
-
-
-
 
 # preprocessing
 titanic_recipe1 <- 
