@@ -1,6 +1,6 @@
 
 ---
-title: "Fall 2021 - Math 421 - Midterm"
+title: "Math 421 - Midterm"
 output:
   html_document:
     toc: yes

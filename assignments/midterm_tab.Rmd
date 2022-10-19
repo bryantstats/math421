@@ -3,7 +3,7 @@
 output:
   html_document:
     theme: united
-title: "Fall 2021 - Math 421 - Midterm"
+title: "Math 421 - Midterm"
 ---
 
 ---
