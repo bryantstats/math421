@@ -22,8 +22,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 The midterm has two components: the Rmarkdown notebook (html) and the presentation.  We will do the presentation in class. Post both the notebook and the presentation on your Github page. 
 
-**The notebook:** The notebook should be created using `rmarkdown` (like other assignments). The notebook should have a title. It should have a table of content (TOC form) or in a tab form. Here are the samples Rmarkdown for [TOC form](fa2021_midterm_toc.Rmd) and [tab form](fa2021_midterm_tab.Rmd)
-
+**The notebook:** The notebook should be created using `rmarkdown` (like other assignments). The notebook should have a title. It should have a table of content (TOC form) or in a tab form. The Rmd files of Tab and Toc form are available on the class webpage. 
 
 **The Presentation:** Present your results in 5-10 minutes. To make the presentation using Rmarkdown, do the follows: 
 
@@ -33,7 +32,7 @@ The midterm has two components: the Rmarkdown notebook (html) and the presentati
     
     - Now you have an Rmarkdown that can be knitted to be a html presentation 
     
-- You can also use borrow a template of our class slides presentations. For example, [this slide](https://bryantstats.github.io/math421/slides/6_viz_fa21_2.html) has this [Rmarkdown](https://bryantstats.github.io/math421/slides/6_viz_fa21_2.Rmd). Using the template may require to install missing packages. 
+- You can also use Rmd samples of the class slides that are available on the class webpage. 
     
 - You do not need to rerun all the codes for the presentation. For example, to show the model comparison, you just need to show the image of the model comparison instead of running all the models again.
     
@@ -150,7 +149,7 @@ Continue with the data from part I. Make sure you do not have any missing values
 
 2. Train a decision tree using `rpart`.  Plot the decision tree. Plot the variable importance ranked by the tree. 
 
-3. Using caret for this question. Set `Training Control` to be: Use Cross-Validation of 5 folds across all models.  Train & tune at least 3 different models (i.e. three different values for `method=` in the train function of caret).  Plot the hyper-parameter tuning plots for each model. 
+3. Using caret for this question. Set `Training Control` to be: Use Cross-Validation of 5 folds across all models.  Train & tune at least 2 different models (i.e. two different values for `method=` in the train function of caret).  Plot the hyper-parameter tuning plots for each model. 
 
 4. Plot the comparison of the models in 3. 
 
