@@ -6,14 +6,7 @@ library(tidymodels)
 titanic_train <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
 library(tidymodels)
 
-# Setup the model
-model1 <- 
-  rand_forest() %>% 
-  set_engine("ranger") %>% 
-  set_mode("classification")
-
-
-# preprocessing
+# data pre-processing
 titanic_recipe <- 
   recipe(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
          data = titanic_train) %>% # keep variables we want
@@ -26,23 +19,41 @@ titanic_recipe <-
   step_normalize(all_numeric_predictors()) # normalize numerical variables
 
 
-doParallel::registerDoParallel()
+titanic_rf_spec <-  
+  rand_forest(trees = 1000) %>% # algorithm speicfic argument:1000 trees
+  set_engine('ranger') %>% 
+  set_mode('classification')
 
-# Train + Tune
-results <- 
+# To check tunable parameters
+rand_forest() %>% tunable()
+decision_tree() %>% tunable()
+# List of models can be found here: https://www.tidymodels.org/find/parsnip/
+
+doParallel::registerDoParallel()
+titanic_rf_wf <- 
   workflow() %>% 
   add_recipe(titanic_recipe) %>% 
-  add_model(model1)
-  
+  add_model(titanic_rf_spec) %>% 
+  fit_resamples(bootstraps(data = titanic_train, times = 25))
 
-# Plot the result
-autoplot(results)
 
-results %>% 
-  collect_metrics()
 
-results %>%
-  select_best("accuracy")
+collect_metrics(titanic_rf_wf)
+
+titanic_rf_last_wf <- 
+  workflow() %>% 
+  add_recipe(titanic_recipe) %>% 
+  add_model(titanic_rf_spec)
+final_fit <- 
+  fit(object = titanic_rf_last_wf, 
+      data = titanic_train)
+final_fit %>% 
+  extract_recipe(estimated = T)
+
+final_fit %>%
+  extract_fit_parsnip()
+
+# https://rpubs.com/tsadigov/titanic_tidymodels
 
 
 ####################### MODEL TUNING
@@ -164,11 +175,16 @@ model2 <-
   set_engine("rpart") %>% 
   set_mode("classification")
 
-
+model3 <- 
+  boost_tree(learn_rate=tune(),
+             mtry = tune()) %>% 
+  set_engine('xgboost') %>% 
+  set_mode('classification')  
 
 models_list <- 
   list(model1 = model1, 
-       model2 = model2)
+       model2 = model2,
+       model3 = model3)
 
 all_workflows <- workflow_set(
   preproc = list(titanic_recipe1, titanic_recipe2, titanic_recipe3 ),
