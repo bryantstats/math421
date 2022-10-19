@@ -20,7 +20,7 @@ title: "Assignment 11: Predictive Modeling - Universal Framework"
 ***Submission***: Submit the link on Github of the assignment to Blackboard.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 

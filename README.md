@@ -14,7 +14,8 @@
 |7. Visualization: Some aspects of ggplot2| [Titanic](slides/7_viz_titanic.html),  [Covid ](slides/7_viz.html) |[Assignment 7](assignments/assignment7.html) | [Extra Credits](assignments/assignment7_extra_credits.html)| 
 |8. Animated Graphics: Bar Races | [Titanic,](gganimate/8_viz_titanic.html) [Bar Races](gganimate/8_viz_bar_race.html) |[Assignment 8](assignments/assignment8.html) | | 
 |9. Animated Graphics: Time Revealing| [Slides](gganimate/9_viz_reveal.html), [Rmd](gganimate/9_viz_reveal.Rmd) |[Assignment 9](assignments/assignment9.html) ||  
-|10. Predictive Modeling| [Slides](gganimate/10_predictive_modeling.html), [Rmd](gganimate/10_predictive_modeling.Rmd) |[Assignment 10](assignments/assignment10.html) | | 
+|10. Modeling - Basics| [Slides](gganimate/10_predictive_modeling.html), [Rmd](gganimate/10_predictive_modeling.Rmd) |[Assignment 10](assignments/assignment10.html) | | 
+|11. Modeling - Universal Framework| [Slides](gganimate/11_predictive_modeling.html), [Rmd](gganimate/11_predictive_modeling.Rmd) |[Assignment 11](assignments/assignment11.html) | | 
  
 
  
