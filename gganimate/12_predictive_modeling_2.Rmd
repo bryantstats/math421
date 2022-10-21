@@ -302,7 +302,7 @@ print(tree_approach2)
 ```
 
 ---
-# Evaluate the tuned model
+# Evaluate the tuned Tree
 
 - By default, the tuned model will go with the `maxdepth` that gives the highest accuracy. 
 
@@ -354,7 +354,7 @@ plot(forest_ranger)
 ```
 
 ---
-# Evaluate the tuned model
+# Evaluate the tuned Forest
 
 - The tuning process is done on the training data.  
 

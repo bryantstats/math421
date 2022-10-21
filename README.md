@@ -16,7 +16,7 @@
 |9. Animated Graphics: Time Revealing| [Slides](gganimate/9_viz_reveal.html), [Rmd](gganimate/9_viz_reveal.Rmd) |[Assignment 9](assignments/assignment9.html) ||  
 |10. Modeling: Basics| [Slides](gganimate/10_predictive_modeling.html), [Rmd](gganimate/10_predictive_modeling.Rmd) |[Assignment 10](assignments/assignment10.html) | | 
 |11. Modeling: Universal Framework| [Slides](gganimate/11_predictive_modeling.html), [Rmd](gganimate/11_predictive_modeling.Rmd) |[Assignment 11](assignments/assignment11.html) | | 
-|12. Modeling: Tuning| [Slides](gganimate/12_predictive_modeling.html), [Rmd](gganimate/12_predictive_modeling.Rmd) |[Assignment 12](assignments/assignment12.html) | |  
+|12. Modeling: Tuning| [Slides](gganimate/12_predictive_modeling_2.html), [Rmd](gganimate/12_predictive_modeling.Rmd) |[Assignment 12](assignments/assignment12.html) | |  
 |**Midterm**| [Toc](assignments/midterm_toc.html), [Rmd](assignments/midterm_toc.Rmd) <br> [Tab](assignments/midterm_tab.html), [Rmd](assignments/midterm_tab.Rmd) | | |
  
 
