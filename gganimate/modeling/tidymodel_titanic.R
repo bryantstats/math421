@@ -1,7 +1,6 @@
 ####################### MODELing
 library(tidyverse)
 library(tidymodels)
-
 library(tidyverse)
 library(tidymodels)
 
@@ -9,7 +8,6 @@ library(tidymodels)
 df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
 
 df <- df %>% rename(target=Survived)
-
 
 set.seed(123)
 split <- initial_split(df, prop = 0.80, strata = target)

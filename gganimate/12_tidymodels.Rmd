@@ -1,0 +1,101 @@
+
+---
+title: "Tidymodels"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: united
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Step 1: Data Partition
+
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+
+df <- df %>% rename(target=Survived)
+
+set.seed(123)
+split <- initial_split(df, prop = 0.80, strata = target)
+df_train <- training(split)
+df_test <- testing(split)
+```
+
+
+
+-------
+
+## Step 2:
+
+```{r}
+# preprocessing
+df_recipe <- 
+  recipe(target ~ ., 
+         data = df_train) %>% # keep variables we want
+  step_impute_median(Age,Fare) %>% # imputation
+  step_impute_mode(Embarked) %>% # imputation
+  step_mutate_at(target, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
+  step_mutate(Travelers = SibSp + Parch + 1) %>% # new variable
+  step_rm(SibSp, Parch, Cabin) %>% # remove variables
+  step_dummy(all_nominal_predictors()) %>% # create indicator variables
+  step_normalize(all_numeric_predictors()) # normalize numerical variables
+```
+
+-------
+
+## II. Data Visualization
+
+Continue with the data from part I. 
+
+1. Provides at least 10 meaningful plots. Comments on the plots. All plots should have title, caption, appropriate labels on x and y-axis
+
+2. Make an animation plot. 
+
+3. Write a paragraph to summarize the section and give your comments on the results. 
+
+-------
+
+## III. Predictive Models
+
+Continue with the data from part I. Make sure you do not have any missing values in the data. Use the follows as the target and input variables: 
+
+*Target Variable*: Create the target variable taking value of 
+
+  - `low` if the total charge of a patient (`tot`) is smaller than the median of the total charge, and
+
+  - `high` otherwise. 
+
+*Input Variables*:
+
+  - "age","sex","raceethn","provider","moa","mod","admtype","campus", 'los'
+  
+-------
+
+1. Use `filter` function to filter out rows where `raceethn==''` or `admtype==''`. Make sure all the categorical variables are factor, numeric variables are numeric. Set Training : Testing Split = 10 : 90 
+
+2. Train a decision tree using `rpart`.  Plot the decision tree. Plot the variable importance ranked by the tree. 
+
+3. Using caret for this question. Set `Training Control` to be: Use Cross-Validation of 5 folds across all models.  Train & tune at least 2 different models (i.e. two different values for `method=` in the train function of caret).  Plot the hyper-parameter tuning plots for each model. 
+
+4. Plot the comparison of the models in 3. 
+
+5. What is your final selection for the model? Test the accuracy of your final model on the test data. 
+
+6. Create another `target` variable (binary), decide the input variables and redo 1 to 5. 
+
+7. Write a paragraph to summarize the section and give your comments on the results. 
+
+-------
