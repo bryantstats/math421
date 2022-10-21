@@ -39,4 +39,4 @@ Train and Test a decision tree and a random forest with caret. Plot the variable
 
 2. Train and Test a `glmnet` model. Plot the variable importance of the model. 
 
-3. Train and test two models that are not `ranger`, `glmnet` or `rpart`  with caret. Plot the variable importance of the model. 
+3. Train and test two models that are not `ranger`, `glmnet` or `rpart`  with caret. If possible, plot the variable importance of the model. 
