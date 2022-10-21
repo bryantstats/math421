@@ -1,0 +1,448 @@
+
+---
+title: "![](./figures/bat-cartoon.png) Predictive Modeling: Tuning"
+author: <font size="5"> Son Nguyen </font>
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>`
+---
+
+<style>
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide > h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide > h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide > h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+</style>
+
+```{css, echo=FALSE}
+.left-code {
+  color: #777;
+  width: 48%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 51%;
+  float: right;
+  padding-left: 1%;
+}
+```
+
+```{r setup, include = FALSE}
+
+# R markdown options
+knitr::opts_chunk$set(echo = TRUE, 
+                      
+                      fig.width = 10,
+                      fig.height = 5,
+                      fig.align = "center", 
+                      message = FALSE,
+                      warning = FALSE)
+
+# Load packages
+library(tidyverse)
+```
+
+# Data Preparation
+
+```{r}
+library(tidyverse)
+library(caret)
+
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
+
+# Remove some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+
+
+# Set the target variable
+df <- df %>% rename(target=Survived)
+
+# Correct variables' types
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
+
+
+# Handle missing values
+df$Age[is.na(df$Age)] = mean(df$Age, na.rm = TRUE)
+
+df = drop_na(df)
+
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+```
+
+---
+# Tree 1
+
+.left-code[
+```{r step7, eval=FALSE}
+library(rpart)
+tree1<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=2))#<<
+
+# Plot the tree
+library(rattle)
+fancyRpartPlot(tree1)
+```
+]
+.right-plot[
+```{r, ref.label = "step7", echo = FALSE, fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Tree 2
+
+.left-code[
+```{r step71, eval=FALSE}
+library(rpart)
+tree2<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=3))#<<
+
+# Plot the tree
+library(rattle)
+fancyRpartPlot(tree2)
+```
+]
+.right-plot[
+```{r, ref.label = "step71", echo = FALSE, cache = FALSE, fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Tree 3
+
+.left-code[
+```{r step7111, eval=FALSE}
+library(rpart)
+tree3<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=5))#<<
+
+# Plot the tree
+library(rattle)
+fancyRpartPlot(tree3)
+```
+]
+.right-plot[
+```{r, ref.label = "step7111", echo = FALSE, cache = FALSE, fig.height = 6, fig.width = 7}
+```
+]
+
+
+
+---
+# What value maxdepth should be?
+
+- maxdepth is called hyperparameter
+
+---
+# What value maxdepth should be?
+
+- maxdepth is called hyperparameter
+
+- The modeler must decide the values of hyperparameter
+
+---
+# What value maxdepth should be?
+
+- maxdepth is called hyperparameter
+
+- The modeler must decide the values of hyperparameter
+
+- What is the best value for maxdepth? 
+
+
+---
+# Approach 1:  Test them on the test
+
+```{r, echo=FALSE, eval=FALSE}
+pred1 <- predict(tree1, df_test, type = "class")
+cm1 <- confusionMatrix(data = pred1, reference = df_test$target, positive = "1")
+
+pred2 <- predict(tree2, df_test, type = "class")
+cm2 <- confusionMatrix(data = pred2, reference = df_test$target, positive = "1")
+
+pred3 <- predict(tree3, df_test, type = "class")
+cm3 <- confusionMatrix(data = pred3, reference = df_test$target, positive = "1")
+
+tree4<-rpart(target ~ ., 
+            data = df_train,
+            control=rpart.control(maxdepth=4))#<<
+
+pred4 <- predict(tree4, df_test, type = "class")
+cm4 <- confusionMatrix(data = pred4, reference = df_test$target, positive = "1")
+
+kable(data.frame(maxdepth = c(2,3, 4,5), Accuracy=c(cm1$overall[1],
+                                                 cm2$overall[1],
+                                                 cm4$overall[1],
+                                                 cm3$overall[1])))
+
+```
+
+
+- We cheated a little bit by using the test data for hyperparameter tuning
+
+- This is not recommended! 
+
+---
+# Approach 2: Cross validation
+
+![](images/grid_search_cross_validation.png)
+
+---
+# Approach 2 with Caret
+
+```{r}
+# Decide the range of the maxdepth to search for the best
+tuneGrid = expand.grid(maxdepth = 2:10)
+
+# Tell caret to do Approach 2, i.e. Cross-Validation
+trControl = trainControl(method = "cv",
+                         number = 5)
+
+
+# Do Approach 2 
+tree_approach2 <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl,
+                                tuneGrid = tuneGrid)
+```
+
+---
+# Approach 2 with Caret
+
+```{r}
+# Plot the results
+plot(tree_approach2)
+```
+
+---
+# Approach 2 with Caret
+
+```{r}
+# Plot the results
+print(tree_approach2)
+```
+
+---
+# Evaluate the tuned model
+
+- By default, the tuned model will go with the `maxdepth` that gives the highest accuracy. 
+
+```{r}
+pred <- predict(tree_approach2, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+---
+# Tuning Random Forest
+
+- We will use `method = ranger` instead of `method = rf` to implement random forest as ranger seems a bit faster
+
+- Let's check to see what parameters we can tune with `ranger` method
+
+```{r}
+getModelInfo('ranger')$ranger$parameters
+```
+
+- As shown, `ranger` offer to tune three hyperparameters for random forest: `mtry`, `splitrule` and `min.node.size`. 
+
+---
+# Tune
+
+- Tune `mtry`, `splitrule` and `min.node.size`. 
+
+```{r}
+trControl = trainControl(method = "cv",
+                         number = 5)
+
+tuneGrid = expand.grid(mtry = 2:4,
+                       splitrule = c('gini', 'extratrees'),
+                       min.node.size = c(1:10))
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                    trControl = trControl,
+                    tuneGrid = tuneGrid)
+```
+
+---
+# Tune
+
+```{r}
+plot(forest_ranger)
+```
+
+---
+# Evaluate the tuned model
+
+- The tuning process is done on the training data.  
+
+- The tuned model have never seen the testing data.  Let's evaluate the tuned model the testing data
+
+```{r}
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+---
+class: inverse, middle, center
+# Model Comparison
+
+
+---
+# Model Comparison
+
+Let's compare different models: Decision Tree, Random Forest and Linear Discriminant Analysis. 
+
+```{r, eval=FALSE}
+trControl = trainControl(method = "cv",
+                         number = 5)
+
+tree <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                                trControl = trControl)
+
+lda <- train(target~., data=df_train, 
+                                method = "lda", 
+                                trControl = trControl)
+
+results <- resamples(list('Decision Tree' = tree,
+                          'Random Forest' = forest_ranger,
+                          'LDA'= lda))
+
+bwplot(results)
+```
+
+---
+# Model Comparison
+
+```{r, echo=FALSE}
+trControl = trainControl(method = "cv",
+                         number = 5)
+
+tree <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+
+forest_ranger <- train(target~., data=df_train, 
+                    method = "ranger", 
+                                trControl = trControl)
+
+lda <- train(target~., data=df_train, 
+                                method = "lda", 
+                                trControl = trControl)
+
+results <- resamples(list('Decision Tree' = tree,
+                          'Random Forest' = forest_ranger,
+                          'LDA'= lda))
+
+bwplot(results)
+```
+
+
+---
+# Final Model
+
+- The comparison shows that random forest using `ranger` package is the best out of the three.  
+
+- This comparison is done on training data.  The models have never seen the test data. 
+
+- Let's evaluate this model on the test data
+
+```{r}
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+
