@@ -18,84 +18,214 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-## Step 1: Data Partition
+## Train a model
 
 
 ```{r}
 library(tidyverse)
 library(tidymodels)
-df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
-
-df <- df %>% rename(target=Survived)
-
-set.seed(123)
-split <- initial_split(df, prop = 0.80, strata = target)
-df_train <- training(split)
-df_test <- testing(split)
-```
 
 
+titanic_train <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+library(tidymodels)
 
--------
-
-## Step 2:
-
-```{r}
-# preprocessing
-df_recipe <- 
-  recipe(target ~ ., 
-         data = df_train) %>% # keep variables we want
+# data pre-processing
+titanic_recipe <- 
+  recipe(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+         data = titanic_train) %>% # keep variables we want
   step_impute_median(Age,Fare) %>% # imputation
   step_impute_mode(Embarked) %>% # imputation
-  step_mutate_at(target, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
+  step_mutate_at(Survived, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
   step_mutate(Travelers = SibSp + Parch + 1) %>% # new variable
-  step_rm(SibSp, Parch, Cabin) %>% # remove variables
+  step_rm(SibSp, Parch) %>% # remove variables
   step_dummy(all_nominal_predictors()) %>% # create indicator variables
   step_normalize(all_numeric_predictors()) # normalize numerical variables
+
+
+titanic_rf_spec <-  
+  rand_forest(trees = 1000) %>% # algorithm speicfic argument:1000 trees
+  set_engine('ranger') %>% 
+  set_mode('classification')
+
+# To check tunable parameters
+rand_forest() %>% tunable()
+decision_tree() %>% tunable()
+# List of models can be found here: https://www.tidymodels.org/find/parsnip/
+
+doParallel::registerDoParallel()
+titanic_rf_wf <- 
+  workflow() %>% 
+  add_recipe(titanic_recipe) %>% 
+  add_model(titanic_rf_spec) %>% 
+  fit_resamples(bootstraps(data = titanic_train, times = 25))
+
+
+
+collect_metrics(titanic_rf_wf)
+
+titanic_rf_last_wf <- 
+  workflow() %>% 
+  add_recipe(titanic_recipe) %>% 
+  add_model(titanic_rf_spec)
+final_fit <- 
+  fit(object = titanic_rf_last_wf, 
+      data = titanic_train)
+final_fit %>% 
+  extract_recipe(estimated = T)
+
+final_fit %>%
+  extract_fit_parsnip()
+
 ```
 
--------
 
-## II. Data Visualization
-
-Continue with the data from part I. 
-
-1. Provides at least 10 meaningful plots. Comments on the plots. All plots should have title, caption, appropriate labels on x and y-axis
-
-2. Make an animation plot. 
-
-3. Write a paragraph to summarize the section and give your comments on the results. 
 
 -------
 
-## III. Predictive Models
+## Tune a model
 
-Continue with the data from part I. Make sure you do not have any missing values in the data. Use the follows as the target and input variables: 
+```{r}
+library(tidyverse)
+library(tidymodels)
 
-*Target Variable*: Create the target variable taking value of 
 
-  - `low` if the total charge of a patient (`tot`) is smaller than the median of the total charge, and
+titanic_train <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+library(tidymodels)
 
-  - `high` otherwise. 
+# Setup the model
+tune_spec <- 
+  rand_forest(
+    mtry = tune(),
+    trees  = tune(),
+    min_n = tune()
+  ) %>% 
+  set_engine("ranger") %>% 
+  set_mode("classification")
 
-*Input Variables*:
 
-  - "age","sex","raceethn","provider","moa","mod","admtype","campus", 'los'
+# preprocessing
+titanic_recipe <- 
+  recipe(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+         data = titanic_train) %>% # keep variables we want
+  step_impute_median(Age,Fare) %>% # imputation
+  step_impute_mode(Embarked) %>% # imputation
+  step_mutate_at(Survived, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
+  step_mutate(Travelers = SibSp + Parch + 1) %>% # new variable
+  step_rm(SibSp, Parch) %>% # remove variables
+  step_dummy(all_nominal_predictors()) %>% # create indicator variables
+  step_normalize(all_numeric_predictors()) # normalize numerical variables
+
+
+doParallel::registerDoParallel()
+
+# Train + Tune
+tree_res <- 
+  workflow() %>% 
+  add_recipe(titanic_recipe) %>% 
+  add_model(tune_spec) %>% 
+  tune_grid(
+    resamples = vfold_cv(titanic_train),
+    grid = crossing(
+      mtry = 3:5,
+      trees  = seq(100, 200, 50),
+      min_n  = seq(100, 300, 50)
+    )
+  )
+
+# Plot the result
+autoplot(tree_res)
+
+tree_res %>% 
+  collect_metrics()
+
+tree_res %>%
+  select_best("accuracy")
+``` 
+
+-------
+
+## Compare models
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+
+
+titanic_train <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+library(tidymodels)
+
+# preprocessing
+titanic_recipe1 <- 
+  recipe(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+         data = titanic_train) %>% # keep variables we want
+  step_impute_median(Age,Fare) %>% # imputation
+  step_impute_mode(Embarked) %>% # imputation
+  step_mutate_at(Survived, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
+  step_mutate(Travelers = SibSp + Parch + 1) %>% # new variable
+  step_rm(SibSp, Parch) %>% # remove variables
+  step_dummy(all_nominal_predictors()) # create indicator variables
   
--------
+  # preprocessing
+  titanic_recipe2 <- 
+  recipe(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+         data = titanic_train) %>% # keep variables we want
+  step_impute_mean(Age,Fare) %>% # imputation
+  step_impute_mode(Embarked) %>% # imputation
+  step_mutate_at(Survived, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
+  step_mutate(Travelers = SibSp + Parch + 1) %>% # new variable
+  step_rm(SibSp, Parch) %>% # remove variables
+  step_dummy(all_nominal_predictors())  # create indicator variables
 
-1. Use `filter` function to filter out rows where `raceethn==''` or `admtype==''`. Make sure all the categorical variables are factor, numeric variables are numeric. Set Training : Testing Split = 10 : 90 
 
-2. Train a decision tree using `rpart`.  Plot the decision tree. Plot the variable importance ranked by the tree. 
+  
+  # preprocessing
+  titanic_recipe3 <- 
+  recipe(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, 
+         data = titanic_train) %>% # keep variables we want
+  step_impute_median(Age,Fare) %>% # imputation
+  step_impute_mode(Embarked) %>% # imputation
+  step_mutate_at(Survived, Pclass, Sex, Embarked, fn = factor) %>% # make these factors
+  step_mutate(Travelers = SibSp + Parch + 1) %>% # new variable
+  step_rm(SibSp, Parch) %>% # remove variables
+  step_dummy(all_nominal_predictors()) %>% # create indicator variables
+  step_normalize(all_numeric_predictors()) # normalize numerical variables
 
-3. Using caret for this question. Set `Training Control` to be: Use Cross-Validation of 5 folds across all models.  Train & tune at least 2 different models (i.e. two different values for `method=` in the train function of caret).  Plot the hyper-parameter tuning plots for each model. 
 
-4. Plot the comparison of the models in 3. 
+# Setup the model
+model1 <- 
+  rand_forest(
+    mtry = tune(),
+    trees  = tune(),
+    min_n = tune()) %>% 
+  set_engine("ranger") %>% 
+  set_mode("classification")
 
-5. What is your final selection for the model? Test the accuracy of your final model on the test data. 
+model2 <-
+  decision_tree(
+    cost_complexity = tune(),
+    tree_depth = tune()) %>% 
+  set_engine("rpart") %>% 
+  set_mode("classification")
 
-6. Create another `target` variable (binary), decide the input variables and redo 1 to 5. 
+model3 <- 
+  boost_tree(learn_rate=tune(),
+             mtry = tune()) %>% 
+  set_engine('xgboost') %>% 
+  set_mode('classification')  
 
-7. Write a paragraph to summarize the section and give your comments on the results. 
+models_list <- 
+  list(model1 = model1, 
+       model2 = model2,
+       model3 = model3)
 
--------
+all_workflows <- workflow_set(
+  preproc = list(titanic_recipe1, titanic_recipe2, titanic_recipe3 ),
+  models = models_list) %>% 
+  workflow_map(resamples = bootstraps(titanic_train), grid = 10, verbose = TRUE)
+
+rank_results(all_workflows, rank_metric = "roc_auc")
+
+
+autoplot(all_workflows, metric = "roc_auc")
+```
+
