@@ -55,7 +55,7 @@ Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ
 
 2. Use `read_sas` in library `haven` to read the data. 
     
-3. Filter the data to have only patients of the year 2018 (`yod==2018`)
+3. Filter the data to have only patients of the year 2018 (`yod==18`)
     
 4. Select to work with only following variables: 
 
