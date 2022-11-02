@@ -1,49 +1,74 @@
 ---
-title: "Untitled"
+title: "Gene Expression Biclustering"
+author: "Bryan Lewis"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
+    orientation: rows
+    social: menu
+    source_code: embed
+runtime: shiny
 ---
 
-```{r setup, include=FALSE}
-library(flexdashboard)
-library(ggplot2)
-library(plotly)
-p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
-    geom_bar(position = "dodge")
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(biclust)
+data(BicatYeast)
+set.seed(1)
+res <- biclust(BicatYeast, method=BCPlaid(), verbose=FALSE)
 ```
 
-Column {data-width=650}
+Inputs {.sidebar}
 -----------------------------------------------------------------------
 
-### Chart A
-
 ```{r}
-
+ selectInput("clusterNum", label = h3("Cluster number"), 
+    choices = list("1" = 1, "2" = 2, "3" = 3, "4" = 4, "5" = 5), 
+    selected = 1)
 ```
 
-Column {data-width=350}
+Microarray data matrix for 80 experiments with Saccharomyces Cerevisiae
+organism extracted from R's `biclust` package.
+
+Sebastian Kaiser, Rodrigo Santamaria, Tatsiana Khamiakova, Martin Sill, Roberto
+  Theron, Luis Quintales, Friedrich Leisch and Ewoud De Troyer. (2015). biclust:
+  BiCluster Algorithms. R package version 1.2.0.
+  http://CRAN.R-project.org/package=biclust
+
+Row
 -----------------------------------------------------------------------
 
-### Chart B
-
+### Heatmap
+    
 ```{r}
-p
+
+num <- reactive(as.integer(input$clusterNum))
+
+col = colorRampPalette(c("red", "white", "darkblue"), space="Lab")(10)
+renderPlot({
+    p = par(mai=c(0,0,0,0))
+    heatmapBC(BicatYeast, res, number=num(), xlab="", ylab="",
+      order=TRUE, useRaster=TRUE, col=col)
+    par(p)
+})
 ```
 
-### Chart C
 
-```{r}
-ggplotly(p)
-```
-
-
-Column {data-width=350}
+Row {.tabset}
 -----------------------------------------------------------------------
 
-### Chart B
+### Parallel Coordinates
+    
+```{r}
+renderPlot(
+  parallelCoordinates(BicatYeast, res, number=num())
+)
+```
+   
+### Data for Selected Cluster
 
 ```{r}
-p
+# only display table for values in cluster 4
+renderTable(
+  BicatYeast[which(res@RowxNumber[, num()]), which(res@NumberxCol[num(), ])]
+)
 ```
