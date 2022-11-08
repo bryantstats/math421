@@ -19,14 +19,14 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ![](netflix2.jpg)
 
-We use the Netflix data at [this Kaggle link](https://www.kaggle.com/shivamb/netflix-shows).  This tabular dataset consists of listings of all the movies and tv shows available on Netflix, along with details such as - cast, directors, ratings, release year, duration, etc. The text data that will be analyzed is stored in the `description` variable. The data can be downloaded at [this link.](data/netflix_titles.csv)
+We use the Netflix data at [this Kaggle link](https://www.kaggle.com/shivamb/netflix-shows).  This tabular dataset consists of listings of all the movies and tv shows available on Netflix, along with details such as - cast, directors, ratings, release year, duration, etc. The text data that will be analyzed is stored in the `description` variable. The data can be downloaded at [this link.](https://bryantstats.github.io/math421/data/netflix_titles.csv)
 
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(tidytext)
 library(knitr)
-df <- readr::read_csv('data/netflix_titles.csv')
+df <- readr::read_csv('https://bryantstats.github.io/math421/data/netflix_titles.csv')
 
 df %>% 
   head(2) %>% 

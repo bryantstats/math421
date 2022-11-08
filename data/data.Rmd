@@ -28,3 +28,5 @@ knitr::opts_chunk$set(echo = TRUE)
 - [vaccinations-by-manufacturer](vaccinations-by-manufacturer.csv), [Source](https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv)
 
 - [Data Science Job Salaries](ds_salaries.csv), [Source](https://www.kaggle.com/datasets/saurabhshahane/data-science-jobs-salaries)
+
+- [Netflix](netflix_titles.csv)

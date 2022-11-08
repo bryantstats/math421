@@ -97,7 +97,7 @@ The final presentation is scheduled on Dec 17 at 6:30PM at Unistucture 253 (regu
 
 ### 15. Text Mining
 
-- [Slides](slides/15_text.html), [Text Mining Demonstration](text_mining_presentation.html)
+- [Slides](slides/15_text.html), [Handle Text Data](text_mining_presentation.html)
 
 - [Sample Codes](text_mining_sample_codes2.html)
 
