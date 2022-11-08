@@ -1,7 +1,8 @@
 ---
-title: "Multiple Pages"
-output: flexdashboard::flex_dashboard:
-  storyboard: true
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard
+    
 ---
 
 ```{r}
@@ -16,43 +17,66 @@ df <- df %>%
 ```
 
 
-Visualizations {data-icon="fa-signal"}
+Visualizations {data-icon= "icon-social-twitter"}
 ===================================== 
     
-Column {data-width=650}
+{data-width=350}
 -----------------------------------------------------------------------
 
-### Chart 1
+### Row 1
     
 ```{r}
 p <- df %>% ggplot() + geom_point(aes(x=Age, y=Fare, color = Survived))
 ggplotly(p)
 ```
 
-### Chart A
+### Row 2
 
-```{r}
-
-```
+- Is it working?
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Row 3
 
 ```{r}
 p
 ```
 
+### Row 4
+
+```{r}
+p
+```
+
+
+### Row 5
+
+```{r}
+p
+```
+
+
+
 Tables {data-icon="fa-table"}
 =====================================     
 
 ### Table 1
-    
-```{r}
-df %>% select(Survived, Sex) %>% kable
 
+Row {}
+-----------------------------------------------------------------------
+
+```{r}
+df %>% select(Survived, Sex) %>% head(10) %>% kable
 ```
+
+Row {}
+-----------------------------------------------------------------------
+
+- The midterm has two components: the Rmarkdown notebook (html) and the presentation. We will do the presentation in class. Post both the notebook and the presentation on your Github page.
+
+Tables
+=====================================
     
 ### Table 2
 

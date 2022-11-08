@@ -1,0 +1,242 @@
+---
+title: "Netflix"
+author: "Son Nguyen"
+date: "11/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(tidytext)
+post_offices <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-13/post_offices.csv")
+
+```
+
+```{r}
+post_offices
+```
+
+```{r}
+glimpse(post_offices)
+```
+```{r}
+post_offices$name
+```
+
+```{r}
+post_offices %>%
+  filter(state == "HI") %>%
+  pull(name)
+```
+
+
+## Word Frequency
+
+```{r}
+netflix_titles %>% 
+  unnest_tokens(word, description) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE)
+```
+
+```{r}
+netflix_titles %>% 
+  unnest_tokens(word, description) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE) %>% 
+  filter(type=='TV Show') %>% 
+  head(10) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col()
+```
+```{r}
+netflix_titles %>% 
+  unnest_tokens(word, description) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE) %>% 
+  filter(type=='Movie') %>% 
+  head(10) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col()
+```
+
+```{r}
+netflix_titles %>%
+  unnest_tokens(word, description) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE) %>% 
+  group_by(type) %>%
+  slice_max(n, n = 10) %>% 
+  ungroup() %>%
+  mutate(word = reorder_within(word, by = n, within = type)) %>%
+  ggplot(aes(n, word, fill = type)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~type, scales = "free") +
+  labs(x = "Contribution to sentiment",
+       y = NULL)+
+  scale_y_reordered() 
+
+```
+## Word Cloud
+
+```{r}
+library(wordcloud) # to render wordclouds
+pal <- brewer.pal(8,"Dark2")
+
+netflix_titles %>%
+  unnest_tokens(word, description) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE) %>%
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+
+
+```
+
+## Sentiment Analysis
+
+```{r}
+netflix_titles %>%
+    unnest_tokens(word, description) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("bing")) 
+```
+
+
+```{r}
+
+netflix_titles %>%
+    unnest_tokens(word, description) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("afinn")) 
+```
+
+
+```{r}
+netflix_titles %>%
+    unnest_tokens(word, description) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("nrc")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(sentiment, n, fill=type))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency')
+
+```
+```{r}
+netflix_titles %>%
+    unnest_tokens(word, description) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(sentiment, n, fill=type))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency')
+```
+```{r}
+netflix_titles %>%
+    unnest_tokens(word, description) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("afinn")) %>%
+    mutate(sentiment = value) %>% 
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(type, n, fill=factor(sentiment)))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency')
+```
+
+```{r}
+netflix_titles %>%
+    unnest_tokens(word, description) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("afinn")) %>%
+    mutate(sentiment = value) %>% 
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(sentiment, n, fill= type))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency')
+```
+
+
+```{r}
+netflix_titles %>%
+    unnest_tokens(word, description) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(rating, word, sort = TRUE) %>%
+    group_by(rating) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(rating) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(rating, n, fill=sentiment))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency')
+```
+
+
+## Modeling
+
+```{r}
+library(caret)
+set.seed(2020)
+library(themis)
+
+df <- netflix_titles %>% select(type, description)
+library(textrecipes)
+
+a <- recipe(type~description,
+       data = df) %>% 
+  step_tokenize(description) %>% 
+  step_tokenfilter(description, max_tokens = 50) %>% 
+  step_tfidf(description) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_smote(type) %>% 
+  prep()
+
+df <- juice(a)
+names(df)[names(df)=='type'] <- 'target'
+
+
+splitIndex <- createDataPartition(df$target, p = .10, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+forest_ranger <- train(target~., data=df_train, 
+                        method = "ranger")
+
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target)
+cm$overall[1]
+
+d = data.frame(pred = pred, obs = df_test$target)
+d %>% conf_mat(pred, obs) %>% autoplot
+
+```
+
+

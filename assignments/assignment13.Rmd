@@ -9,7 +9,7 @@ title: "Assignment 13: Text Mining"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment13.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment13.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
@@ -30,7 +30,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 ### Netflix Data
 
-**1.** Download the `netflix_titles` at this [link](data/netflix_titles.csv).  Create a century variable taking two values:
+**1.** Download the `netflix_titles` at this [link](../data/netflix_titles.csv).  Create a century variable taking two values:
 
     - '21' if the released_year is greater or equal to 2000, and
     
@@ -84,7 +84,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 We will study the Animal Crossing Data at [Kaggle](https://www.kaggle.com/jessemostipak/animal-crossing). The data file is `user_review`
 
-**7.**  Download the animal reviews data at this [link](data/user_reviews.tsv).  Read the data using `read_tsv()` function.
+**7.**  Download the animal reviews data at this [link](../data/user_reviews.tsv).  Read the data using `read_tsv()` function.
 
 **8.** Create a `rating` variable taking value `good` if the grade is greater than 7 and `bad` otherwise. 
 

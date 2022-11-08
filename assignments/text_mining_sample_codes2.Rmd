@@ -1,0 +1,278 @@
+---
+title: "Text Mining"
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: false
+    
+    theme: united
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+![](netflix2.jpg)
+
+We use the Netflix data at [this Kaggle link](https://www.kaggle.com/shivamb/netflix-shows).  This tabular dataset consists of listings of all the movies and tv shows available on Netflix, along with details such as - cast, directors, ratings, release year, duration, etc. The text data that will be analyzed is stored in the `description` variable. The data can be downloaded at [this link.](data/netflix_titles.csv)
+
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidytext)
+library(knitr)
+df <- readr::read_csv('data/netflix_titles.csv')
+
+df %>% 
+  head(2) %>% 
+  kable()
+```
+
+
+## 1. Word Frequency
+
+- A token is a meaningful unit of text. 
+
+- One row of text will be converted to multiple rows of tokens. 
+
+### By TV Show
+
+```{r}
+df %>% 
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE) %>% 
+  filter(type=='TV Show') %>% 
+  head(10) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+```
+
+### TV Show vs. Movies
+
+```{r}
+df %>%
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE) %>% 
+  group_by(type) %>%
+  slice_max(n, n = 10) %>% 
+  ungroup() %>%
+  mutate(word = reorder_within(word, by = n, within = type)) %>%
+  ggplot(aes(n, word, fill = type)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~type, scales = "free") +
+  labs(x = "Frequency",
+       y = NULL)+
+  scale_y_reordered() 
+```
+
+
+## 2. Word Cloud
+
+### Total Word Cloud
+```{r}
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
+
+### By Movie
+
+```{r}
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  filter(type =='Movie') %>% 
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(type, word, sort = TRUE) %>%
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+
+```
+
+## 3. Sentiment Analysis
+
+A word is converted to a sentiment measure. 
+
+  - `nrc` converts a word into positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, or trust. 
+  
+  - `bing` converts a word into positive or negative
+  
+  - `AFINN` converts a word into a score that runs between -5 (max negative) and 5 (max positive). 
+
+### By `bing`
+
+
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(type, n, fill=sentiment))+geom_col(position = 'fill')+
+    labs(y='Relative Frequency', x ='')
+```
+
+```{r}
+df %>%
+    mutate(century = if_else(release_year>=2000, '21','20')) %>% 
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(century, word, sort = TRUE) %>%
+    group_by(century) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(century) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(century, n, fill=sentiment))+geom_col(position = 'fill')+
+    labs(y='Relative Frequency', x ='')
+```
+
+
+### By `nrc`
+
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("nrc")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(sentiment, n, fill=type))+geom_col(position = 'fill')+
+    labs(y='Relative Frequency', x ='')
+
+```
+
+### By `afinn`
+
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("afinn")) %>%
+    mutate(sentiment = value) %>% 
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(type, n, fill=factor(sentiment)))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency', fill = 'Sentiment', x = '')
+```
+
+
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("afinn")) %>%
+    mutate(sentiment = value) %>% 
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(sentiment, n, fill= type))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency', x ='')
+```
+
+
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(rating, word, sort = TRUE) %>%
+    group_by(rating) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(rating) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(rating, n, fill=sentiment))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency', x ='')
+```
+
+
+## 4. Modeling
+
+We build a model to predict the type of a video (movies vs. tv show) from its description.  First we need to convert the description (text) to numeric values. We use `TF-IDF` method to convert the text to numeric variables. 
+
+- TF (Term Frequency) = (Number of times term t appears in a document) / (Total number of terms in the document).
+
+- IDF (Inverse Document Frequency) = log_e(Total number of documents / Number of documents with term t in it).
+
+- TF-IDF = TF * IDF
+
+Example:
+
+Consider a document containing 100 words wherein the word cat appears 3 times. The term frequency (i.e., tf) for cat is then (3 / 100) = 0.03. Now, assume we have 10 million documents and the word cat appears in one thousand of these. Then, the inverse document frequency (i.e., idf) is calculated as log(10,000,000 / 1,000) = 4. Thus, the Tf-idf weight is the product of these quantities: 0.03 * 4 = 0.12.
+
+Source: http://www.tfidf.com/
+
+
+```{r, cache=TRUE}
+library(caret)
+library(themis)
+library(textrecipes)
+
+# Select data and set target 
+df <- df %>% 
+  mutate(target = type) %>% 
+  select(target, description) 
+
+# Convert text data to numeric variables
+a <- recipe(target~description,
+       data = df) %>% 
+  step_tokenize(description) %>% 
+  step_tokenfilter(description, max_tokens = 50) %>% 
+  step_tfidf(description) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_smote(target) %>% 
+  prep()
+df <- juice(a)
+
+# Using Caret for modeling
+set.seed(2021)
+splitIndex <- createDataPartition(df$target, p = .7, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+forest_ranger <- train(target~., data=df_train, 
+                        method = "ranger")
+
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target)
+cm$overall[1]
+
+d = data.frame(pred = pred, obs = df_test$target)
+library(yardstick)
+d %>% conf_mat(pred, obs) %>% autoplot
+
+```
