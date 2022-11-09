@@ -242,7 +242,7 @@ library(textrecipes)
 
 # Select data and set target 
 df <- df %>% 
-  mutate(target = type) %>% 
+  rename(target = type) %>% 
   select(target, description) 
 
 # Convert text data to numeric variables
