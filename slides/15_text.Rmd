@@ -76,6 +76,19 @@ d1 %>% unnest_tokens(input = description, output = word) %>%
   kable()%>% kable_styling(font_size = 12)
 ```
 
+
+---
+
+```{r}
+df %>% 
+  filter(title=='Avengers: Infinity War'|title=='Spider-Man 3') %>% 
+  select(title, description) %>% 
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  kable()%>% kable_styling(font_size = 10)
+```
+
+
 ---
 ```{r}
 d1 <- df %>%
