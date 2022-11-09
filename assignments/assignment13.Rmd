@@ -80,7 +80,7 @@ knitr::opts_chunk$set(message = FALSE)
     
 -------
 
-### Animal Reviews Data
+### Animal Reviews Data (Optional)
 
 We will study the Animal Crossing Data at [Kaggle](https://www.kaggle.com/jessemostipak/animal-crossing). The data file is `user_review`
 
