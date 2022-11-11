@@ -13,7 +13,9 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Text Mining
+]
 
 ---
 
@@ -711,6 +713,116 @@ class: center
 
  - Some words are missing
  - Some words have more than one sentiment
+ 
+---
+![](15_text_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+# Using `bing`
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sentiment &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Spider-Man 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; invincible &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; positive &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Spider-Man 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; villains &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; negative &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Spider-Man 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; blockbuster &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; positive &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+![](15_text_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+
+
+---
+# Using `afinn`
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; word &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Avengers: Infinity War &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; stop &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Spider-Man 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; invincible &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Spider-Man 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; blockbuster &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Spider-Man 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; adventure &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+![](15_text_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, middle, center
+# Modeling
+
+---
+
+- TF (Term Frequency) = (Number of times term `t` appears in a text) / (Total number of terms in the text).
+
+- IDF (Inverse Document Frequency) = log_e(Total number of texts / Number of texts with term `t` in it).
+
+- TF_IDF = TF * IDF
+
+---
+# Example:
+
+Consider a text containing 100 words wherein the word `cat` appears 3 times. 
+
+Then, TF(Cat) =  3/100 = 0.03. 
+
+Now, assume we have 10 million texts and the word `cat` appears in one thousand of these. 
+
+Then, IDF(Cat) = log(10,000,000/1,000) = 4. 
+
+Thus, the Tf_idf(Cat) 0.03 * 4 = 0.12.
+
+---
+
+
+```
+##  [1] "tfidf_description_a"    "tfidf_description_an"   "tfidf_description_and" 
+##  [4] "tfidf_description_her"  "tfidf_description_his"  "tfidf_description_in"  
+##  [7] "tfidf_description_of"   "tfidf_description_the"  "tfidf_description_to"  
+## [10] "tfidf_description_with" "target"
+```
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -758,6 +870,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

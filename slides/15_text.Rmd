@@ -128,6 +128,7 @@ df %>%
 d1 <- df %>% 
   filter(title=='Avengers: Infinity War') %>% 
   select(title, description)
+
 ```
 
 ---
@@ -156,3 +157,133 @@ d1 %>% unnest_tokens(input = description, output = word) %>%
 
  - Some words are missing
  - Some words have more than one sentiment
+ 
+---
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("nrc")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(sentiment, n, fill=type))+geom_col(position = 'fill')+
+    labs(y='Relative Frequency', x ='')
+
+```
+
+---
+# Using `bing`
+```{r}
+df %>% 
+  filter(title=='Avengers: Infinity War'|title=='Spider-Man 3') %>% 
+  select(title, description) %>% 
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  inner_join(get_sentiments("bing")) %>% 
+  kable()
+```
+
+---
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(sentiment, n, fill=type))+geom_col(position = 'fill')+
+    labs(y='Relative Frequency', x ='')
+
+```
+
+
+
+---
+# Using `afinn`
+```{r}
+df %>% 
+  filter(title=='Avengers: Infinity War'|title=='Spider-Man 3') %>% 
+  select(title, description) %>% 
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  inner_join(get_sentiments("afinn")) %>% 
+  kable()
+```
+
+---
+```{r}
+df %>%
+    unnest_tokens(input = description, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(type, word, sort = TRUE) %>%
+    group_by(type) %>% 
+    inner_join(get_sentiments("afinn")) %>%
+    mutate(sentiment = value) %>% 
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(type) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(type, n, fill=factor(sentiment)))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency', fill = 'Sentiment', x = '')
+
+
+```
+
+---
+class: inverse, middle, center
+# Modeling
+
+---
+
+- TF (Term Frequency) = (Number of times term `t` appears in a text) / (Total number of terms in the text).
+
+- IDF (Inverse Document Frequency) = log_e(Total number of texts / Number of texts with term `t` in it).
+
+- TF_IDF = TF * IDF
+
+---
+# Example:
+
+Consider a text containing 100 words wherein the word `cat` appears 3 times. 
+
+Then, TF(Cat) =  3/100 = 0.03. 
+
+Now, assume we have 10 million texts and the word `cat` appears in one thousand of these. 
+
+Then, IDF(Cat) = log(10,000,000/1,000) = 4. 
+
+Thus, the Tf_idf(Cat) 0.03 * 4 = 0.12.
+
+---
+
+```{r}
+library(caret)
+library(themis)
+library(textrecipes)
+
+# Select data and set target 
+df <- df %>% 
+  mutate(target = type) %>% 
+  select(target, description) 
+
+# Convert text data to numeric variables
+a <- recipe(target~description,
+       data = df) %>% 
+  step_tokenize(description) %>% 
+  step_tokenfilter(description, max_tokens = 10) %>% 
+  step_tfidf(description) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_smote(target) %>% 
+  prep()
+
+names(juice(a))
+```
+
