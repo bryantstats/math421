@@ -24,7 +24,7 @@ knitr::opts_chunk$set(message = FALSE)
 ```
 
 
-[Sample Codes](rtweet2.html)
+[Sample Codes](https://bryantstats.github.io/math421/slides/16_text_mining_rtweet.html)
 
 -------
 
