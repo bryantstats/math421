@@ -29,24 +29,52 @@ library(lubridate)
 
 ## Search tweets
 
+- Install `rtweet` package
+
+- Set up a tweeter account if you don't have one
+
+- Authorize Twitter API by using the function: `auth_setup_default()`
+
 -  Do this one then save the csv file.  Running this code multiple time may stop you from getting access to tweeter API. 
 
 ```{r, eval=FALSE}
 
-keyword_search = '#olegunnarsolskjaer'
+auth_setup_default()
+
+keyword_search = '#ronaldo'
 
 df <- search_tweets(q = keyword_search, 
-                        n = 18000,
+                        n = Inf, # number of tweets
                         include_rts = FALSE,
                         `-filter` = "replies",
                         lang = "en") %>% 
   mutate(created_at = ymd_hms(format(created_at, tz = "US/Eastern")))
 
-write_csv(df, 'twitter_data_ole.csv')
+write_csv(df, 'twitter_data.csv')
 ```
 
 ```{r}
-df <- read_csv('twitter_data_ole.csv')
+df <- read_csv('twitter_data.csv')
+```
+
+## Tweets Frequency by time
+
+```{r}
+ts_plot(df, "hours") +
+  labs(x = NULL, y = NULL,
+       title = "Frequency of tweets by time",
+       subtitle = paste0(format(min(df$created_at), "%d %B %Y"), " to ", format(max(df$created_at),"%d %B %Y")),
+       caption = "Data collected from Twitter's REST API via rtweet") +
+  theme_minimal()
+```
+## Mentions
+
+```{r}
+df %>% 
+  unnest_tokens(mentions, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(mentions, "^@")) %>%  
+  count(mentions, sort = TRUE) %>%
+  head(10)
 ```
 
 
@@ -56,17 +84,19 @@ df <- read_csv('twitter_data_ole.csv')
 
 ```{r}
 df %>% 
+  filter(created_at>='2022-11-14') %>% 
   unnest_tokens(output = hashtag, input = text, token = "tweets") %>%
-  filter(!hashtag %in% c("#olegunnarsolskjaer",'#mufc','#manutd','#manchesterunited'), str_detect(hashtag, "^#")) %>% 
+  filter(!hashtag %in% c("#cr7",'#ronaldo','#cristianoronaldo','#cristiano', '#mufc',"#manutd"), str_detect(hashtag, "^#")) %>% 
   count(hashtag, sort = TRUE) %>%
-  head(10)
+  head(20)
 ```
 
 
 ```{r}
 df %>% 
+  filter(created_at>='2022-11-14') %>% 
   unnest_tokens(output = hashtag, input = text, token = "tweets") %>%
-  filter(!hashtag %in% c("#olegunnarsolskjaer",'#mufc','#manutd','#manchesterunited'), str_detect(hashtag, "^#")) %>%
+  filter(!hashtag %in% c("#cr7",'#ronaldo','#cristianoronaldo','#cristiano', '#mufc',"#manutd"), str_detect(hashtag, "^#")) %>% 
   count(hashtag, sort = TRUE) %>%
   head(5) %>% 
   ggplot(aes(x = n, y = reorder(hashtag, n)))+
@@ -83,8 +113,9 @@ pal <- brewer.pal(8,"Dark2")
 library(wordcloud) 
 
 df %>% 
+  filter(created_at>='2022-11-14') %>% 
   unnest_tokens(output = hashtag, input = text, token = "tweets") %>%
-  filter(!hashtag %in% c("#olegunnarsolskjaer",'#mufc','#manutd','#manchesterunited'), str_detect(hashtag, "^#")) %>%
+  filter(!hashtag %in% c("#cr7",'#ronaldo','#cristianoronaldo','#cristiano', '#mufc',"#manutd"), str_detect(hashtag, "^#")) %>% 
   count(hashtag, sort = TRUE) %>%
   mutate(hashtag = str_remove(hashtag, '#')) %>% 
   filter(hashtag != 'mufc') %>% 
@@ -116,150 +147,6 @@ df %>%
   arrange(-favorite_count) %>%
   head(5) %>% 
   select(favorite_count, text, favorite_count)
-```
-
-## Screen Name
-
-```{r}
-df %>% 
-  count(screen_name, sort = TRUE) %>%
-  head(5) %>% 
-  ggplot(aes(x = n, y = reorder(screen_name, n)))+
-  geom_col()+
-  labs(x = 'Frequency', y = '')
-```
-
-## Mentions
-
-```{r}
-df %>% 
-  unnest_tokens(mentions, text, "tweets", to_lower = FALSE) %>%
-  filter(str_detect(mentions, "^@")) %>%  
-  count(mentions, sort = TRUE) %>%
-  head(10)
-```
-
-
-```{r}
-df %>% 
-  unnest_tokens(mentions, text, "tweets", to_lower = FALSE) %>%
-  filter(str_detect(mentions, "^@")) %>%  
-  count(mentions, sort = TRUE) %>%
-  head(10) %>% 
-  ggplot(aes(x = n, y = reorder(mentions, n)))+
-  geom_col()+
-  labs(x = 'Frequency', y = '')
-```
-
-
-
-## Source
-
-```{r}
-df %>% 
-  count(source, sort = TRUE) %>%
-  head(5) %>% 
-  ggplot(aes(x = n, y = reorder(source, n)))+
-  geom_col()+
-  labs(x = 'Frequency', y = '')
-```
-
-## Country
-
-```{r}
-df %>% 
-  filter(!is.na(country)) %>% 
-  count(country, sort = TRUE) %>%
-  head(5) %>% 
-  ggplot(aes(x = n, y = reorder(country, n)))+
-  geom_col()+
-  labs(x = 'Frequency', y = '')
-```
-
-## Location
-
-```{r}
-df %>% 
-  filter(!is.na(location), !location=='') %>% 
-  count(location, sort = TRUE) %>%
-  head(5) %>% 
-  ggplot(aes(x = n, y = reorder(location, n)))+
-  geom_col()+
-  labs(x = 'Frequency', y = '')
-```
-
-
-```{r}
-df %>% 
-  select(screen_name, favourites_count) %>% 
-  filter(!is.na(favourites_count)) %>% 
-  group_by(screen_name) %>% 
-  summarise(average_fav = mean(favourites_count)) %>% 
-  arrange(-average_fav) %>% 
-  head(5) %>% 
-  ggplot(aes(x=average_fav, y = reorder(screen_name, average_fav)))+
-  geom_col()+
-  labs(y='Account')
-```
-
-
-## Tweets
-
-```{r}
-df %>% 
-  unnest_tokens(output = word, input = text, token = "words") %>%
-  anti_join(get_stopwords()) %>% 
-  count(word, sort = TRUE) %>%
-  head(5) %>% 
-  ggplot(aes(x = n, y = reorder(word, n)))+
-  geom_col()+
-  labs(x = 'Frequency', y = '')
-```
-
-- Filter out some unnecessary words. 
-
-```{r}
-df %>% 
-  unnest_tokens(output = word, input = text, token = "words") %>%
-  anti_join(get_stopwords()) %>% 
-  filter(!word %in% c('https', 't.co')) %>% 
-  count(word, sort = TRUE) %>%
-  head(5) %>% 
-  ggplot(aes(x = n, y = reorder(word, n)))+
-  geom_col()+
-  labs(x = 'Frequency', y = '')
-```
-
-
-```{r}
-words <- df %>%
-  mutate(text = str_remove_all(text, "&amp;|&lt;|&gt;"),
-         text = str_remove_all(text, "\\s?(f|ht)(tp)(s?)(://)([^\\.]*)[\\.|/](\\S*)"),
-         text = str_remove_all(text, "[^\x01-\x7F]")) %>% 
-  unnest_tokens(word, text, token = "tweets") %>%
-  filter(!word %in% stop_words$word,
-        !word %in% str_remove_all(stop_words$word, "'"),
-        str_detect(word, "[a-z]"),
-        !str_detect(word, "^#"),         
-        !str_detect(word, "@\\S+"),
-        !word %in% c('united','manchester')) %>%
-  count(word, sort = TRUE)
-
-al <- brewer.pal(8,"Dark2")
-library(wordcloud) 
-words %>% 
-  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors = pal))
-```
-
-## Tweets Frequency
-
-```{r}
-ts_plot(df, "hours") +
-  labs(x = NULL, y = NULL,
-       title = "Frequency of tweets",
-       subtitle = paste0(format(min(df$created_at), "%d %B %Y"), " to ", format(max(df$created_at),"%d %B %Y")),
-       caption = "Data collected from Twitter's REST API via rtweet") +
-  theme_minimal()
 ```
 
 

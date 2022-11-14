@@ -28,6 +28,6 @@ knitr::opts_chunk$set(message = FALSE)
 
 -------
 
-1. Pick a keyword or hashtag. Download the data associated with the keyword/hashtag. Plot at least 10 plots to visualize the data associated with the keyword/hashtag. All plots should have titles and captions. 
+1. Pick a keyword or hashtag. Download the data associated with the keyword/hashtag. Plot at least 5 plots to visualize the data associated with the keyword/hashtag. All plots should have titles and captions. 
 
-2. Choose a location then pick a trending keyword/hashtag in the location. Download the data associated with the keyword/hashtag. Plot at least 10 plots to visualize the data associated with the keyword/hashtag. All plots should have titles and captions. 
+2. Choose a location then pick a trending keyword/hashtag in the location. Download the data associated with the keyword/hashtag. Plot at least 5 plots to visualize the data associated with the keyword/hashtag. All plots should have titles and captions. 
