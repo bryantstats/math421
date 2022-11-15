@@ -156,10 +156,11 @@ df %>%
 ## Favourite Counts
 
 ```{r}
+# Most favourite tweets
 df %>% 
   arrange(-favorite_count) %>%
   head(5) %>% 
-  select(favorite_count, text, favorite_count)
+  select(text)
 ```
 
 
@@ -217,7 +218,6 @@ get_trends('Worldwide')
 
 ## Lookup users
 
-Source: https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html
 
 ```{r}
 ## lookup users by screen_name or user_id
