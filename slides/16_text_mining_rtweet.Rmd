@@ -67,6 +67,7 @@ ts_plot(df, "hours") +
        caption = "Data collected from Twitter's REST API via rtweet") +
   theme_minimal()
 ```
+
 ## Mentions
 
 ```{r}
