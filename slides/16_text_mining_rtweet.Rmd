@@ -39,7 +39,7 @@ library(lubridate)
 
 ```{r, eval=FALSE}
 
-auth_setup_default()
+#auth_setup_default()
 
 keyword_search = '#ronaldo'
 
@@ -78,6 +78,18 @@ df %>%
 ```
 
 
+```{r}
+df %>% 
+  unnest_tokens(mentions, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(mentions, "^@")) %>%  
+  count(mentions, sort = TRUE) %>%
+  head(10) %>% 
+  ggplot(aes(x = n, y = reorder(mentions, n)))+
+  geom_col()+
+  labs(x = 'Top 10 mentions in the tweets', y = '')
+```
+
+
 ## Hashtag
 
 ### Frequency
@@ -104,7 +116,7 @@ df %>%
   labs(x = 'Frequency', y = '')
 ```
 
-### Cloud
+### Hashtag Cloud
 
 ```{r}
 library(RColorBrewer)
@@ -122,7 +134,7 @@ df %>%
   with(wordcloud(hashtag, n, random.order = FALSE, max.words = 50, colors = pal))
 ```
 
-## Emoji
+## Emoji in the tweets
 
 ```{r}
 # Install emo pakage:
@@ -137,7 +149,7 @@ df %>%
   ggplot(aes(y=reorder(emoji,n), x=n)) +
   geom_col()+
   theme(axis.text.y = element_text(size = 40))+
-  labs(x = 'Frequency', y = '')
+  labs(x = 'Top Emoji in the tweets', y = '')
 ```
 
 ## Favourite Counts
@@ -208,12 +220,7 @@ Source: https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html
 
 ```{r}
 ## lookup users by screen_name or user_id
-users <- c("KimKardashian", "justinbieber", "taylorswift13",
-           "espn", "JoelEmbiid", "cstonehoops", "KUHoops",
-           "upshotnyt", "fivethirtyeight", "hadleywickham",
-           "cnn", "foxnews", "msnbc", "maddow", "seanhannity",
-           "potus", "epa", "hillaryclinton", "realdonaldtrump",
-           "natesilver538", "ezraklein", "annecoulter")
+users <- c("cnn", "foxnews")
 
 famous_tweeters <- lookup_users(users)
 
