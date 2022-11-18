@@ -35,7 +35,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 - Output: Print out "You are r age". Where r is the age of the person, i.e. 2020 - x. 
 
-Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions_fa21.html#41)
+Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#42)
 
 -------
 
@@ -45,7 +45,7 @@ Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writ
 
 - Output: print out: "You input an even number!" if the number is event, or "You input an odd number!" otherwise. 
 
-Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions_fa21.html#45)
+Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#46)
 
 -------
 
@@ -59,7 +59,7 @@ Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writ
   
   - if the input vector has no missing value: return the same input vector
   
-Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions_fa21.html#49)
+Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#50)
 
 -------
 
@@ -69,7 +69,7 @@ Hint: [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writ
 
 - Output:  The vector x where the missing values replaced by the mean (if x is numeric) or the mode (if x is non-numeric).  If x does not have missing value, return the same vector x.  
 
-Hint: Use If-statement to combine the function in Question 3 and [this function](https://bryantstats.github.io/math421/gganimate/17_writing_functions_fa21.html#49)
+Hint: Use If-statement to combine the function in Question 3 and [this function](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#49)
 
 -------
 
@@ -87,17 +87,17 @@ Hint: Use If-statement to combine the function in Question 3 and [this function]
 
 Hint: 
 
-- [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions_fa21.html#53)
+- [Similar Function](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#53)
  
 - You can refer to this slide to plot a boxplot: https://bryantstats.github.io/math421/slides/6_viz.html#36
  
 -------
  
-6. Combine the function in Question 5 and the function in this example ([Link](https://bryantstats.github.io/math421/gganimate/17_writing_functions_fa21.html#53)) to have a function that can plot all possible cases (2 categorical, 2 numeric, 1 numeric and 1 categorical). 
+6. Combine the function in Question 5 and the function in this example ([Link](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#53)) to have a function that can plot all possible cases (2 categorical, 2 numeric, 1 numeric and 1 categorical). 
 
 -------
 
-#### NOTICE: Question 7 and 8 are optional. 
+#### NOTICE: Question 7, 8 and 9 are optional. 
 
 -------
 
@@ -137,8 +137,8 @@ Hint:
 
 Sample codes
 
-- [Word Cloud codes](https://bryantstats.github.io/math421/text_mining_sample_codes2.html#2_Word_Cloud)
+- [Word Cloud codes](https://bryantstats.github.io/math421/assignments/text_mining_sample_codes2.html#Total_Word_Cloud)
 
-- [A similar function](https://bryantstats.github.io/math421/gganimate/17_writing_functions_fa21.html#10)
+- [A similar function](https://bryantstats.github.io/math421/gganimate/17_writing_functions.html#10)
 
 
