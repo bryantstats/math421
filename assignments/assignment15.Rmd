@@ -9,7 +9,7 @@ title: "Assignment 15: Writing a function - Conditional Statement"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment15.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment15.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
