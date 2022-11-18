@@ -1,0 +1,13 @@
+name: dateRangeInput
+title: dateRangeInput
+username:
+account: sonfed
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5214815
+bundleId: 5300116
+url: https://sonfed.shinyapps.io/dateRangeInput/
+when: 1638047279.24809
+lastSyncTime: 1638047279.24809
+asMultiple: FALSE
+asStatic: FALSE

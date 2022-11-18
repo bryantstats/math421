@@ -1,0 +1,13 @@
+name: selectinput
+title: selectinput
+username:
+account: fa20
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5215084
+bundleId: 5300235
+url: https://fa20.shinyapps.io/selectinput/
+when: 1638052252.9296
+lastSyncTime: 1638052252.9296
+asMultiple: FALSE
+asStatic: FALSE

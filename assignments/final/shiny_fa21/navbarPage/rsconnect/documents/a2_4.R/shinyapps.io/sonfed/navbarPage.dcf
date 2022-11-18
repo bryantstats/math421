@@ -1,0 +1,13 @@
+name: navbarPage
+title: navbarPage
+username:
+account: sonfed
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5215350
+bundleId: 5300382
+url: https://sonfed.shinyapps.io/navbarPage/
+when: 1638059020.36013
+lastSyncTime: 1638059020.36013
+asMultiple: FALSE
+asStatic: FALSE
