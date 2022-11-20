@@ -32,11 +32,11 @@ titanic_sex <- unique(df$Sex)
 The sinking of the Titanic is one of the most infamous shipwrecks in history. While there was some element of luck involved in surviving, it seems some groups of people were more likely to survive than others.  Select the input for the plots. 
 
 ```{r}
-      sliderInput(inputId = "fare_input",
-                  label = h2("Select Fare Range"),
-                  min = min(df$Fare, na.rm=TRUE),
-                  max = max(df$Fare, na.rm=TRUE),
-                  value= c(50, 200))
+sliderInput(inputId = "fare_input",
+            label = h2("Select Fare Range"),
+            min = min(df$Fare, na.rm=TRUE),
+            max = max(df$Fare, na.rm=TRUE),
+            value= c(50, 200))
 
 ```
 

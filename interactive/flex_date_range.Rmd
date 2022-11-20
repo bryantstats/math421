@@ -18,9 +18,11 @@ library(tidyverse)
 library(plotly)
 library(knitr)
 library(DT)
-df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+library(lubridate)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_final.csv')
 df <- drop_na(df, Age)
 df <- drop_na(df, Embarked)
+df$date <- mdy(df$date)
 df$Survived = factor(df$Survived)
 df$Pclass = factor(df$Pclass)
 
@@ -30,14 +32,17 @@ titanic_sex <- unique(df$Sex)
 {.sidebar}
 =======================================================================
 
-The sinking of the Titanic is one of the most infamous shipwrecks in history. While there was some element of luck involved in surviving, it seems some groups of people were more likely to survive than others.  Select the input for the plots. 
+- The sinking of the Titanic is one of the most infamous shipwrecks in history. While there was some element of luck involved in surviving, it seems some groups of people were more likely to survive than others.  Select the input for the plots. 
+
+- In this example, the data for Date is not fictional and not real data. 
 
 ```{r}
-checkboxGroupInput(inputId = "embarked_input", 
-                   label = h2("Select Embarked Location"),
-                   choices = unique(df$Embarked), 
-                   inline = TRUE,
-                   selected = 'S')
+dateRangeInput(inputId = "date_input", 
+               label = h2("Date range"), 
+               start = min(df$date), 
+               end = max(df$date),
+               min = min(df$date), 
+               max = max(df$date))
 ```
 
 Main Tab 1
@@ -51,7 +56,7 @@ Column {data-width=500}
 ```{r}
 renderPlotly({
   p1 <- df %>% 
-    filter(Embarked %in% input$embarked_input) %>% 
+    filter(date > input$date_input[1], date < input$date_input[2]) %>% 
     ggplot(aes(x=Age, color=Survived))+
     geom_density()
   ggplotly(p1)
@@ -66,7 +71,7 @@ Column {data-width=500}
 ```{r}
 renderPlotly({
   p2 <- df %>% 
-    filter(Embarked %in% input$embarked_input) %>% 
+    filter(date > input$date_input[1], date < input$date_input[2]) %>% 
     ggplot(aes(x=Pclass, fill=Survived))+
     geom_bar()
   ggplotly(p2)
