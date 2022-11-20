@@ -15,28 +15,23 @@ title: "Final Project - Building Shiny Apps"
 
 ### Question 1. Create an empty dashboard. In Rstudio, File -> New File -> R Markdown -> From Template -> Flex Dashboard. Knit the rmarkdown file and add the html link to this report. 
 
-### Question 2. Use this flex rmarkdown template []
+### Question 2. Use [this flex rmarkdown template](https://bryantstats.github.io/math421/final/flex_template.Rmd) to create a flex dashboard that
 
+- Has at least 4 different plotly graphs
 
+- Has at least two main Tab
 
+- Shows a table data that can be searched
 
-Install the following packages `shiny`, `packrat`, `rsconnect`. 
+- Has a side bar
 
-In this question, you will build and publish your first shiny app. Following these steps to do so
+### Question 3. We want users to be able to interact with our dashboard.  This can be done using `shiny`. Follow these below steps to create a shiny flex dashboard then publish it to the Internet. 
 
-1. Create a new R Script (File -> New R Script). 
+- Install the following packages `shiny`, `packrat`, `rsconnect`. 
 
-2. Copy [these code](c1.R) to the file 
+- Go to https://www.shinyapps.io/ and create an account 
 
-3. Save the file as app.R file into a newly created folder. 
-
-4. Press `Ctrl + Shift + Enter` to run the app locally. 
-
-5. Go to https://www.shinyapps.io/
-
-6. Create an account 
-
-7. Go to https://www.shinyapps.io/admin/#/dashboard.  Account -> Tokens -> Show -> Show secret-> Copy the secret code. 
+- Go to https://www.shinyapps.io/admin/#/dashboard.  Account -> Tokens -> Show -> Show secret-> Copy the secret code. 
 
 It should look like this
 
@@ -47,9 +42,9 @@ rsconnect::setAccountInfo(name='fall20',
 			  secret='mJI7rgq2Wf46g2Wf46g2WNOa+E6NRqr26yG3N5')
 ```
 
-8. Go back to the app (If you closed it, hit `Ctrl + Shift + Enter` to reopen it), click to `Publish` on the top right corner.  
+- Paste the secret code into Rstudio Consile and Run it. 
 
-9.  Paste the secret code and follow the instruction to publish the app on the Internet. 
+- Download a sample shiny flex dashboard:  
 
 -------
 
