@@ -4,12 +4,12 @@ output:
   html_document:
   pdf_document: default
   word_document: default
-title: "Final Project - Building Shiny Apps"
+title: "Final Project - Building Interactive Dashboard"
 ---
 
 -------
 
-**Submission Guideline:**  Include to your Github page the link of the app for each question from 1-12. You could also embed all your shiny apps in an Rmarkdown.  See the note under Question 4 for how to embed shiny apps in a Rmarkdown file.
+**Submission Guideline:**  Create one html file from Rmarkdown that answer all the following questions. Include the link of the html file to your Github webpage and submit the link to the html file to Canvas. 
 
 -------
 
@@ -19,7 +19,9 @@ Create an empty dashboard. In Rstudio, File -> New File -> R Markdown -> From Te
 
 ### Question 2. 
 
-Use this flex dashboard ([dashboard](https://bryantstats.github.io/math421/final/flex_template.html), [Rmd](https://bryantstats.github.io/math421/final/flex_template.Rmd))  to create a flex dashboard that
+Use this template flex dashboard ([dashboard](https://bryantstats.github.io/math421/final/flex_template.html), [Rmd](https://bryantstats.github.io/math421/final/flex_template.Rmd))  to create a flex dashboard that
+
+- Has a side bar
 
 - Has at least three main Tabs
 
@@ -27,7 +29,6 @@ Use this flex dashboard ([dashboard](https://bryantstats.github.io/math421/final
 
 - Shows a table data that can be searched
 
-- Has a side bar
 
 ### Question 3. 
 
@@ -48,9 +49,9 @@ rsconnect::setAccountInfo(name='fall20',
 			  secret='mJI7rgq2Wf46g2Wf46g2WNOa+E6NRqr26yG3N5')
 ```
 
-- Paste the secret code into Rstudio Consile and Run it. 
+- Paste the secret code into Rstudio Console and Run it. 
 
-- Download a sample shiny flex dashboard: https://bryantstats.github.io/math421/final/1_flex_select.Rmd
+- Download a sample shiny flex dashboard: [Dashboard](https://sn904109.shinyapps.io/1_flex_select/), [Rmd](https://bryantstats.github.io/math421/final/1_flex_select.Rmd)
 
 - Click `Run Document` (Or Ctrl + Shift + K) to check the dashboard
 
@@ -63,66 +64,97 @@ rsconnect::setAccountInfo(name='fall20',
 
 ### Question 4 - selectInput
 
-Write a shiny flex dashboard that uses `selectInput` working on a dataset different from the titanic dataset.  
+Write a shiny flex dashboard that uses `selectInput` and works with a dataset different from the titanic dataset.  
 
 [Similar dashboard](https://sn904109.shinyapps.io/1_flex_select/)
 
-Note:  In the dashboard, click to Source Code to show the codes. 
+Note:  In the above dashboard, click to Source Code to show the codes. 
 
+Include the link of your dashboard here. 
 
 ### Question 5 - checkboxGroupInput
 
-Write a shiny flex dashboard that uses `checkboxGroupInput` working on a dataset different from the titanic dataset.   
+Write a shiny flex dashboard that uses `checkboxGroupInput` and works with a dataset different from the titanic dataset.   
 
 [Similar dashboard](https://sn904109.shinyapps.io/2_flex_checkbox/)
 
+Include the link of your dashboard here. 
 
 ### Question 6 - sliderInput
 
-Write a shiny flex dashboard that uses `sliderInput` working on a dataset different from the titanic dataset.   
+Write a shiny flex dashboard that uses `sliderInput` and works with a dataset different from the titanic dataset.   
 
 [Similar dashboard](https://sn904109.shinyapps.io/3_flex_slider/)
 
+Include the link of your dashboard here. 
 
 ### Question 7 - radioButtons
 
-Write a shiny flex dashboard that uses `radioButtons` working on a dataset different from the titanic dataset.   
+Write a shiny flex dashboard that uses `radioButtons` and works with a dataset different from the titanic dataset.   
 
 [Similar dashboard](https://sn904109.shinyapps.io/4_flex_radio/)
 
+Include the link of your dashboard here. 
+
 --- 
 
-**Notice:  You can only run 5 apps on shinyapps.io.  If you are running out of apps, you are recommended to create another shiny account and use multiple accounts.**
+**Notice:  You can only run maximum 5 apps on shinyapps.io.  If you are running out of apps, you are recommended to create another shiny account and use multiple accounts.**
 
 ---
 
 ### Question 8 - dateRangeInput
 
-Write a shiny flex dashboard that uses `dateRangeInput` working on a dataset different from the titanic dataset.   
+Write a shiny flex dashboard that uses `dateRangeInput` and works with a dataset different from the titanic dataset.   
 
 [Similar dashboard](https://sn904109.shinyapps.io/5_flex_date_range/)
 
+Include the link of your dashboard here. 
 
 ### Question 9 - Combination
 
-Write a shiny flex dashboard working on a dataset different from the titanic dataset. The dashboard should use at least three different input methods.   
+We can combine different input methods into one dashboard.  Write a shiny flex dashboard and works with a dataset different from the titanic dataset. The dashboard should use at least three different input methods.   
 
 [Similar dashboard](https://snguyen4.shinyapps.io/6_flex_combine/)
 
+Include the link of your dashboard here. 
 
 -------
 
 ### Question 10
 
-Write an app that make uses of `selectInput`, `sliderInput` or `dateRangeInput` or both, `radioButtons`, `checkboxGroupInput`  and `navbarPage`. You might use multiple datasets for the app. 
+Write a dashboard that
+
+- Works with a dataset that have not been used in class
+
+- Has a social media click
+
+- Has a source code click
+
+- Has a side bar
+
+- Has five input methods
+
+- Has at least three main Tabs
+
+- Has at least five meaningful plots
+
+- Shows a table data that can be searched
+
+- Has at least one text paragraph
+
+- Includes at least one image
+
+- (Extra Credits) Uses twitter data and text data visualization
+
+Include the link of your dashboard here. 
 
 -------
 
-### Question 13 - Presentation
+### Question 11 - Presentation
 
-Present your shiny app in Question 12 on the final exam day. 
+Present your dashboard in Question 10 on the final exam day. 
 
-- Present the features of your app 
+- Present the features of your dashboard 
 
 - Discuss the codes of the apps. 
 
@@ -130,12 +162,16 @@ Present your shiny app in Question 12 on the final exam day.
 
 - Give an advice for anyone who is about to do this project
 
-- The presentation should be accessible to ones that have no experience with shiny coding but know R. 
-
 -------
 
 ### References
 
+
+https://rstudio.github.io/flexdashboard/articles/examples.html
+
+https://bookdown.org/yihui/rmarkdown/dashboards.html
+
+https://epirhandbook.com/en/dashboards-with-r-markdown.html
 
 Check out Shiny official tutorial: https://shiny.rstudio.com/tutorial/
 

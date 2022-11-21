@@ -21,7 +21,7 @@
 |13. Text Mining| [Slides](slides/15_text.html),  <br> [Sample Codes](assignments/text_mining_sample_codes2.html) |[Assignment 13](assignments/assignment13.html) | | 
 |14. Twitter| [Sample Codes](slides/16_text_mining_rtweet.html) |[Assignment 14](assignments/assignment14.html) | | 
 |15. Functions: If-Else Statement| [Slides](gganimate/17_writing_functions.html) |[Assignment 15](assignments/assignment15.html) | | 
-
- 
+|16. Functions: Loop| [Slides](gganimate/18_writing_functions.html) | |[Assignment 16](assignments/assignment16.html) | 
+|**Final Project**|[html](final/final.html), [Rmd](final/final.Rmd)  | | | 
 
  

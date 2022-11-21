@@ -9,7 +9,7 @@ title: "Assignment 16: Writing a function - Loop"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment16.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment16.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
