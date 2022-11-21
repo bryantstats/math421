@@ -31,7 +31,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 - Output: a data frame with all the missing of numeric variables replaced by the associated means.
 
-Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions_fa21.html#28)
+Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#28)
 
 -------
 
@@ -41,7 +41,7 @@ Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writ
 
 - Output: a data frame with all the missing of variables replaced by the associated means (for numeric variables) or modes (for non-numeric variables).
 
-Hint: Use If-statement to combine the function in Problem 1 and the function in [this example](https://bryantstats.github.io/math421/gganimate/18_writing_functions_fa21.html#28)
+Hint: Use If-statement to combine the function in Problem 1 and the function in [this example](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#28)
 
 
 -------
@@ -52,7 +52,7 @@ Hint: Use If-statement to combine the function in Problem 1 and the function in 
 
 - Output: Bar plots of all non-numeric variables
 
-Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions_fa21.html#33)
+Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#33)
 
 
 -------
@@ -63,7 +63,7 @@ Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writ
 
 - Output: all possible the bar plots of a non-numeric variable filled by a non-numeric variable.
 
-Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions_fa21.html#40)
+Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#40)
 
 -------
 
