@@ -13,19 +13,25 @@ title: "Final Project - Building Shiny Apps"
 
 -------
 
-### Question 1. Create an empty dashboard. In Rstudio, File -> New File -> R Markdown -> From Template -> Flex Dashboard. Knit the rmarkdown file and add the html link to this report. 
+### Question 1. 
 
-### Question 2. Use [this flex rmarkdown template](https://bryantstats.github.io/math421/final/flex_template.Rmd) to create a flex dashboard that
+Create an empty dashboard. In Rstudio, File -> New File -> R Markdown -> From Template -> Flex Dashboard. Knit the rmarkdown file and add the html link to this report. 
 
-- Has at least 4 different plotly graphs
+### Question 2. 
 
-- Has at least two main Tab
+Use this flex dashboard ([dashboard](https://bryantstats.github.io/math421/final/flex_template.html), [Rmd](https://bryantstats.github.io/math421/final/flex_template.Rmd))  to create a flex dashboard that
+
+- Has at least three main Tabs
+
+- Has at least four plots
 
 - Shows a table data that can be searched
 
 - Has a side bar
 
-### Question 3. We want users to be able to interact with our dashboard.  This can be done using `shiny`. Follow these below steps to create a shiny flex dashboard then publish it to the Internet. 
+### Question 3. 
+
+We want users to be able to interact with our dashboard.  This can be done using `shiny`. Follow these below steps to create a shiny flex dashboard then publish it to the Internet. 
 
 - Install the following packages `shiny`, `packrat`, `rsconnect`. 
 
@@ -44,122 +50,69 @@ rsconnect::setAccountInfo(name='fall20',
 
 - Paste the secret code into Rstudio Consile and Run it. 
 
-- Download a sample shiny flex dashboard:  
+- Download a sample shiny flex dashboard: https://bryantstats.github.io/math421/final/1_flex_select.Rmd
 
--------
+- Click `Run Document` (Or Ctrl + Shift + K) to check the dashboard
 
-### Question 2 - selectInput
+- On right, top corner click Publish to Publish the dashboard to your acccount on shinyapps.io
 
-Write a shiny app that can plot barplot of two categorical variables in the titanic dataset, [Example of the barplot](https://bryantstats.github.io/math421/slides/6_viz.html#39).
+- Your published dashboard should look like this
 
-[Similar Apps](https://fa20.shinyapps.io/selectinput/) and [Codes](shiny_fa21/selectinput/a2.R)
-
-Notice:  
-
-- Two different shiny apps should be in two different folders. 
-
-- You should not use local path when reading a data file.  For example,  do not use `read_csv('C://final//titanic.csv')`.  Instead, create a new folder and put the data file (titanic.csv) and the code file in the folder just created and use `read_csv('titanic.csv')`
-
--------
-
-### Question 3 - checkboxGroupInput
-
-Write a shiny app that creates a plot for the adult census dataset. The user inputs two variables and can choose a tick on some options of a variable (i.e., use`checkboxGroupInput`). 
-
-[Similar Apps](https://fa20.shinyapps.io/checkboxGroupInput/) and [Codes](shiny_fa21/checkboxGroupInput/a2_3.R)
-
--------
-
-### Question 4 - sliderInput
-
-Write a shiny app that creates a plot for the adult census dataset.  The user inputs two variables and can change the range of `Age` (i.e., use `sliderInput`). 
-
-[Similar Apps](https://sonfed.shinyapps.io/sliderInput/) and [Codes](shiny_fa21/sliderInput/a2_1.R)
-
--------
-
-Notice:  You can only run 5 apps on shinyapps.io.  If you are running out of apps, you are recommended to create another shiny account and use multiple accounts.  
-
-You could also embed all your shiny apps in an Rmarkdown.  Do the follows to embed an shiny app to an rmarkdown. 
-
-- Create an Rmarkdown
-
-- Insert a code cell (`Ctrl + Alt + I`)
-
-- Copy the codes of the shiny to the code cell
-
-- Knit it 
-
-- When asked, choose `Yes, Always.`
-
-- Here is an example: https://fa20.shinyapps.io/a9_markdown/
+    https://sn904109.shinyapps.io/1_flex_select/
 
 
--------
+### Question 4 - selectInput
 
-### Question 5 - dateRangeInput
+Write a shiny flex dashboard that uses `selectInput` working on a dataset different from the titanic dataset.  
 
-Use the WHO-Covid19 data, write a shiny app that shows statistics of Covid19 for any three countries selected by the user.  The user can also change the range of the dates.  Notice:  you may want to use selectInput instead of checkboxGroupInput for the user to select countries. 
+[Similar dashboard](https://sn904109.shinyapps.io/1_flex_select/)
 
-[Similar App](https://sonfed.shinyapps.io/dateRangeInput2/), 
-[Codes](shiny_fa21/dateRangeInput2/3.R), and 
-[Data](shiny_fa21/dateRangeInput2/who_covid.csv)
+Note:  In the dashboard, click to Source Code to show the codes. 
 
--------
 
-### Question 6 - radioButtons
+### Question 5 - checkboxGroupInput
 
-Write a shiny app that creates plots for the adult census dataset. The user inputs two variables and can choose a multiple choice option (i.e., use`radioButtons`). 
+Write a shiny flex dashboard that uses `checkboxGroupInput` working on a dataset different from the titanic dataset.   
 
-[Similar Apps](https://sonfed.shinyapps.io/radioButtons/) and [Codes](shiny_fa21/radioButtons/a2_2.R)
+[Similar dashboard](https://sn904109.shinyapps.io/2_flex_checkbox/)
 
--------
 
-### Question 7 - navbarPage
+### Question 6 - sliderInput
 
-Write a shiny app that creates plots for the adult census data. Make use of the `navbarPage`
+Write a shiny flex dashboard that uses `sliderInput` working on a dataset different from the titanic dataset.   
 
-This below example shows how to use `navbarPage`
+[Similar dashboard](https://sn904109.shinyapps.io/3_flex_slider/)
 
-[Example App](https://sonfed.shinyapps.io/navbarPage/) and 
-[Codes](shiny_fa21/navbarPage/a2_4.R)
 
--------
+### Question 7 - radioButtons
 
-### Question 8 - Uploaded Data
+Write a shiny flex dashboard that uses `radioButtons` working on a dataset different from the titanic dataset.   
 
-Write a shiny app that can plot barplot of two categorical variables in an uploaded dataset, [Example of the barplot](https://bryantstats.github.io/math421/slides/6_viz.html#39). 
+[Similar dashboard](https://sn904109.shinyapps.io/4_flex_radio/)
 
-Use this data to test your app: [Adult Census Data](data/adult_modified.csv)
+--- 
 
-[Similar Apps](https://fa20.shinyapps.io/uploaded_data/) and [Codes](shiny_fa21/uploaded_data/a3.R)
+**Notice:  You can only run 5 apps on shinyapps.io.  If you are running out of apps, you are recommended to create another shiny account and use multiple accounts.**
 
--------
+---
 
-### Question 9 - Uploaded Data
+### Question 8 - dateRangeInput
 
-Write a shiny app that can plot the scatter plot of two numeric variables and colored by a categorical variable in an uploaded dataset. Example of the plot: https://bryantstats.github.io/math421/slides/6_viz.html#15
+Write a shiny flex dashboard that uses `dateRangeInput` working on a dataset different from the titanic dataset.   
 
-Use this data to test your app: [Adult Census Data](data/adult_modified.csv)
+[Similar dashboard](https://sn904109.shinyapps.io/5_flex_date_range/)
+
+
+### Question 9 - Combination
+
+Write a shiny flex dashboard working on a dataset different from the titanic dataset. The dashboard should use at least three different input methods.   
+
+[Similar dashboard](https://snguyen4.shinyapps.io/6_flex_combine/)
 
 
 -------
 
 ### Question 10
-
-Write a shiny app on own selected data.  Make uses of  `selectInput`,  `radioButtons`, `checkboxGroupInput` and `sliderInput`. 
-
-
--------
-
-### Question 11
-
-Write a shiny app on own selected data.  Make uses of `selectInput`, `radioButtons`, `checkboxGroupInput` and `dateRangeInput`. 
-
-
--------
-
-### Question 12
 
 Write an app that make uses of `selectInput`, `sliderInput` or `dateRangeInput` or both, `radioButtons`, `checkboxGroupInput`  and `navbarPage`. You might use multiple datasets for the app. 
 
