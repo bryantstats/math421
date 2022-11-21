@@ -79,5 +79,5 @@ Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writ
   
   - all possible the scatter plots.
 
-Hint: Combine [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions_fa21.html#37), [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions_fa21.html#40), and the function in Question 4. One way to combine is creating a new function, `quick_plot`, and call these three functions within `quic_kplot`. 
+Hint: Combine [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#37), [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#40), and the function in Question 4. One way to combine is creating a new function, `quick_plot`, and call these three functions within `quic_kplot`. 
 
