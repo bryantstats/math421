@@ -37,18 +37,18 @@ The sinking of the Titanic is one of the most infamous shipwrecks in history. Wh
 
 ```{r}
 sliderInput(inputId = "fare_input",
-            label = h2("Select Fare Range"),
+            label = h3("Fare Range"),
             min = min(df$Fare, na.rm=TRUE),
             max = max(df$Fare, na.rm=TRUE),
             value= c(50, 200))
 
 selectInput(inputId = "sex_input", 
-            label = h2("Select Gender"),
+            label = h3("Gender"),
             choices = titanic_sex, 
             selected = 'male')
 
 checkboxGroupInput(inputId = "embarked_input", 
-                   label = h2("Select Embarked Location"),
+                   label = h3("Embarked Location"),
                    choices = unique(df$Embarked), 
                    inline = TRUE,
                    selected = 'S')

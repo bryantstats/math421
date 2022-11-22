@@ -144,7 +144,7 @@ Write a dashboard that
 
 - Includes at least one image
 
-- (Extra Credits) Uses twitter data and text data visualization
+- (Extra Credits) Uses twitter data or text data and text data visualization
 
 Include the link of your dashboard here. 
 
