@@ -75,13 +75,13 @@ datatable(df, options = list(
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### ggplot
+### Row 1
 
 ```{r}
 p
 ```
 
-### ggplotly
+### Row 2
 
 ```{r}
 ggplotly(p)
@@ -120,13 +120,13 @@ ggplotly(p)
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Chart C
+### Row 1
 
 ```{r}
 p1
 ```
 
-### Chart D
+### Row 2
 
 ```{r}
 ggplotly(p1)
