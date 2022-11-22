@@ -49,21 +49,21 @@ Main Tab 1
 Column {data-width=500, .tabset}
 -----------------------------------------------------------------------
 
-### Table 1
+### Column Tab 1
 
 ```{r}
 df
 ```
 
 
-### Table 2
+### Column Tab 2
 
 ```{r}
 kable(df)
 ```
 
 
-### Table 3 
+### Column Tab 3
 
 ```{r}
 datatable(df, options = list(

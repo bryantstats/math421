@@ -34,7 +34,7 @@ The sinking of the Titanic is one of the most infamous shipwrecks in history. Wh
 
 ```{r}
 checkboxGroupInput(inputId = "embarked_input", 
-                   label = h2("Select Embarked Location"),
+                   label = h3("Embarked Location"),
                    choices = unique(df$Embarked), 
                    inline = TRUE,
                    selected = 'S')

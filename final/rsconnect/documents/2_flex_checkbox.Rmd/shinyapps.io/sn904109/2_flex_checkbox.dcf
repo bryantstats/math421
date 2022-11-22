@@ -5,9 +5,9 @@ account: sn904109
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7686858
-bundleId: 6536191
+bundleId: 6544006
 url: https://sn904109.shinyapps.io/2_flex_checkbox/
-when: 1668984792.69598
-lastSyncTime: 1668984792.69599
+when: 1669141932.99342
+lastSyncTime: 1669141932.99343
 asMultiple: FALSE
 asStatic: FALSE

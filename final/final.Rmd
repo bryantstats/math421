@@ -134,7 +134,9 @@ Write a dashboard that
 
 - Has five input methods
 
-- Has at least three main Tabs
+- Has at least three main tabs
+
+- Has columns tabs
 
 - Has at least five meaningful plots
 
