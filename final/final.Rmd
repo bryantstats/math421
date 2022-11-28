@@ -161,7 +161,7 @@ Present your dashboard in Question 10 on the final exam day.
 
 - Present the features of your dashboard 
 
-- Discuss the codes of the apps. 
+- Discuss how you organize the codes of the dashboard and the final project.  
 
 - Discuss any error or challenge you had to overcome
 
