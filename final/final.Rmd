@@ -15,7 +15,10 @@ title: "Final Project - Building Interactive Dashboard"
 
 ### Question 1. 
 
-Create an empty dashboard. In Rstudio, File -> New File -> R Markdown -> From Template -> Flex Dashboard. Knit the rmarkdown file and add the html link to this report. 
+- Install the flexdashboard package using `install.packages("flexdashboard")`. 
+
+
+- Create an empty dashboard. In Rstudio, File -> New File -> R Markdown -> From Template -> Flex Dashboard. Knit the rmarkdown file and add the html link to this report. 
 
 ### Question 2. 
 
