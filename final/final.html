@@ -297,23 +297,17 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before {
-content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "\e259";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "";
-border: none;
-}
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "";
+content: "\e258";
 font-family: 'Glyphicons Halflings';
-display: inline-block;
-padding: 10px;
-border-right: 1px solid #ddd;
+border: none;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -464,8 +458,8 @@ and works with a dataset different from the titanic dataset.</p>
 dashboard</a></p>
 <p>Include the link of your dashboard here.</p>
 </div>
-<div id="question-9---combination" class="section level3">
-<h3>Question 9 - Combination</h3>
+<div id="question-9---combination-of-inputs" class="section level3">
+<h3>Question 9 - Combination of Inputs</h3>
 <p>We can combine different input methods into one dashboard. Write a
 shiny flex dashboard and works with a dataset different from the titanic
 dataset. The dashboard should use at least three different input

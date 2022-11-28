@@ -113,7 +113,7 @@ Write a shiny flex dashboard that uses `dateRangeInput` and works with a dataset
 
 Include the link of your dashboard here. 
 
-### Question 9 - Combination
+### Question 9 - Combination of Inputs
 
 We can combine different input methods into one dashboard.  Write a shiny flex dashboard and works with a dataset different from the titanic dataset. The dashboard should use at least three different input methods.   
 
