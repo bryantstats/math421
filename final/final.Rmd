@@ -9,7 +9,7 @@ title: "Final Project - Building Interactive Dashboard"
 
 ------------------------------------------------------------------------
 
-**Submission Guideline:** Create one html file from Rmarkdown that answer all the following questions. Include the link of the html file to your Github webpage and submit the link to the html file to Canvas.
+**Submission Guideline:** Create one html file from Rmarkdown that answer all the following questions. **Each question should has it own Rmd file and a corresponding link**. Include the link of the html file to your Github webpage and submit the link to the html file to Canvas.
 
 ------------------------------------------------------------------------
 
