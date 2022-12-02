@@ -31,11 +31,13 @@ Use this template flex dashboard ([dashboard](https://bryantstats.github.io/math
 
 -   Shows a table data that can be searched
 
+Include the link of the dashboard here. 
+
 ### Question 3.
 
 We want users to be able to interact with our dashboard. This can be done using `shiny`. A flex dashboard using `shiny` requires a domain to host it. We will use shinyapps.io, which can host five dashboard for free. If we want to host more than five dashboards, we can create multiple accounts at shinyapps.io.
 
-Follow these below steps to create a shiny flex dashboard then publish it.
+Follow these below steps to create a shiny flex dashboard then publish it.  Include the link of the dashboard here. 
 
 -   Install the following packages `shiny`, `packrat`, `rsconnect`.
 
