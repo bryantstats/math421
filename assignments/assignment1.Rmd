@@ -17,7 +17,7 @@ https://download1.rstudio.org/desktop/windows/RStudio-2022.07.1-554.exe
 
 - While waiting for the installation, sign up for an account at Github: https://github.com/
 
-- Create a sample Rmarkdown file and publish it to your Github Page.  Follow the instruction in this video:   https://www.loom.com/share/3d6e0766edc0403badfc9df2bad4bb7f
+- Download and Install Github Desktop
 
 - Your Github Page should look like this: https://bryantstudent2021.github.io/
 
