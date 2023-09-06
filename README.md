@@ -5,6 +5,6 @@
 
 |Topics| Slides |Assignments |Extra Credits | 
 |:---|:---|:---|:---|
-|1. Introduction| [Slides](slides/1_intro.html), [Rmd](slides/1_intro.Rmd) |[Assignment 1]() | | 
+|1. Introduction| [Slides](slides/1_intro.html), [Rmd](slides/1_intro.Rmd) |[Assignment 1](assignments/assignment1.html) | | 
 
  

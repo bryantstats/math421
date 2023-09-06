@@ -1,26 +1,12 @@
 ---
-output: # rmarkdown::github_document
-  html_document:
-  pdf_document: default
-  word_document: default
-title: "Assignment 1.  Setup working environment" 
+title: "Assignment 1"
+output: html_document
 ---
 
-Follow this steps to set up your working environment and publish the first assignment to Github Page. All other assignments should also be in your Github Page. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-- Download and Install R at: https://cran.r-project.org/bin/windows/base/old/4.1.1
+This assignment guides you to set up the working environment for the class and publish your work on your webpage. Following [this video](https://bryant.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=ddf1c6a8-26ba-4b19-b08f-b07501304343) to do so. Upload the link of your Github page to Canvas. 
 
-- Download and Install Rstudio at:
-https://download1.rstudio.org/desktop/windows/RStudio-2022.07.1-554.exe
-
-- Download and Install Git at: https://github.com/git-for-windows/git/releases/download/v2.37.3.windows.1/Git-2.37.3-64-bit.exe
-
-- While waiting for the installation, sign up for an account at Github: https://github.com/
-
-- Download and Install Github Desktop
-
-- Your Github Page should look like this: https://bryantstudent2021.github.io/
-
-**Submission**:  Submit the link of your Github Page to Canvas under "Assignment 1"
-
-
+ 
