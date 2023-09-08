@@ -18,7 +18,9 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # R Basics
+]
 
 ---
 
@@ -499,7 +501,9 @@ class: center, middle, inverse
 
 ### YOUR TURN
 
-This is also your assignment 2:https://bryantstats.github.io/math421/assignments/assignment2.html
+This is also your assignment 2
+
+https://bryantstats.github.io/math421/assignments/assignment2.html
 
 ---
 class:inverse
@@ -507,7 +511,7 @@ class:inverse
 
 ***Guideline***: Use the rmarkdown [here](https://bryantstats.github.io/math421/assignments/assignment2.Rmd) as a template to write your codes. Open the Rmarkdown file in Rstudio. After each question, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the questions. `Knit` the rmarkdown file (hotkey `Ctrl + Alt + K`) to export an html.  Then Publish the html to your Githiub Page. 
 
-***Submissions***: Submit the link on Github of the assignment to Blackboard under Assignment 2. 
+***Submissions***: Submit the link on Github of the assignment to Canvas under Assignment 2. 
 
 **Go the the next page for the problems**
 
@@ -583,6 +587,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
