@@ -127,7 +127,7 @@ names(df)
 ```
 
 ```
-## [1] "ï..Date_reported"  "Country_code"      "Country"          
+## [1] "Date_reported"     "Country_code"      "Country"          
 ## [4] "WHO_region"        "New_cases"         "Cumulative_cases" 
 ## [7] "New_deaths"        "Cumulative_deaths"
 ```
@@ -142,7 +142,7 @@ str(df)
 
 ```
 ## 'data.frame':	318291 obs. of  8 variables:
-##  $ ï..Date_reported : chr  "2020-01-03" "2020-01-04" "2020-01-05" "2020-01-06" ...
+##  $ Date_reported    : chr  "2020-01-03" "2020-01-04" "2020-01-05" "2020-01-06" ...
 ##  $ Country_code     : chr  "AF" "AF" "AF" "AF" ...
 ##  $ Country          : chr  "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" ...
 ##  $ WHO_region       : chr  "EMRO" "EMRO" "EMRO" "EMRO" ...
@@ -161,20 +161,20 @@ head(df)
 ```
 
 ```
-##   ï..Date_reported Country_code     Country WHO_region New_cases
-## 1       2020-01-03           AF Afghanistan       EMRO         0
-## 2       2020-01-04           AF Afghanistan       EMRO         0
-## 3       2020-01-05           AF Afghanistan       EMRO         0
-## 4       2020-01-06           AF Afghanistan       EMRO         0
-## 5       2020-01-07           AF Afghanistan       EMRO         0
-## 6       2020-01-08           AF Afghanistan       EMRO         0
-##   Cumulative_cases New_deaths Cumulative_deaths
-## 1                0          0                 0
-## 2                0          0                 0
-## 3                0          0                 0
-## 4                0          0                 0
-## 5                0          0                 0
-## 6                0          0                 0
+##   Date_reported Country_code     Country WHO_region New_cases Cumulative_cases
+## 1    2020-01-03           AF Afghanistan       EMRO         0                0
+## 2    2020-01-04           AF Afghanistan       EMRO         0                0
+## 3    2020-01-05           AF Afghanistan       EMRO         0                0
+## 4    2020-01-06           AF Afghanistan       EMRO         0                0
+## 5    2020-01-07           AF Afghanistan       EMRO         0                0
+## 6    2020-01-08           AF Afghanistan       EMRO         0                0
+##   New_deaths Cumulative_deaths
+## 1          0                 0
+## 2          0                 0
+## 3          0                 0
+## 4          0                 0
+## 5          0                 0
+## 6          0                 0
 ```
 
 ---
@@ -194,7 +194,7 @@ colSums(is.na(df))
 ```
 
 ```
-##  ï..Date_reported      Country_code           Country        WHO_region 
+##     Date_reported      Country_code           Country        WHO_region 
 ##                 0              1343                 0                 0 
 ##         New_cases  Cumulative_cases        New_deaths Cumulative_deaths 
 ##                 0                 0                 0                 0
@@ -205,7 +205,7 @@ colMeans(is.na(df))
 ```
 
 ```
-##  ï..Date_reported      Country_code           Country        WHO_region 
+##     Date_reported      Country_code           Country        WHO_region 
 ##       0.000000000       0.004219409       0.000000000       0.000000000 
 ##         New_cases  Cumulative_cases        New_deaths Cumulative_deaths 
 ##       0.000000000       0.000000000       0.000000000       0.000000000
@@ -387,6 +387,10 @@ library(dplyr)
 ```
 
 ```
+## Warning: package 'dplyr' was built under R version 4.2.3
+```
+
+```
 ## 
 ## Attaching package: 'dplyr'
 ```
@@ -444,6 +448,10 @@ table(df$New_deaths2)
 ```r
 # Create a variable month
 library(lubridate)
+```
+
+```
+## Warning: package 'lubridate' was built under R version 4.2.3
 ```
 
 ```
