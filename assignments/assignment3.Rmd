@@ -40,6 +40,12 @@ Problems
 
 2. Show the names of the variables in the data
 
+```{r}
+df = read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
+names(df)
+```
+
+
 3. How many columns and rows the data have? 
 
 4. How many missing values are there?  Show the missing values by columns.  What variable has the most number of missing values?
