@@ -136,12 +136,10 @@ class: inverse
 # Step 2: Convert all missing to NA 
 
 ```{r}
-df <- na_if(df, 'Unknown')
-df <- na_if(df, 'Missing')
-df <- na_if(df, 'Not Available')
-
-# OR Pipe
-df <- df %>% na_if('Unknown') %>% na_if('Missing') %>% na_if('Not Available')
+# Convert Unknown, Missing and Not Available to NA
+df <- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
 ``` 
 
 ---
@@ -218,9 +216,9 @@ class: inverse, middle, center
 ```{r, warning=FALSE}
 library(VIM)
 df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
-df <- na_if(df, 'Unknown')
-df <- na_if(df, 'Missing')
-df <- na_if(df, 'Not Available')
+df <- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
 ```
 
 ---
