@@ -29,7 +29,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 2. Let's study the variable `SEX`. How many missing values in the NAs form? 
 
-3. Still with variable `SEX`. There are missing values in this variables that are not `NAs`. Identify the forms of missing values in this variable. Use the `na_if` function to change all the forms of missing values to `NAs`. 
+3. Still with variable `SEX`. There are missing values in this variables that are not `NAs`. Identify the forms of missing values in this variable. Change all the forms of missing values to `NAs`. 
 
 4. Still with variable `SEX`. After all the missing values are in the `NAs` form.  Change the missing values of this variable to the majority sex. 
 
