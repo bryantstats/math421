@@ -12,6 +12,7 @@
 |5. Handle Missing Values| [Slides](slides/5_missing_value_slides.html), [Rmd](slides/5_missing_value_slides.Rmd) |[Assignment 5](assignments/assignment5.html) |[Extra Credits](assignments/assignment5_extra_credits.html) | 
 |6. Visualization:  Aesthetic Mapping| [Titanic](slides/6_viz_titanic.html),  [Covid ](slides/6_viz.html) |[Assignment 6](assignments/assignment6.html) | | 
 |7. Visualization: Some aspects of ggplot2| [Titanic](slides/7_viz_titanic.html),  [Covid ](slides/7_viz.html) |[Assignment 7](assignments/assignment7.html) | [Extra Credits](assignments/assignment7_extra_credits.html)| 
+|8. Animated Graphics: Bar Races | [Titanic,](gganimate/8_viz_titanic.html) [Bar Races](gganimate/8_viz_bar_race.html) |[Assignment 8](assignments/assignment8.html) | | 
 
 
 
