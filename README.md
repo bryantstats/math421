@@ -11,9 +11,9 @@
 |4. Data Wrangling with dplr| [Slides](slides/4_dplyr.html), [Rmd](slides/4_dplyr.Rmd) |[Assignment 4](assignments/assignment4.html) |[Extra Credits](assignments/assignment4_extra_credits.html) | 
 |5. Handle Missing Values| [Slides](slides/5_missing_value_slides.html), [Rmd](slides/5_missing_value_slides.Rmd) |[Assignment 5](assignments/assignment5.html) |[Extra Credits](assignments/assignment5_extra_credits.html) | 
 |6. Visualization:  Aesthetic Mapping| [Titanic](slides/6_viz_titanic.html),  [Covid ](slides/6_viz.html) |[Assignment 6](assignments/assignment6.html) | | 
-|7. Visualization: Some aspects of ggplot2| [Titanic](slides/7_viz_titanic.html),  [Covid ](slides/7_viz.html) |[Assignment 7](assignments/assignment7.html),[ Rmd](assignments/assignment7.rmd),[ OQuarto](assignments/assignment7.qmd) | [Extra Credits](assignments/assignment7_extra_credits.html)| 
+|7. Visualization: Some aspects of ggplot2| [Titanic](slides/7_viz_titanic.html),  [Covid ](slides/7_viz.html) |[Assignment 7](assignments/assignment7.html),[ Rmd](assignments/assignment7.rmd),[Quarto](assignments/assignment7.qmd) | [Extra Credits](assignments/assignment7_extra_credits.html)| 
 |8. Animated Graphics: Bar Races | [Titanic,](gganimate/8_viz_titanic.html) [Bar Races](gganimate/8_viz_bar_race.html) |[Assignment 8](assignments/assignment8.html) | | 
-|9. Animated Graphics: Time Revealing| [Slides](gganimate/9_viz_reveal.html), [Rmd](gganimate/9_viz_reveal.Rmd) |[Assignment 9](assignments/assignment9.html) || 
+|9. Animated Graphics: Time Revealing| [Slides](gganimate/9_viz_reveal.html), [Rmd](gganimate/9_viz_reveal.Rmd) |[Assignment 9](assignments/assignment9.html) |[Extra Credits](assignments/assignment9_extra_credits.html)| 
 
 
 
