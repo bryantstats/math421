@@ -9,7 +9,7 @@ title: "How effective the Covid vaccines?"
 
 ***How to do it?***: 
 
-- Open the Rmarkdown file of this assignment ([link](fa2021_assignment9_extra_credits.Rmd)) in Rstudio. 
+- Open the Rmarkdown file of this assignment ([link](assignment9_extra_credits.Rmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
