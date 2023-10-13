@@ -45,7 +45,7 @@ After completing this course, you should be able to
 -   implement a variety of techniques in statistical unsupervised learning on data using R.\
 -   produce a data-interactive document and slides presentation to communicate their works using R.
 
-## Office Hours:
+## Office Hours
 
 You can find me at my office (A8 - Suite A) from 10:00AM-10:55PM on MWF. I am also available over Zoom (ID: 4419675207) during these times if needed. If these time slots do not work, please feel free to schedule another time with me.
 
