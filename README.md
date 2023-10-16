@@ -15,6 +15,7 @@
 |8. Animated Graphics: Bar Races | [Titanic,](gganimate/8_viz_titanic.html) [Bar Races](gganimate/8_viz_bar_race.html) |[Assignment 8](assignments/assignment8.html), [ Rmd](assignments/assignment8.Rmd), [ Quarto](assignments/assignment8.qmd)   | | 
 |9. Animated Graphics: Time Revealing| [Slides](gganimate/9_viz_reveal.html), [Rmd](gganimate/9_viz_reveal.Rmd) |[Assignment 9](assignments/assignment9.html), [ Rmd](assignments/assignment9.Rmd), [ Quarto](assignments/assignment9.qmd)  |[Extra Credits](assignments/assignment9_extra_credits.html)| 
 |10. Modeling: Basics| [Slides](gganimate/10_predictive_modeling.html), [Rmd](gganimate/10_predictive_modeling.Rmd) |[Assignment 10](assignments/assignment10.html) | | 
+|11. Modeling: Universal Framework| [Slides](gganimate/11_predictive_modeling.html), [Rmd](gganimate/11_predictive_modeling.Rmd) |[Assignment 11](assignments/assignment11.html) | | 
 
 
 
