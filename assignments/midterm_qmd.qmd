@@ -34,6 +34,15 @@ The midterm has two components: the Rmarkdown notebook (html) and the presentati
     
 - To inset an image in a slide, use  `![](image.png)`
 
+- To scale images, you can use `![](image.png){width="60%"}` or follow these below instructions. 
+    
+    - https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html
+    
+    - http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/
+
+- To turn off message and warning of a code cell, use:  `{r, message=FALSE, warning=FALSE}` for the cell. 
+
+
 - To turn off message and warning of a code cell, use:  `{r, message=FALSE, warning=FALSE}` for the cell. 
 
 **What to present**:

@@ -37,7 +37,7 @@ The midterm has two components: the Rmarkdown notebook (html) and the presentati
     
 - To inset an image in a slide, use  `![](image.png)`
 
-- To scale images, you can follow these below instructions. 
+- To scale images, you can use `![](image.png){width="60%"}` or follow these below instructions. 
     
     - https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html
     
