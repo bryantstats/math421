@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>M421 Statistics Analysis with R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="midterm_qmd_files/libs/clipboard/clipboard.min.js"></script>
+<script src="midterm_qmd_files/libs/quarto-html/quarto.js"></script>
+<script src="midterm_qmd_files/libs/quarto-html/popper.min.js"></script>
+<script src="midterm_qmd_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="midterm_qmd_files/libs/quarto-html/anchor.min.js"></script>
+<link href="midterm_qmd_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="midterm_qmd_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="midterm_qmd_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="midterm_qmd_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="midterm_qmd_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#instruction" id="toc-instruction" class="nav-link active" data-scroll-target="#instruction">Instruction</a></li>
+  <li><a href="#i.-data-wranggling" id="toc-i.-data-wranggling" class="nav-link" data-scroll-target="#i.-data-wranggling">I. Data Wranggling</a></li>
+  <li><a href="#ii.-data-visualization" id="toc-ii.-data-visualization" class="nav-link" data-scroll-target="#ii.-data-visualization">II. Data Visualization</a></li>
+  <li><a href="#iii.-predictive-models" id="toc-iii.-predictive-models" class="nav-link" data-scroll-target="#iii.-predictive-models">III. Predictive Models</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">M421 Statistics Analysis with R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="instruction" class="level2">
+<h2 class="anchored" data-anchor-id="instruction">Instruction</h2>
+<p>The midterm has two components: the Rmarkdown notebook (html) and the presentation. We will do the presentation in class. Post both the notebook and the presentation on your Github page.</p>
+<p><strong>The notebook:</strong> The notebook should be created using <code>rmarkdown</code> (like other assignments). The notebook should have a title.</p>
+<p><strong>The Presentation:</strong> Present your results in 5-10 minutes. To make the presentation using Rmarkdown, do the follows:</p>
+<pre><code>- In Rstudio -&gt; File -&gt; New File -&gt; R markdown
+
+- In the left panel, click to Presentation -&gt; Click OK
+
+- Now you have an Rmarkdown that can be knitted to be a html presentation </code></pre>
+<ul>
+<li><p>You can also use the Rmd templates of the class slides.</p></li>
+<li><p>You do not need to rerun all the codes for the presentation. For example, to show the model comparison, you just need to show the image of the model comparison instead of running all the models again.</p></li>
+<li><p>To inset an image in a slide, use <code>![](image.png)</code></p></li>
+<li><p>To turn off message and warning of a code cell, use: <code>{r, message=FALSE, warning=FALSE}</code> for the cell.</p></li>
+</ul>
+<p><strong>What to present</strong>:</p>
+<ul>
+<li><p>Present Part 2 - Visualization</p></li>
+<li><p>Present Question Question 4, 5 and 6 in Part 3.</p></li>
+<li><p>Present any errors/challenges you run into and how you fix/overcome them.</p></li>
+</ul>
+<p><strong>Data:</strong></p>
+<p>The data for the mid-term project is the Rhode Island Department of Health Hospital Discharge Data. Each row of the data presents a patient.</p>
+<p>Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ</p>
+<hr>
+</section>
+<section id="i.-data-wranggling" class="level2">
+<h2 class="anchored" data-anchor-id="i.-data-wranggling">I. Data Wranggling</h2>
+<ol type="1">
+<li><p>Download the data file <code>hdd0318cy.sas7bdat</code>.</p></li>
+<li><p>Use <code>read_sas</code> in library <code>haven</code> to read the data.</p></li>
+<li><p>Filter the data to have only patients of the year 2018 (<code>yod==18</code>)</p></li>
+<li><p>Select to work with only following variables:</p></li>
+</ol>
+<p><em>Notice</em>: You may want to save the current data to your computer for easy access later. To save the data file use <code>write_csv(df, 'midterm.csv')</code>, for example.</p>
+<ol start="5" type="1">
+<li><p>What are variables that have missing values?</p></li>
+<li><p>Remove all variables with missing values.</p></li>
+<li><p>Refer to the data description in the file <code>HDD2015-18cy6-20-19.docx</code>, which variable recording the month of admission?, which variable recording the month of discharge?</p></li>
+<li><p>Which month admitted the most number of patients? Which month admitted the most number of male patients?</p></li>
+<li><p>Which month has the most number of teenage female patients?</p></li>
+<li><p>Which provider has the most number of female patients in October?</p></li>
+<li><p>Is female patients older than male patients, on average?</p></li>
+<li><p>Calculate the average age of patients by months. Which month has the oldest patients on average age?</p></li>
+<li><p>What is the name of the provider that has the highest total charge?</p></li>
+<li><p>What is the name of the provider that has the least total charge for teenage male on average?</p></li>
+<li><p>Create a season (Spring, Summer, Fall, Winter) variable. Calculate the length of stays by season. Which season has the longest length of stays on average?</p></li>
+<li><p>On average, how much a 20 year-old male get charged for staying 1 day in the Fall season?</p></li>
+<li><p>Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points.</p></li>
+</ol>
+<hr>
+</section>
+<section id="ii.-data-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="ii.-data-visualization">II. Data Visualization</h2>
+<p>Continue with the data from part I.</p>
+<ol type="1">
+<li><p>Provides at least 10 meaningful plots. Comments on the plots. All plots should have title, caption, appropriate labels on x and y-axis</p></li>
+<li><p>Make an animation plot.</p></li>
+<li><p>Write a paragraph to summarize the section and give your comments on the results.</p></li>
+</ol>
+<hr>
+</section>
+<section id="iii.-predictive-models" class="level2">
+<h2 class="anchored" data-anchor-id="iii.-predictive-models">III. Predictive Models</h2>
+<p>Continue with the data from part I. Use the follows as the target and input variables:</p>
+<p><em>Target Variable</em>: Create the target variable taking value of</p>
+<ul>
+<li><p><code>low</code> if the total charge of a patient (<code>tot</code>) is smaller than the median of the total charge, and</p></li>
+<li><p><code>high</code> otherwise.</p></li>
+</ul>
+<p><em>Input Variables</em>:</p>
+<ul>
+<li>“provider”,“moa”,“mod”,“admtype”,“campus”, ‘los’,‘diag_adm’</li>
+</ul>
+<hr>
+<ol type="1">
+<li><p>Use <code>filter</code> function to filter out rows where <code>raceethn==''</code> or <code>admtype==''</code>. Make sure all the categorical variables are factor, numeric variables are numeric. Set Training : Testing Split = 10 : 90</p></li>
+<li><p>Train a decision tree using <code>rpart</code>. Plot the decision tree. Plot the variable importance ranked by the tree.</p></li>
+<li><p>Using caret for this question. Set <code>Training Control</code> to be: Use Cross-Validation of 5 folds across all models. Train &amp; tune at least 2 different models (i.e.&nbsp;two different values for <code>method=</code> in the train function of caret). Plot the hyper-parameter tuning plots for each model.</p></li>
+<li><p>Plot the comparison of the models in 3.</p></li>
+<li><p>What is your final selection for the model? Test the accuracy of your final model on the test data.</p></li>
+<li><p>Create another <code>target</code> variable (binary), decide the input variables and redo 1 to 5.</p></li>
+<li><p>Write a paragraph to summarize the section and give your comments on the results.</p></li>
+</ol>
+<hr>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
