@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 The midterm has two components: the Rmarkdown notebook (html) and the presentation.  We will do the presentation in class. Post both the notebook and the presentation on your Github page. 
 
-**The notebook:** The notebook should be created using `rmarkdown` (like other assignments). The notebook should have a title. 
+**The notebook:** The notebook should be created using `rmarkdown` or Quarto (like other assignments). The notebook should have a title. 
 
 
 **The Presentation:** Present your results in 5-10 minutes. To make the presentation using Rmarkdown, do the follows: 
@@ -27,6 +27,8 @@ The midterm has two components: the Rmarkdown notebook (html) and the presentati
     - Now you have an Rmarkdown that can be knitted to be a html presentation 
     
 - You can also use the Rmd templates of the class slides. 
+
+- You can also use Quarto to create the presentation: *In Rstudio -> File -> New File -> Quarto Presentation...*
     
 - You do not need to rerun all the codes for the presentation. For example, to show the model comparison, you just need to show the image of the model comparison instead of running all the models again.
     
