@@ -7,6 +7,7 @@ editor: visual
 ---
 
 
+
 ## Instruction
 
 The midterm has two components: the Rmarkdown notebook (html) and the presentation.  We will do the presentation in class. Post both the notebook and the presentation on your Github page. 
@@ -60,13 +61,18 @@ Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ
 - Since this is a large dataset, you could try to run the codes on the smaller dataset, which is a portion of the original dataset before running the codes on the original data.  To create a random subset of the data you could use
 
 
-```{r, eval=FALSE}
+
+::: {.cell}
+
+```{.r .cell-code}
 # find the number of rows of the data
 n = nrow(df)
 
 # subset 1000 rows of the data
 df1 = df[sample(1:n, 1000), ]
 ```
+:::
+
 
 
 -------
@@ -81,7 +87,10 @@ df1 = df[sample(1:n, 1000), ]
     
 4. Select to work with only following variables: 
 
-```{r, eval=FALSE}
+
+::: {.cell}
+
+```{.r .cell-code}
                       "yod", "payfix","pay_ub92","age",  
                       "sex","raceethn","provider","moa", 
                       "yoa","mod","admtype", "asource" , 
@@ -94,6 +103,8 @@ df1 = df[sample(1:n, 1000), ]
                       "campus","er_fee","er_chrg","er_mode","obs_chrg",
                       "obs_hour","psycchrg","nicu_day"
 ```
+:::
+
  
 
 *Notice*:  You may want to save the current data to your computer for easy access later.  To save the data file use `write_csv(df, 'midterm.csv')`, for example.  
@@ -169,3 +180,4 @@ Continue with the data from part I. Use the follows as the target and input vari
 7. Write a paragraph to summarize the section and give your comments on the results. 
 
 -------
+

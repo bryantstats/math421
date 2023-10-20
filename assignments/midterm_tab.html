@@ -410,6 +410,18 @@ fix/overcome them.</p></li>
 Health Hospital Discharge Data. Each row of the data presents a
 patient.</p>
 <p>Link: <a href="https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ" class="uri">https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ</a></p>
+<p><strong>Notice</strong></p>
+<ul>
+<li>Since this is a large dataset, you could try to run the codes on the
+smaller dataset, which is a portion of the original dataset before
+running the codes on the original data. To create a random subset of the
+data you could use</li>
+</ul>
+<pre class="r"><code># find the number of rows of the data
+n = nrow(df)
+
+# subset 1000 rows of the data
+df1 = df[sample(1:n, 1000), ]</code></pre>
 <hr />
 </div>
 <div id="i.-data-wranggling" class="section level2">
