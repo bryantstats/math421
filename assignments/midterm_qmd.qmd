@@ -1,6 +1,6 @@
 
 ---
-title: "M421 Statistics Analysis with R"
+title: "M421 - Midterm Projects: RI Hospital Data"
 format: 
   html:
     toc: true
