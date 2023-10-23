@@ -4,7 +4,7 @@
     <title> Modeling: Universal Framework</title>
     <meta charset="utf-8" />
     <meta name="author" content=" Son Nguyen " />
-    <script src="libs/header-attrs-2.16/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.21/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
@@ -212,7 +212,7 @@ cm$overall[1]
 
 ```
 ##  Accuracy 
-## 0.7819549
+## 0.8157895
 ```
 
 ---
@@ -233,7 +233,7 @@ cm$overall[1]
 
 ```
 ##  Accuracy 
-## 0.7894737
+## 0.8383459
 ```
 
 ---
@@ -248,16 +248,16 @@ varImp(model1)
 ```
 ## rpart2 variable importance
 ## 
-##           Overall
-## Sexmale   100.000
-## Fare       57.450
-## Pclass3    52.297
-## Age        25.498
-## Parch      11.809
-## EmbarkedS   7.402
-## SibSp       5.760
-## EmbarkedQ   1.203
-## Pclass2     0.000
+##            Overall
+## Sexmale   100.0000
+## Fare       80.6302
+## Pclass3    74.9213
+## Age        46.8959
+## Parch      17.6597
+## SibSp      15.4525
+## EmbarkedS   9.4607
+## Pclass2     0.9702
+## EmbarkedQ   0.0000
 ```
 
 ---
@@ -274,13 +274,13 @@ varImp(model2)
 ## 
 ##           Overall
 ## Sexmale   100.000
-## Fare       55.597
-## Age        38.815
-## Pclass3    18.803
-## SibSp      10.556
-## Parch       9.180
-## EmbarkedS   4.606
-## Pclass2     1.150
+## Fare       67.184
+## Age        48.652
+## Pclass3    29.739
+## SibSp      13.615
+## Parch      10.680
+## Pclass2     4.881
+## EmbarkedS   4.324
 ## EmbarkedQ   0.000
 ```
 
@@ -304,7 +304,12 @@ varImp(model2)
 
 &lt;img src="11_predictive_modeling_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 
+---
+# Other Models
 
+Find all the available models at
+
+[Available Models](https://topepo.github.io/caret/available-models.html)
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

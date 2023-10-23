@@ -259,5 +259,10 @@ plot(varImp(model1)) #<<
 plot(varImp(model2)) #<<
 ```
 
+---
+# Other Models
 
+Find all the available models at
+
+[Available Models](https://topepo.github.io/caret/available-models.html)
 
