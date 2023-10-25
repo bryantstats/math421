@@ -1,4 +1,3 @@
-
 ---
 title: "M421 - Midterm Projects: RI Hospital Data"
 format: 
@@ -6,6 +5,7 @@ format:
     toc: true
 editor: visual
 ---
+
 
 ## Instruction
 
@@ -59,13 +59,18 @@ Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ
 
 -   Since this is a large dataset, you could try to run the codes on the smaller dataset, which is a portion of the original dataset before running the codes on the original data. To create a random subset of the data you could use
 
-```{r, eval=FALSE}
+
+::: {.cell}
+
+```{.r .cell-code}
 # find the number of rows of the data
 n = nrow(df)
 
 # subset 1000 rows of the data
 df1 = df[sample(1:n, 1000), ]
 ```
+:::
+
 
 ------------------------------------------------------------------------
 
@@ -79,7 +84,10 @@ df1 = df[sample(1:n, 1000), ]
 
 4.  Select to work with only following variables:
 
-```{r, eval=FALSE}
+
+::: {.cell}
+
+```{.r .cell-code}
                       "yod", "payfix","pay_ub92","age",  
                       "sex","raceethn","provider","moa", 
                       "yoa","mod","admtype", "asource" , 
@@ -92,6 +100,8 @@ df1 = df[sample(1:n, 1000), ]
                       "campus","er_fee","er_chrg","er_mode","obs_chrg",
                       "obs_hour","psycchrg","nicu_day"
 ```
+:::
+
 
 *Notice*: You may want to save the current data to your computer for easy access later. To save the data file use `write_csv(df, 'midterm.csv')`, for example. Also notice that, empty values in the data before writing to csv may turn to NAs later when you re-read the file. 
 
@@ -166,3 +176,4 @@ Continue with the data from part I. Use the follows as the target and input vari
 7.  Write a paragraph to summarize the section and give your comments on the results.
 
 ------------------------------------------------------------------------
+

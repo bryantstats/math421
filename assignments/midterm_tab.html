@@ -447,7 +447,9 @@ the data.</p></li>
                       &quot;obs_hour&quot;,&quot;psycchrg&quot;,&quot;nicu_day&quot;</code></pre>
 <p><em>Notice</em>: You may want to save the current data to your
 computer for easy access later. To save the data file use
-<code>write_csv(df, &#39;midterm.csv&#39;)</code>, for example.</p>
+<code>write_csv(df, &#39;midterm.csv&#39;)</code>, for example. Also notice
+that, empty values in the data before writing to csv may turn to NAs
+later when you re-read the file.</p>
 <ol start="5" style="list-style-type: decimal">
 <li><p>What are variables that have missing values?</p></li>
 <li><p>Remove all variables with missing values.</p></li>

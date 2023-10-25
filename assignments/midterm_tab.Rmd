@@ -63,7 +63,7 @@ Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ
 
 - Since this is a large dataset, you could try to run the codes on the smaller dataset, which is a portion of the original dataset before running the codes on the original data.  To create a random subset of the data you could use
 
-```{r}
+```{r, eval=FALSE}
 # find the number of rows of the data
 n = nrow(df)
 
@@ -99,7 +99,7 @@ df1 = df[sample(1:n, 1000), ]
 ```
  
 
-*Notice*:  You may want to save the current data to your computer for easy access later.  To save the data file use `write_csv(df, 'midterm.csv')`, for example.  
+*Notice*:  You may want to save the current data to your computer for easy access later.  To save the data file use `write_csv(df, 'midterm.csv')`, for example.  Also notice that, empty values in the data before writing to csv may turn to NAs later when you re-read the file. 
 
 5. What are variables that have missing values?
  
