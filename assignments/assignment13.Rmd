@@ -32,9 +32,9 @@ knitr::opts_chunk$set(message = FALSE)
 
 **1.** Download the `netflix_titles` at this [link](../data/netflix_titles.csv).  Create a century variable taking two values:
 
-    - '21' if the released_year is greater or equal to 2000, and
-    
-    - '20' otherwise. 
+  - `21` if the released_year is greater or equal to 2000, and
+  
+  - `20` otherwise. 
     
 **2. Word Frequency**    
 
@@ -60,23 +60,23 @@ knitr::opts_chunk$set(message = FALSE)
   
   b. Create variable century2 taking three following values. (Hint: You can use the case_when function to do this)
 
-    - `21` if released_year is greater or equal to 2000
-    
-    - `second_half_20`if released_year is greater than or equal to 1950 and less than 2000
-    
-    - `first_half_20` otherwise
+  - `21` if released_year is greater or equal to 2000
+  
+  - `second_half_20`if released_year is greater than or equal to 1950 and less than 2000
+  
+  - `first_half_20` otherwise
     
   Predict century2 using the descriptions. Give the accuracy and plot the confusion matrix table. (Notice that the codes for 8 should still work for this question)
 
 **6.** Create another categorical variable from the data and do the following
 
-    - Plot side-by-side word frequency by different categories of the newly created variable
-    
-    - Plot word clouds on different categories of the newly created variable
-    
-    - Do sentiment analysis to compare different categories of the newly created variable
-    
-    - Predict the newly created variable using the description. Give the accuracy and plot the confusion matrix table. 
+  - Plot side-by-side word frequency by different categories of the newly created variable
+  
+  - Plot word clouds on different categories of the newly created variable
+  
+  - Do sentiment analysis to compare different categories of the newly created variable
+  
+  - Predict the newly created variable using the description. Give the accuracy and plot the confusion matrix table. 
     
 -------
 
@@ -90,10 +90,10 @@ We will study the Animal Crossing Data at [Kaggle](https://www.kaggle.com/jessem
 
 **9.** Do the follows. Notice that the text information is in the `text` variable. 
 
-    - Plot side-by-side word frequency by different categories of the `rating` variable
-    
-    - Plot word clouds on different categories of the `rating` variable
-    
-    - Do sentiment analysis to compare different categories of the `rating` variable
-    
-    - Predict the rating using the reviews (`text` variable). Give the accuracy and plot the confusion matrix table.
+  - Plot side-by-side word frequency by different categories of the `rating` variable
+  
+  - Plot word clouds on different categories of the `rating` variable
+  
+  - Do sentiment analysis to compare different categories of the `rating` variable
+  
+  - Predict the rating using the reviews (`text` variable). Give the accuracy and plot the confusion matrix table.
