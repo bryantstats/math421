@@ -100,7 +100,9 @@ Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ
 
 16. On average, how much a 20 year-old male get charged for staying 1 day in the Fall season?
 
-17. Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points. 
+17. Find the top three diagnosis at admission (`diag_adm`).  Find the top three diagnosis at admission for patients from 7 to 17 years old.
+
+18. Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points. 
 
 -------
 
