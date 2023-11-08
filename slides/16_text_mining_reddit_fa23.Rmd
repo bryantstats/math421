@@ -1,0 +1,128 @@
+---
+title: "Twitter Mining with rtweet"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: united
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+![](reddit.png)
+
+In this section, we will use do analyze text data scraping from [Reddit](https://www.reddit.com/), an American social news aggregation, content rating, and discussion website. We will use the package `RedditExtractoR` to help use collect the data.
+
+https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
+
+```{r}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+```
+
+#
+
+```{r}
+df <- find_thread_urls(sort_by="top", subreddit = 'college')
+```
+
+```{r}
+write_csv(df, "reddit_college.csv")
+```
+
+
+```{r}
+df = read_csv("reddit_college.csv")
+```
+```{r}
+df$date_time = as.POSIXct(df$timestamp)
+df = drop_na(df)
+
+# Create a time variable
+df$time = format(as.POSIXct(df$date_time), format = "%H:%M:%S")
+
+# change time to hours
+df$hours = as.numeric(hms(df$time), "hours")
+hist(df$hours)
+```
+
+## 
+
+```{r}
+df %>% 
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>% 
+  head(10) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+```
+
+We notice that there are some words that have only one letter in the frequency. We can filter out these words
+
+```{r}
+df %>% 
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>% 
+  filter(nchar(word)>1) %>% 
+  head(20) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+```
+
+```{r}
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  filter(nchar(word)>1, word!="college") %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
+
+
+
+##
+
+
+```{r}
+df %>% 
+  unnest_tokens(input = text, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>% 
+  filter(nchar(word)>1) %>% 
+  head(20) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+
+```
+
+
+
+```{r}
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  unnest_tokens(input = text, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  filter(nchar(word)>1, word!="college") %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
