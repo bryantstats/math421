@@ -72,7 +72,7 @@ The collected dataset has two text columns `title` and `text`.  We can create so
 The `timestamp` variable can give us the time of the day for the threads. We can convert the time to hours (numeric value from 0 to 24).
 
 ```{r}
-df$date_time = as.POSIXct(df$timestamp)
+df$date_time = as.POSIXct(df$timestamp, origin="1970-01-01")
 df = drop_na(df)
 
 # Create a time variable

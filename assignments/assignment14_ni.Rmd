@@ -1,0 +1,214 @@
+
+---
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+  pdf_document: default
+  word_document: default
+title: "Assignment 14: Reddit - Text Mining"
+---
+
+![](reddit.png)
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment14.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+```
+
+-------
+
+In this Assignment we will analyze text data scrapped from [Reddit](https://www.reddit.com/), an American social news aggregation, content rating, and discussion website. We will use the package `RedditExtractoR` to help use collect the data.
+
+To learn more about about the package:
+
+https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
+
+We use the function `find_thread_urls` to collect the threads in the subreddit `college`. 
+
+```{r, eval=FALSE}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+
+df <- find_thread_urls(sort_by="new", subreddit = 'college')
+```
+
+We can save the data for faster access later and also limit our number of times to inquire the data from Reddit. 
+
+```{r, eval=FALSE}
+write_csv(df, "reddit_college.csv")
+```
+
+
+```{r}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+df = read_csv("reddit_college.csv")
+```
+
+## Data Wranggling
+
+The collected dataset has two text columns `title` and `text`.  We can create some categorical variables for our analysis.  
+
+The `timestamp` variable can give us the time of the day for the threads. We can convert the time to hours (numeric value from 0 to 24).
+
+```{r}
+df$date_time = as.POSIXct(df$timestamp, origin="1970-01-01")
+df = drop_na(df)
+
+# Create a time variable
+df$time = format(as.POSIXct(df$date_time), format = "%H:%M:%S")
+
+# change time to hours
+df$hours = as.numeric(hms(df$time), "hours")
+hist(df$hours)
+```
+
+We can create categorical variables for our analysis. 
+
+```{r}
+# Create binary variable
+df$day_night = case_when(((df$hours >= 7)&(df$hours<=17))~ "day",
+                         TRUE ~ "night")
+
+df$threads = case_when(df$comments > 2 ~ "Long",
+                         TRUE ~ "Short")
+
+```
+
+
+## Words Cloud
+
+```{r}
+df %>% 
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>% 
+  head(20) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+```
+
+We notice that there are some words that have only one letter in the frequency. We can filter out these words
+
+```{r}
+df %>% 
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>% 
+  filter(nchar(word)>1) %>% 
+  head(20) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+```
+
+
+```{r}
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  filter(nchar(word)>1, word!="college") %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
+
+
+## Sentiment Analysis
+
+```{r}
+df %>%
+    unnest_tokens(input = title, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(day_night, word, sort = TRUE) %>%
+    group_by(day_night) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(day_night) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(day_night, n, fill=sentiment))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency', x ='')
+
+```
+
+
+## Modeling
+
+Let's train a model to predict from the title if a thread is long (more than 2 comments) or short (no more than 2 comments).
+
+```{r}
+library(caret)
+library(themis)
+library(textrecipes)
+library(tidyverse)
+
+df = read_csv('reddit_college.csv')
+
+df$threads = case_when(df$comments > 2 ~ "Long",
+                         TRUE ~ "Short")
+
+# Select data and set target 
+df <- df %>% 
+  mutate(target = threads) %>% 
+  select(target, title) 
+
+# Convert text data to numeric variables
+a <- recipe(target~title,
+       data = df) %>% 
+  step_tokenize(title) %>% 
+  step_tokenfilter(title, max_tokens = 100) %>% 
+  step_tfidf(title) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_smote(target) %>% 
+  prep()
+df <- juice(a)
+
+# Using Caret for modeling
+set.seed(12345)
+splitIndex <- createDataPartition(df$target, p = .7, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+forest_ranger <- train(target~., data=df_train, 
+                        method = "ranger")
+
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target)
+cm$overall[1]
+
+d = data.frame(pred = pred, obs = df_test$target)
+library(yardstick)
+d %>% conf_mat(pred, obs) %>% autoplot
+```
+
+---
+
+## Question
+
+Collect data from Reddit to do text mining (word clouds, sentiment analysis and modelling) for at least two text variables. 
