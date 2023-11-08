@@ -14,3 +14,9 @@ lubridate
 knitr
 RColorBrewer
 wordcloud
+lattice
+caret
+recipes
+themis
+textrecipes
+yardstick
