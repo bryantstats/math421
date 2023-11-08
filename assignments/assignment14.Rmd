@@ -101,7 +101,7 @@ df %>%
   unnest_tokens(input = title, output = word) %>% 
   anti_join(get_stopwords()) %>% 
   count(word, sort = TRUE) %>% 
-  head(10) %>% 
+  head(20) %>% 
   ggplot(aes(x = n, y = reorder(word, n))) +
   geom_col() +
   labs(y = '', x = 'Frequency')
@@ -205,6 +205,6 @@ library(yardstick)
 d %>% conf_mat(pred, obs) %>% autoplot
 ```
 
-## Questions
+## Question
 
 Collect data from Reddit to do text mining (word clouds, sentiment analysis and modelling) for at least two text variables. 
