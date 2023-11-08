@@ -2,6 +2,8 @@
 ---
 output: 
   html_document:
+    toc: yes
+    toc_float: yes
   pdf_document: default
   word_document: default
 title: "Assignment 14: Reddit - Text Mining"
@@ -204,6 +206,8 @@ d = data.frame(pred = pred, obs = df_test$target)
 library(yardstick)
 d %>% conf_mat(pred, obs) %>% autoplot
 ```
+
+---
 
 ## Question
 
