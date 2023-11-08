@@ -1,0 +1,16 @@
+RedditExtractoR
+tidytext
+ggplot2
+ggpubr
+tidyverse
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+knitr
+RColorBrewer
+wordcloud

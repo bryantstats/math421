@@ -7,6 +7,8 @@ output:
 title: "Assignment 14: Reddit - Text Mining"
 ---
 
+![](reddit.png)
+
 ***How to do it?***: 
 
 - Open the Rmarkdown file of this assignment ([link](assignment14.Rmd)) in Rstudio. 
