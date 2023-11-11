@@ -1,0 +1,137 @@
+
+---
+title: "Text Mining: Network of Words"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse, middle, center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(knitr)
+library(kableExtra)
+df <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-20/netflix_titles.csv')
+
+library(ggraph)
+library(igraph)
+library(ggraph)
+library(widyr)
+library(tidytext)
+
+
+df %>%
+  unnest_tokens(input = description, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, show_id, sort = TRUE) %>% 
+  pairwise_count(word, show_id, sort = TRUE, upper = FALSE) %>%
+  filter(n>30) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void()
+```
+
+
+
+
+```{r}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+
+df <- find_thread_urls(sort_by="new", subreddit = 'college')
+
+library(ggraph)
+library(igraph)
+library(ggraph)
+library(widyr)
+library(tidytext)
+
+my_stopwords <- tibble(word = letters)
+
+
+
+df %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  anti_join(my_stopwords) %>%
+  count(word, timestamp, sort = TRUE) %>% 
+  pairwise_count(word, timestamp, sort = TRUE, upper = FALSE) %>%
+  filter(n>5) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void()
+
+
+
+
+```
+
+
+```{r}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+
+df <- find_thread_urls(sort_by="top", subreddit = 'tennis')
+
+library(ggraph)
+library(igraph)
+library(ggraph)
+library(widyr)
+library(tidytext)
+
+my_stopwords <- tibble(word = letters)
+
+
+
+df %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  anti_join(my_stopwords) %>%
+  count(word, timestamp, sort = TRUE) %>% 
+  pairwise_count(word, timestamp, sort = TRUE, upper = FALSE) %>%
+  filter(n>5) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void()
+
+
+
+
+```
+
+## Correlations
+
