@@ -20,6 +20,8 @@
 |**Midterm**| [Toc](assignments/midterm_toc.html), [Rmd](assignments/midterm_toc.Rmd) <br> [Tab](assignments/midterm_tab.html), [Rmd](assignments/midterm_tab.Rmd) <br> [Quarto](assignments/midterm_qmd.html), [Qmd](assignments/midterm_qmd.qmd) | | |
 |13. Text Mining| [Slides](slides/15_text.html),  <br> [Sample Codes](assignments/text_mining_sample_codes2.html) |[Assignment 13](assignments/assignment13.html) | | 
 |14. Text Mining - Reddit|  |[Assignment 14](assignments/assignment14.html) | [Extra Credits](assignments/assignment14_extra.html)  | 
+|15. Functions: If-Else Statement| [Slides](gganimate/17_writing_functions.html) |[Assignment 15](assignments/assignment15.html) | | 
+
 
 
 
