@@ -45,13 +45,13 @@ library(tidyverse)
 library(knitr)
 library(lubridate)
 
-df <- find_thread_urls(sort_by="new", subreddit = 'college')
+df <- find_thread_urls(sort_by="new", subreddit = 'forest')
 ```
 
 We can save the data for faster access later and also limit our number of times to inquire the data from Reddit. 
 
 ```{r, eval=FALSE}
-write_csv(df, "reddit_college.csv")
+write_csv(df, "reddit_forest.csv")
 ```
 
 
