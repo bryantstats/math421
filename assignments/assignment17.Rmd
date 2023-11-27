@@ -87,7 +87,7 @@ Do the following to estimate $\pi$
 - We have the area of a circle is calculated by $A_1 = \pi r^2$, and the area of the bounding square is $A_2 = 4r^2$. We have
 
 $$
-\frac{\pi}{4} = \frac{\pi r^2}{4r^2} = \frac{A_1}{A_2} = \frac{\text{Number of Points within the circle}}{\text{Total Number of Points}}
+\frac{\pi}{4} = \frac{\pi r^2}{4r^2} = \frac{A_1}{A_2}  \approx \frac{\text{Number of Points within the circle}}{\text{Total Number of Points}}
 $$
 
 
