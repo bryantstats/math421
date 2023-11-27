@@ -1,0 +1,97 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 17: Data Simulation"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment17.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+-------
+
+**Notice:** *In this assignment, all the plot should have title, caption, and axis labels. *
+
+### 1. Simulating Data for a model
+
+Suppose we want to simulate data from the following linear model
+
+$$
+y = 2 + 3 x + \epsilon
+$$
+where $\epsilon \sim N(0, 1)$. 
+
+To simulate data, we first need specify values for $x$.  We use `rnorm` to generate data from the normal distribution and `runif` to generate data from the uniform distribution.
+
+```{r}
+n = 1000
+x = runif(n = n, 0, 10)
+e = rnorm(n=100, mean = 0, sd = 1)
+y = 2+3*x + e
+```
+Use the linear model to estimate the coefficient with the simulated the data. 
+
+```{r}
+lm(y~x)
+```
+
+We see that the linear model does a very good job estimating the true value of the coefficients.
+
+Do the follows.
+
+- Simulate data for the following model and use linear model to recover the coefficients. How well the linear model fits the data?
+
+$$
+y = 2 + 3 x_1 + 4x_2 + \epsilon
+$$
+where $\epsilon \sim N(0, 2)$. 
+
+### 2. Simulating Data to test the Central Limit Theorem
+
+The central limit theorem says that the sample means of any distribution follows the normal distribution with the same population mean. Do the follows to verify the theorem
+
+- Generate 1000 samples from uniform distribution, each sample has the size $n$
+- Calculate the means of all the samples
+- Plot the histogram of the means and verify that the histogram shows the normal distribution of the means. 
+
+Redo the above steps for the distribution of the number of values getting when rolling a die. [Hint: Use `sample(1, 6, n, replace = TRUE)` to generate samples from rolling a die]
+
+### 3. (Monte Carlo Methods) Estimating Pi
+
+![](sim.png)
+
+Do the following to estimate $\pi$
+
+- Generating n = 1000 values of $x$ from -1 to 1 using `runif`
+
+- Generating n = 1000 values of $y$ from -1 to 1 using `runif`
+
+- We have the area of a circle is calculated by $A_1 = \pi r^2$, and the area of the bounding square is $A_2 = 4r^2$. We have
+
+$$
+\frac{\pi}{4} = \frac{\pi r^2}{4r^2} = \frac{A_1}{A_2} = \frac{\text{Number of Points within the circle}}{\text{Total Number of Points}}
+$$
+
+- Counting the number of points $(x,y)$ within the circle by counting the number of points such that $x^2 + y^2 \leq 1$. 
+
+- Estimating $\pi$ from the above equation.
+
+- Increase the value of $n$ for more accurate estimation for $\pi$.
+
+
