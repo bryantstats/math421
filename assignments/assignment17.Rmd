@@ -66,8 +66,10 @@ where $\epsilon \sim N(0, 2)$.
 
 The central limit theorem says that the sample means of any distribution follows the normal distribution with the same population mean. Do the follows to verify the theorem
 
-- Generate 1000 samples from uniform distribution, each sample has the size $n$
+- Generate m = 10,000 samples from uniform distribution, each sample has the size $n = 1000$
+
 - Calculate the means of all the samples
+
 - Plot the histogram of the means and verify that the histogram shows the normal distribution of the means. 
 
 Redo the above steps for the distribution of the number of values getting when rolling a die. [Hint: Use `sample(1, 6, n, replace = TRUE)` to generate samples from rolling a die]
