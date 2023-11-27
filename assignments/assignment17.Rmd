@@ -55,7 +55,7 @@ We see that the linear model does a very good job estimating the true value of t
 
 Do the follows.
 
-- Simulate data for the following model and use linear model to recover the coefficients. How well the linear model fits the data?
+- Simulate data for the following model and use linear model to recover the coefficients. How well the linear model fits the data? Hint: Use `lm(y ~ x1 + x2)` for multiple linear regression.
 
 $$
 y = 2 + 3 x_1 + 4x_2 + \epsilon
