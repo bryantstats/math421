@@ -23,6 +23,7 @@
 |15. Functions: If-Else Statement| [Slides](gganimate/17_writing_functions.html) |[Assignment 15](assignments/assignment15.html) | |
 |16. Functions: Loop| [Slides](gganimate/18_writing_functions.html)  |[Assignment 16](assignments/assignment16.html) | |
 |17. Data Simulation|  |[Assignment 17](assignments/assignment17.html) | |
+|**Final Project**|[Project](final/final.html), [Rmd](final/final.Rmd)  | | | 
 
 
 
