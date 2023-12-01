@@ -391,7 +391,7 @@ the data.</p>
 ## 
 ## Coefficients:
 ## (Intercept)            x  
-##       1.991        2.993</code></pre>
+##       1.929        3.015</code></pre>
 <p>We see that the linear model does a very good job estimating the true
 value of the coefficients.</p>
 <p>Do the follows.</p>
@@ -412,9 +412,11 @@ distribution follows the normal distribution with the same population
 mean. Do the follows to verify the theorem</p>
 <ul>
 <li><p>Generate m = 10,000 samples from uniform distribution, each
-sample has the size <span class="math inline">\(n =
-1000\)</span></p></li>
-<li><p>Calculate the means of all the samples</p></li>
+sample has the size <span class="math inline">\(n = 1000\)</span>. Hint:
+Generate <span class="math inline">\(m \times n\)</span> random numbers
+and organize them in a matrix where each columns is a sample.</p></li>
+<li><p>Calculate the means of each samples (The column means of the
+matrix)</p></li>
 <li><p>Plot the histogram of the means and verify that the histogram
 shows the normal distribution of the means.</p></li>
 </ul>
