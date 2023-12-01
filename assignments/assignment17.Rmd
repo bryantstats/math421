@@ -72,7 +72,7 @@ The central limit theorem says that the sample means of any distribution follows
 
 - Plot the histogram of the means and verify that the histogram shows the normal distribution of the means. 
 
-Redo the above steps for the distribution of the number of values getting when rolling a die. [Hint: Use `sample(1, 6, n, replace = TRUE)` to generate samples from rolling a die]
+Redo the above steps for the distribution of the number of values getting when rolling a die. [Hint: Use `sample(c(1: 6), n, replace = TRUE)` to generate samples from rolling a die]
 
 ### 3. (Monte Carlo Methods) Estimating Pi
 
