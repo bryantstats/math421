@@ -66,7 +66,7 @@ where $\epsilon \sim N(0, 2)$.
 
 The central limit theorem says that the sample means of any distribution follows the normal distribution with the same population mean. Do the follows to verify the theorem
 
-- Generate m = 10,000 samples from uniform distribution, each sample has the size $n = 1000$. Hint: Generate $m \times n$ random numbers and organize them in a matrix where each columns is a sample.  
+- Generate m = 10,000 samples from an uniform distribution, each sample has the size $n = 1000$. Hint: Generate $m \times n$ random numbers and organize them in a matrix where each columns is a sample.  
 
 - Calculate the means of each samples (The column means of the matrix)
 
