@@ -8,9 +8,18 @@ output:
     logo: logo.png
     source_code: embed
     social: menu
+    theme: 
+      version: 4
+      bootswatch: minty
+
 
 runtime: shiny
 ---
+
+```{r setup, include = FALSE, context = "server"}
+bslib::bs_themer()
+```
+
 
 ```{r global, include=FALSE}
 # load data in 'global' chunk so it can be shared by all users of the dashboard
