@@ -14,6 +14,12 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 [Statistics Analysis with R](https://bryantstats.github.io/math421/)
 
+## Office Hours:
+
+WF: 12-2pm or by appointment
+
+[Office hour Zoom Link](https://bryant.zoom.us/j/4419675207)
+
 ## Course Description
 
 This course covers the application of R in a wide range of subjects in data analysis. The statistics subjects include descriptive statistics; data visualization; probability distribution; predictive modelling; unsupervised learning. Students also learn about how to write functions in R, Rmarkdown, and various R famous packages such as tidyverse, ggplot2, caret, dplyr.
@@ -28,11 +34,6 @@ After completing this course, you should be able to
 -   implement a variety of techniques in statistical unsupervised learning on data using R.\
 -   produce a data-interactive document and slides presentation to communicate their works using R.
 
-## Office Hours:
-
-TR: 11-12:30pm, F: 1-3pm or by appointment
-
-[Office hour Zoom Link](https://bryant.zoom.us/j/4419675207)
 
 ## Grades
 
