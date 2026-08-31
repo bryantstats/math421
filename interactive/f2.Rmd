@@ -1,0 +1,78 @@
+---
+title: "Titanic"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    logo: logo.png
+    source_code: embed
+    social: menu
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(knitr)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+
+# Create a ggplot object
+p <- df %>% 
+  mutate(Survived = factor(Survived)) %>% 
+  ggplot()+ 
+  geom_bar(mapping=aes(x=Sex, fill=Survived), 
+           position = 'fill')+
+  labs(y='Proportion', fill='Survived')
+
+# Create a data
+d <- df %>% group_by(Sex) %>% summarise(Survived=mean(Survived))
+
+```
+
+What is this? {.sidebar}
+=======================================================================
+
+### 1
+
+The streaming data is a 1-week-delayed livestream of download
+logs from  cran.rstudio.com. The server code for that service is at [jcheng5/cransim](https://github.com/jcheng5/cransim).
+
+### 2
+
+Main Tab 1
+=======================================================================
+
+Column {data-width=500, .tabset}
+-----------------------------------------------------------------------
+
+### Tab 1
+
+```{r}
+kable(d)
+```
+
+
+### Tab 2 
+
+```{r}
+
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r}
+p
+```
+
+### Chart D
+
+```{r}
+ggplotly(p)
+```
+
+
+Main Tab 2
+=======================================================================

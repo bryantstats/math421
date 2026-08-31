@@ -1,0 +1,13 @@
+name: app2_2
+title: app2_2
+username:
+account: fa20
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3142619
+bundleId: 3809640
+url: https://fa20.shinyapps.io/app2_2/
+when: 1604303376.32687
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: a1.R|a10.R|a11.R|a2.R|a2_1.R|a2_3.R|a3.R|a4.R|a5.R|a6.R|a7.R|a8.R|a9.R|covid19.csv|final2.Rmd

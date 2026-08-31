@@ -1,0 +1,76 @@
+---
+title: "Titanic"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    logo: logo.png
+    source_code: embed
+    social: menu
+---
+
+```{r setup, include=FALSE}
+
+```
+
+{.sidebar}
+=======================================================================
+
+Insert text or code here
+
+Main Tab 1
+=======================================================================
+
+Column {data-width=500, .tabset}
+-----------------------------------------------------------------------
+
+### Table 1
+
+Insert text or code here
+
+### Table 2
+
+Insert text or code here
+
+### Table 3 
+
+Insert text or code here
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Chart C
+
+Insert text or code here
+
+### Chart D
+
+Insert text or code here
+
+Main Tab 2
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+Insert text or code here
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Chart C
+
+Insert text or code here
+
+### Chart D
+
+Insert text or code here
+
+Main Tab 3
+=======================================================================
+
+Main Tab 4
+=======================================================================
+
+Main Tab 5
+=======================================================================
