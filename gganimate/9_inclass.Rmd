@@ -1,0 +1,72 @@
+---
+title: "gganimate"
+output: html_document
+date: "2024-10-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Loads the library
+library(tidyverse)
+```
+
+
+```{r}
+# Read in the data
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
+```
+
+
+```{r}
+# Take out some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+# Set the target variable
+df <- df %>% rename(target = Survived)
+
+
+
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         Embarked = as.factor(Embarked),
+         Sex = as.factor(Sex)
+         )
+
+```
+
+
+```{r}
+# Replace NA of Age by its mean
+mean_age <- mean(df$Age, na.rm=TRUE)
+df$Age <- replace_na(df$Age, mean_age)
+# Drop all rows that has an NA
+df = drop_na(df)
+
+```
+
+
+
+```{r}
+library(caret)
+set.seed(2020)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+```
+
+
+```{r}
+library(rpart) #load the rpart package
+# Create a tree
+tree_model <- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
+library(rattle)
+fancyRpartPlot(tree_model)
+
+```
+

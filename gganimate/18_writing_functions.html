@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title> Writing Functions - Loop</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=" Son Nguyen " />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <img src="figures/Thanksgiving-Day.jpg" /> Writing Functions - Loop
+### <font size="5"> Son Nguyen </font>
+
+---
+
+
+&lt;style&gt;
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 1em 1em 1em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide &gt; h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide &gt; h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide &gt; h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+&lt;/style&gt;
+
+&lt;style type="text/css"&gt;
+.left-code {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 59%;
+  float: right;
+  padding-left: 1%;
+}
+
+.pull-left {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.pull-right {
+  width: 58%;
+  float: right;
+  padding-left: 2%;
+}
+
+
+.left-column {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.right-column {
+  width: 58%;
+  float: right;
+  padding-left: 2%;
+}
+
+
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Loop
+
+---
+# Task
+
+
+
+
+.pull-left[
+
+
+
+
+|Name                                                | Age|Sex    |Survived |
+|:---------------------------------------------------|---:|:------|:--------|
+|Braund, Mr. Owen Harris                             |  22|male   |0        |
+|Cumings, Mrs. John Bradley (Florence Briggs Thayer) |  38|female |1        |
+|Heikkinen, Miss. Laina                              |  26|female |1        |
+|Futrelle, Mrs. Jacques Heath (Lily May Peel)        |  35|female |1        |
+|Allen, Mr. William Henry                            |  35|male   |0        |
+- For each passenger, print out a sentence reporting the name and the age. 
+
+]
+
+.pull-right[]
+
+
+---
+# Task
+
+.pull-left[
+
+
+|Name                                                | Age|Sex    |Survived |
+|:---------------------------------------------------|---:|:------|:--------|
+|Braund, Mr. Owen Harris                             |  22|male   |0        |
+|Cumings, Mrs. John Bradley (Florence Briggs Thayer) |  38|female |1        |
+|Heikkinen, Miss. Laina                              |  26|female |1        |
+|Futrelle, Mrs. Jacques Heath (Lily May Peel)        |  35|female |1        |
+|Allen, Mr. William Henry                            |  35|male   |0        |
+- For each passenger, print out a sentence reporting the name and the age. 
+
+]
+
+.pull-right[
+
+
+```r
+for (i in 1:5)
+{
+  print(paste0(df$Name[i], ' is ', df$Age[i], ' year old.'))
+}
+```
+
+]
+
+
+---
+# Task
+
+.pull-left[
+
+
+|Name                                                | Age|Sex    |Survived |
+|:---------------------------------------------------|---:|:------|:--------|
+|Braund, Mr. Owen Harris                             |  22|male   |0        |
+|Cumings, Mrs. John Bradley (Florence Briggs Thayer) |  38|female |1        |
+|Heikkinen, Miss. Laina                              |  26|female |1        |
+|Futrelle, Mrs. Jacques Heath (Lily May Peel)        |  35|female |1        |
+|Allen, Mr. William Henry                            |  35|male   |0        |
+- For each passenger, print out a sentence reporting the name and the age. 
+
+]
+
+.pull-right[
+
+
+```r
+for (i in 1:5)
+{
+  print(paste0(df$Name[i], ' is ', df$Age[i], ' year old.'))
+}
+```
+
+```
+## [1] "Braund, Mr. Owen Harris is 22 year old."
+## [1] "Cumings, Mrs. John Bradley (Florence Briggs Thayer) is 38 year old."
+## [1] "Heikkinen, Miss. Laina is 26 year old."
+## [1] "Futrelle, Mrs. Jacques Heath (Lily May Peel) is 35 year old."
+## [1] "Allen, Mr. William Henry is 35 year old."
+```
+
+]
+
+---
+# Loop through a vector
+
+
+.pull-left[
+
+- Loop through a vector and print out all element of the vector.
+
+]
+
+.pull-right[
+
+
+
+
+]
+
+---
+# Loop through a vector
+
+
+.pull-left[
+
+- Loop through a vector and print out all element of the vector.
+
+]
+
+.pull-right[
+
+
+
+```r
+x &lt;- c('b','r','y','a','n','t')
+for (i in x)
+{
+  print(i)
+}
+```
+
+]
+
+---
+# Loop through a vector
+
+
+.pull-left[
+
+- Loop through a vector and print out all element of the vector.
+
+]
+
+.pull-right[
+
+
+
+```r
+x &lt;- c('b','r','y','a','n','t')
+for (i in x)
+{
+  print(i)
+}
+```
+
+```
+## [1] "b"
+## [1] "r"
+## [1] "y"
+## [1] "a"
+## [1] "n"
+## [1] "t"
+```
+
+]
+
+---
+# Loop through a data frame
+
+.pull-left[
+
+- Loop through variables of a data frame and print the number of missing for each variable
+
+
+
+
+]
+
+.pull-right[
+
+
+]
+
+
+---
+# Loop through a data frame
+
+.pull-left[
+
+- Loop through variables of a data frame and print the number of missing for each variable
+
+
+
+
+]
+
+.pull-right[
+
+
+
+```r
+for (i in df)
+{ 
+  print(sum(is.na(i)))
+}
+```
+
+]
+
+---
+# Loop through a data frame
+
+.pull-left[
+
+- Loop through variables of a data frame and print the number of missing for each variable
+
+
+
+
+]
+
+.pull-right[
+
+
+```r
+for (i in df)
+{ 
+  print(sum(is.na(i)))
+}
+```
+
+```
+## [1] 0
+## [1] 0
+## [1] 0
+## [1] 0
+## [1] 177
+## [1] 0
+## [1] 0
+## [1] 2
+```
+
+]
+
+---
+# Loop through a data frame
+
+
+.pull-left[
+
+- Print out the types of variables for each columns in a data frame
+
+
+
+
+]
+
+.pull-right[
+
+]
+
+---
+# Loop through a data frame
+
+
+.pull-left[
+
+- Print out the types of variables for each columns in a data frame
+
+]
+
+.pull-right[
+
+
+
+
+
+```r
+for (i in 1:length(df))
+{
+  print(class(df[[i]]))
+}
+```
+
+]
+
+
+---
+# Loop through a data frame
+
+
+.pull-left[
+
+- Print out the types of variables for each columns in a data frame
+
+]
+
+.pull-right[
+
+
+```r
+for (i in 1:length(df))
+{
+  print(class(df[[i]]))
+}
+```
+
+```
+## [1] "factor"
+## [1] "factor"
+## [1] "factor"
+## [1] "numeric"
+## [1] "numeric"
+## [1] "numeric"
+## [1] "factor"
+```
+
+]
+
+
+---
+class: center, inverse, middle
+
+# Map functions
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+]
+
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+
+
+```r
+for (i in 1:length(df))
+{
+  class(df[[i]])
+}
+```
+
+- The above is the same as
+
+
+```r
+library(purrr)
+map_df(df, class)
+```
+
+]
+
+
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+- Rewrite the following codes using a `map` function
+
+
+```r
+for (i in 1:length(df))
+{
+  length(df[[i]])
+}
+```
+
+]
+
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+- Rewrite the following codes using a `map` function
+
+
+```r
+for (i in 1:length(df))
+{
+  length(df[[i]])
+}
+```
+
+
+- Rewrite:
+
+
+```r
+library(purrr)
+map_df(df, length)
+```
+
+]
+
+
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+- Rewrite the following codes using a `map` function
+
+
+```r
+for (i in 1:length(df))
+{
+  mean(df[[i]])
+}
+```
+
+
+]
+
+
+
+
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+- Rewrite the following codes using a `map` function
+
+
+```r
+for (i in 1:length(df))
+{
+  mean(df[[i]])
+}
+```
+
+
+- Rewrite:
+
+
+```r
+library(purrr)
+map_df(df, mean)
+```
+
+]
+
+
+
+
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+- Rewrite the following codes using a `map` function
+
+
+```r
+for (i in 1:length(df))
+{
+  sum(is.na(df[[i]]))
+}
+```
+
+]
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+- Rewrite the following codes using a `map` function
+
+
+```r
+for (i in 1:length(df))
+{
+  sum(is.na(df[[i]]))
+}
+```
+
+
+- Rewrite:
+
+
+```r
+library(purrr)
+map_df(df, ~sum(is.na(.)))
+```
+
+]
+
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+- Rewrite the following codes using a `map` function
+
+
+```r
+for (i in 1:length(df))
+{
+  sum(is.na(df[[i]]))
+}
+```
+
+
+- Rewrite:
+
+
+```r
+library(purrr)
+map_df(df, ~sum(is.na(.)))
+```
+
+- Notice that `map_df(df, sum(is.na)` would not work because `sum(is.na)` is not a function!
+
+]
+
+
+
+
+---
+class: inverse, center, middle
+
+# Write functions with Loop
+
+---
+# Example 
+
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - a data frame with all the missing of non-numeric variables replaced by the associated modes. 
+
+]
+
+.pull-right[
+
+]
+
+
+
+---
+# Example 
+
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - a data frame with all the missing of non-numeric variables replaced by the associated modes. 
+
+]
+
+.pull-right[
+
+- We use the `mode_impute` function from last class
+
+
+
+
+
+```r
+numeric_impute &lt;- function(d)
+{
+  for (i in 1:length(d))
+  {
+      d[[i]] &lt;- mode_impute(d[[i]])
+  }
+  return(d)
+}
+```
+]
+---
+# Example 
+
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - a data frame with all the missing of non-numeric variables replaced by the associated modes. 
+
+]
+
+.pull-right[
+
+- We use the `mode_impute` function from last class
+
+
+
+
+
+```r
+numeric_impute &lt;- function(d)
+{
+  for (i in 1:length(d))
+  {
+      d[[i]] &lt;- mode_impute(d[[i]])
+  }
+  return(d)
+}
+```
+
+- Test the function
+
+
+```r
+colSums(is.na(df))
+```
+
+```
+## Survived   Pclass      Sex      Age    SibSp     Fare Embarked 
+##        0        0        0      177        0        0        2
+```
+
+
+```r
+d1 &lt;- numeric_impute(df)
+colSums(is.na(d1))
+```
+
+```
+## Survived   Pclass      Sex      Age    SibSp     Fare Embarked 
+##        0        0        0      177        0        0        0
+```
+
+]
+
+---
+# Map function
+
+---
+# Map function
+
+.pull-left[
+
+- When you apply the same function to all columns of a data frame, 
+
+- you could use a map function in the `purrr` package to make the code simpler
+
+]
+
+.pull-right[
+
+
+```r
+numeric_impute &lt;- function(d)
+{
+  for (i in 1:length(d))
+  {
+      d[[i]] &lt;- mode_impute(d[[i]])
+  }
+  return(d)
+}
+```
+
+- The above is the same as
+
+
+```r
+numeric_impute &lt;- function(d)
+{
+  d &lt;- map_df(d, mode_impute)
+  return(d)
+}
+```
+]
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - Density plots of all numeric variables.  
+]
+
+.pull-right[
+]
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - Density plots of all numeric variables.  
+]
+
+.pull-right[
+
+
+```r
+density_plot &lt;- function(d)
+{
+  library(ggplot2)
+  for (i in 1:length(d))
+  {
+    if (is.numeric(d[[i]]))
+    {
+      print(ggplot(d, aes(x = d[[i]]))+ 
+              geom_density()+
+              labs(x = names(d)[i]))
+    }
+  }
+}
+```
+
+]
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - Density plots of all numeric variables.  
+]
+
+.pull-right[
+
+- Test the function
+
+
+```r
+density_plot(df)
+```
+
+![](Figs/unnamed-chunk-37-1.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-37-2.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-37-3.png)&lt;!-- --&gt;
+
+
+]
+
+---
+class: inverse, center, middle
+
+# Double Loop
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the scatter plots.  
+]
+
+.pull-right[
+
+
+]
+
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the scatter plots.  
+]
+
+.pull-right[
+
+
+```r
+scatter_plot &lt;- function(d)
+{
+  library(ggplot2)
+  l &lt;- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if (is.numeric(d[[i]])&amp;is.numeric(d[[j]]))
+    {
+      print(ggplot(d, aes(x = d[[i]], y = d[[j]]))+ 
+              geom_point()+
+              labs(x = names(d)[i], y = names(d)[j]))
+    }
+  }
+}
+```
+]
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the scatter plots.  
+]
+
+.pull-right[
+
+- Test the function
+
+
+
+
+
+
+
+```r
+scatter_plot(df)
+```
+
+![](Figs/unnamed-chunk-39-1.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-39-2.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-39-3.png)&lt;!-- --&gt;
+
+]
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the density plots of a numeric variable colored by a non-numeric variable.  
+]
+
+.pull-right[
+]
+
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the density plots of a numeric variable colored by a non-numeric variable.  
+]
+
+.pull-right[
+
+
+```r
+density_plot2 &lt;- function(d)
+{
+  library(ggplot2)
+  l &lt;- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if (is.numeric(d[[i]])&amp; (!is.numeric(d[[j]])))
+    {
+      print(ggplot(d, aes(x = d[[i]], color = d[[j]]))+ 
+              geom_density()+labs(x = names(d)[i], color = names(d)[j]))
+    }
+  }
+}
+```
+
+
+
+]
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the density plots of a numeric variable colored by a non-numeric variable.  
+]
+
+.pull-right[
+
+
+```r
+density_plot2 &lt;- function(d)
+{
+  library(ggplot2)
+  l &lt;- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if (is.numeric(d[[i]])&amp; (!is.numeric(d[[j]])))
+    {
+      print(ggplot(d, aes(x = d[[i]], color = d[[j]]))+ 
+              geom_density()+labs(x = names(d)[i], color = names(d)[j]))
+    }
+  }
+}
+```
+
+
+- Test the function
+
+
+```r
+density_plot2(df)
+```
+
+
+]
+
+---
+# Test the function
+
+
+```r
+density_plot2(df)
+```
+
+![](Figs/unnamed-chunk-43-1.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-43-2.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-43-3.png)&lt;!-- --&gt;
+
+
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the bar plots of a non-numeric variable filled by a non-numeric variable.  
+
+]
+
+.pull-right[
+
+
+```r
+bar_plot2 &lt;- function(d)
+{
+  library(ggplot2)
+  l &lt;- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if ((!is.numeric(d[[i]])) &amp; (!is.numeric(d[[j]])))
+    {
+      print(ggplot(d, aes(x = d[[i]], fill = d[[j]])) + 
+              geom_bar(position = 'dodge')+
+              labs(x = names(d)[i], fill = names(d)[j]))
+    }
+  }
+}
+```
+]
+
+
+---
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the bar plots of a non-numeric variable filled by a non-numeric variable.  
+
+]
+
+.pull-right[
+
+
+
+```r
+bar_plot2 &lt;- function(d)
+{
+  library(ggplot2)
+  l &lt;- length(d)
+  for (i in 1:(l-1))
+    for (j in (i+1):l)
+  {
+    if ((!is.numeric(d[[i]])) &amp; (!is.numeric(d[[j]])))
+    {
+      print(ggplot(d, aes(x = d[[i]], fill = d[[j]])) + 
+              geom_bar(position = 'dodge')+
+              labs(x = names(d)[i], fill = names(d)[j]))
+    }
+  }
+}
+```
+
+- Test the function
+
+
+```r
+bar_plot2(df)
+```
+
+
+
+]
+
+---
+# Test the function
+
+
+```r
+bar_plot2(df)
+```
+
+![](Figs/unnamed-chunk-47-1.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-47-2.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-47-3.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-47-4.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-47-5.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-47-6.png)&lt;!-- --&gt;
+
+---
+exclude: true
+
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the bar plots of a non-numeric variable filled by a non-numeric variable.  
+  - all possible the density plots of a numeric variable colored by a non-numeric variable.  
+  - all possible the scatter plots.  
+]
+
+.pull-right[
+
+
+
+
+]
+
+
+
+---
+exclude: true
+
+
+# Example 
+
+.pull-left[
+
+Write the following function.  Give an example to test your function. 
+
+- Input: 
+
+   - a data frame
+
+- Output: 
+
+  - all possible the bar plots of a non-numeric variable filled by a non-numeric variable.  
+  - all possible the density plots of a numeric variable colored by a non-numeric variable.  
+  - all possible the scatter plots.  
+]
+
+.pull-right[
+
+
+```r
+quickplot &lt;- function(d)
+{
+  density_plot2(d)
+  scatter_plot(d)
+  bar_plot2(d)
+}
+```
+
+]
+
+
+
+---
+# Test the function
+
+
+
+
+```r
+df2 &lt;- read_csv('insurance.csv')
+quickplot(df2)
+```
+
+![](Figs/unnamed-chunk-49-1.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-2.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-3.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-4.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-5.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-6.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-7.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-8.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-9.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-10.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-11.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-12.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-13.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-14.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-15.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-49-16.png)&lt;!-- --&gt;
+
+---
+# Test the function
+
+
+```r
+quickplot(df)
+```
+
+![](Figs/unnamed-chunk-50-1.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-2.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-3.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-4.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-5.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-6.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-7.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-8.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-9.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-10.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-11.png)&lt;!-- --&gt;![](Figs/unnamed-chunk-50-12.png)&lt;!-- --&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">\n  <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">\n  </div>\n</div>`"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
