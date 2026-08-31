@@ -118,6 +118,7 @@ Late assignments are penalized 10% for each day late. You can resubmit your work
 -   Text Mining
 -   Writing a function
 -   Shiny Applications
+-   R with AI/Large Language Models (LLM)
 
 ## Academic Misconduct
 
