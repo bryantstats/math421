@@ -1,0 +1,22 @@
+---
+title: "Assignment 1"
+format: html
+editor: visual
+---
+
+Follow this steps to set up your working environment and publish the first assignment to Github Page. All other assignments should also be in your Github Page. 
+
+- Download and Install R at: https://cran.r-project.org/bin/windows/base/old/4.1.1
+
+- Download and Install Rstudio at:
+https://download1.rstudio.org/desktop/windows/RStudio-2022.07.1-554.exe
+
+- Download and Install Git at: https://github.com/git-for-windows/git/releases/download/v2.37.3.windows.1/Git-2.37.3-64-bit.exe
+
+- While waiting for the installation, sign up for an account at Github: https://github.com/
+
+- Create a sample Rmarkdown file and publish it to your Github Page.  Follow the instruction in this video:   https://www.loom.com/share/3d6e0766edc0403badfc9df2bad4bb7f
+
+- Your Github Page should look like this: https://bryantstudent2021.github.io/
+
+**Submission**:  Submit the link of your Github Page to Canvas under "Assignment 1"

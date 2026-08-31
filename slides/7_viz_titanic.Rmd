@@ -1,0 +1,228 @@
+
+---
+title: "Some aspects of ggplot2 - Titanic Version"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    
+
+---
+class: inverse, middle, center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+
+class: inverse, middle, center
+# Combine multiple graphs with the same aes
+
+---
+```{r, message=FALSE}
+library(tidyverse)
+library(knitr)
+library(ggplot2)
+df <- read_csv('../data/titanic.csv')
+df <- df %>% 
+  mutate(Survived = as.character(Survived),
+         Pclass = as.character(Pclass))
+```
+
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_point(mapping=aes(x=Age, y=Fare))
+```
+
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_point(mapping=aes(x=Age, y=Fare))+
+  geom_smooth(mapping=aes(x=Age, y=Fare))
+```
+---
+class: inverse, middle, center
+# Facets
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_point(mapping=aes(x=Age, y=Fare))+
+  facet_wrap(~Pclass)
+```
+
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_point(mapping=aes(x=Age, y=Fare))+
+  facet_wrap(~Pclass+Sex)
+```
+
+---
+class: inverse, middle, center
+# Position adjustments
+---
+
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_bar(mapping=aes(x=Sex, fill=Survived), 
+           position = 'dodge')
+```
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_bar(mapping=aes(x=Sex, fill=Survived), 
+           position = 'fill')
+```
+---
+class: inverse, middle, center
+
+# geom_bar vs. geom_col
+---
+**geom_bar for one categorical variable**
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_bar(mapping=aes(x=Pclass))
+```
+
+---
+**geom_col for one categorical variable and one continuous variable**
+```{r, fig.height=6}
+df %>% group_by(Pclass) %>% 
+  summarise(average_age=mean(Age, na.rm=TRUE)) %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x=Pclass, y=average_age))
+```
+
+---
+class: inverse, middle, center
+# Labels/Title
+
+---
+
+```{r,  eval=FALSE}
+df %>% 
+  group_by(Pclass, Sex) %>% 
+  summarise(average_age=mean(Age, na.rm=TRUE)) %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x=Pclass, 
+                       y=average_age, 
+                       fill=Sex), 
+           position = 'dodge')+
+  labs(x='Class in the Titanic', 
+       y = 'Average Age', 
+       fill='Gender', 
+       title = 'Average Age of Passenger by Class and Gender', 
+       caption = 'The higher the class, the younger the passengers.')
+```
+
+---
+
+
+```{r,  echo=FALSE}
+df %>% 
+  group_by(Pclass, Sex) %>% 
+  summarise(average_age=mean(Age, na.rm=TRUE)) %>% 
+  ggplot()+ 
+  geom_col(mapping=aes(x=Pclass, 
+                       y=average_age, 
+                       fill=Sex), 
+           position = 'dodge')+
+  labs(x='Class in the Titanic', 
+       y = 'Average Age', 
+       fill='Gender', 
+       title = 'Average Age of Passenger by Class and Gender', 
+       caption = 'The higher the class, the younger the passengers.')
+```
+
+
+---
+class: inverse, middle, center
+
+# Change Themes
+
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+    geom_bar(mapping=aes(x=Sex, fill=Survived))
+```
+
+---
+```{r, fig.height=6}
+df %>% ggplot()+ 
+    geom_bar(mapping=aes(x=Sex, fill=Survived))+
+  theme_dark()
+```
+
+---
+
+```{r}
+df %>% ggplot()+ 
+    geom_bar(mapping=aes(x=Sex, fill=Survived))+
+  theme_linedraw()
+```
+
+---
+# More Themes
+
+- https://ggplot2.tidyverse.org/reference/ggtheme.html
+
+---
+**`ggthemes` package**
+
+```{r, fig.height=6}
+df %>% ggplot()+ 
+  geom_point(mapping=aes(x=Age, y=Fare, color=Survived))+
+  facet_wrap(~Sex)
+```
+
+---
+**`ggthemes` package**
+
+```{r, fig.height=6}
+library(ggthemes)
+df %>% ggplot()+ 
+  geom_point(mapping=aes(x=Age, y=Fare, color=Survived))+
+  facet_wrap(~Sex)+
+  scale_color_stata()
+```
+
+---
+**Save plots**
+```{r, fig.height=6}
+gg <- df %>% ggplot()+ 
+    geom_bar(mapping=aes(x=Sex, fill=Survived))+
+  theme_dark()
+ggsave(filename = 'abc.png', plot = gg)
+```
+
+---
+class: inverse, middle, center
+# dplyr + ggplot
+
+
+---
+**filter + ggplot**
+
+```{r,out.height = '450px'}
+df %>% 
+    filter(Age>=13, Age<=19) %>% 
+    ggplot()+
+    geom_bar(mapping=aes(x=Sex, fill=Survived))
+```
+
+---
+**group_by + summarise + geom_col**
+
+```{r,out.height = '400px'}
+df %>% 
+  group_by(Survived, Pclass) %>% 
+  summarise(mean_fare = Fare) %>% 
+  ggplot()+
+  geom_col(aes(x=Pclass, y=mean_fare, fill=Survived), position = 'dodge')
+```
+

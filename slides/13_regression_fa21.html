@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Predictive Modeling - Regression</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Predictive Modeling - Regression
+
+---
+
+# Regression vs. Classification
+
+-  When the target variable is categorical, we have classification problem. For example, predict if a patient has cancer or not. Predict an image is a dog image or cat image.  
+
+-  When the target variable is continuous, we have a regression problem. For example, predict a salary of a fresh graduate, predict the average temperature next year. 
+
+-  A regression model can be evaluated using R-squared. In caret, R-squared is the correlation between the observed and predicted values (i.e. R) and squaring the value. 
+
+---
+# Predicting the age of a passenger
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```r
+library(tidyverse)
+library(rpart)
+library(caret)
+df = read_csv("../data/titanic.csv")
+# Remove some columns
+df &lt;- df %&gt;% select(-PassengerId, -Ticket, -Name, -Cabin)
+# Set the target variable
+names(df)[4] &lt;- 'target'
+df &lt;- df %&gt;% drop_na(target)
+# Correct variables' types
+df$Survived &lt;- factor(df$Survived)
+df$Pclass = factor(df$Pclass)
+df$Sex &lt;- factor(df$Sex)
+df$Embarked &lt;- factor(df$Embarked)
+df = drop_na(df)
+set.seed(00000)
+splitIndex &lt;- createDataPartition(df$target, p = .70, list = FALSE)
+# Split the data to train and test
+df_train &lt;- df[ splitIndex,]
+df_test &lt;- df[-splitIndex,]
+```
+
+
+---
+class: inverse, center, middle
+# Decision Tree
+
+---
+
+```r
+library(rpart) #load the rpart package
+# Create a tree
+tree_model &lt;- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
+library(rattle)
+fancyRpartPlot(tree_model)
+```
+
+![](regression_fa21_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+# Variables Importance
+
+
+```r
+barplot(tree_model$variable.importance)
+```
+
+![](regression_fa21_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+# Evaluation on Test Data
+
+```r
+pred &lt;- predict(tree_model, df_test)
+postResample(pred = pred, obs = df_test$target)
+```
+
+```
+##       RMSE   Rsquared        MAE 
+## 12.8838482  0.2237229  9.8724197
+```
+
+---
+class: inverse, middle, center
+# Random Forest with Ranger
+
+---
+
+```r
+library(ranger)
+rf &lt;- ranger(target ~ ., 
+                   num.trees = 100, mtry = 4, importance = "impurity", data = df_train)
+
+pred_rf &lt;- predict(rf, df_test)$predictions
+
+postResample(pred = pred_rf, obs = df_test$target)
+```
+
+```
+##       RMSE   Rsquared        MAE 
+## 12.3620634  0.2845753  9.1566117
+```
+
+---
+
+
+```r
+df_test %&gt;% mutate(predicted = predict(rf, df_test)$predictions) %&gt;% 
+      ggplot(aes(predicted, target)) + geom_point(colour = "#ff6767", alpha = 0.3) +
+      labs(title = "Predicted and observed") +  theme_bw(18)
+```
+
+![](regression_fa21_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+# Variable Importance
+
+```r
+barplot(rf$variable.importance)
+```
+
+![](regression_fa21_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, middle, center
+# Random Forest using Caret
+
+---
+
+```r
+forest_ranger &lt;- train(target~., data=df_train, 
+                       method = "ranger", num.trees = 100)
+pred &lt;- predict(forest_ranger, df_test)
+postResample(pred = pred, obs = df_test$target)
+```
+
+```
+##       RMSE   Rsquared        MAE 
+## 12.1280489  0.3053816  9.1814747
+```
+
+---
+class: inverse, middle, center
+# Model Comparison using Caret
+
+---
+
+```r
+trControl = trainControl(method = "cv",
+                         number = 10)
+
+tree &lt;- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl)
+
+forest_ranger &lt;- train(target~., data=df_train, 
+                    method = "ranger", 
+                                trControl = trControl)
+
+glm &lt;- train(target~., data=df_train, 
+                                method = "glm", 
+                                trControl = trControl)
+
+results &lt;- resamples(list('Decision Tree' = tree,
+                          'Random Forest' = forest_ranger,
+                          'Generalized Linear Model'= glm))
+
+bwplot(results)
+```
+
+---
+![](regression_fa21_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

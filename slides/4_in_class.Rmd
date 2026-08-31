@@ -1,0 +1,47 @@
+---
+title: "In Class Codes 4"
+author: "Son Nguyen"
+date: "2024-09-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+```
+
+```{r}
+df %>% 
+    select(state, date, death) %>% 
+    filter(date >="2021-01-01", date<"2022-01-01") %>% 
+    filter(state == "RI" | state == "MA" | state== "CT") %>% 
+    group_by(state) %>% 
+    summarise(average_death = mean(death, na.rm=TRUE)) %>% 
+    arrange(-average_death)
+```
+
+```{r}
+df %>% 
+    mutate(wd2 = weekdays(date)) %>% 
+    filter(state == "RI") %>% 
+    group_by(wd2) %>% 
+    summarise(median_death_RI = median(death, na.rm=TRUE)) %>% 
+    arrange(-median_death_RI)
+
+
+# Create a new variable using base R
+df$wd = weekdays(df$date)
+
+# filter out RI
+df1 = df[df$state=="RI",]
+
+# calculate by groups
+# this wont work with NAs
+ by(data=df1$death, INDICES = df1$wd, median)
+```
+

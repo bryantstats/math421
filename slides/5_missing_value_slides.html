@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Handle Missing Values</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Handle Missing Values
+]
+
+---
+
+class: inverse
+
+
+
+
+
+
+
+
+
+
+
+
+# New Functions
+
+- na_if
+
+- drop_na
+
+- fill
+
+- replace_na
+
+- package: vis_dat, VIM
+
+---
+class: inverse, center, middle
+# Do we need to handle missing values?
+
+---
+class: inverse, center, middle
+# No if just doing some calculations on the data
+
+---
+class: inverse
+
+
+```r
+library(tidyverse)
+df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df %&gt;% summarise(mean_age=mean(Age, na.rm=TRUE))
+```
+
+```
+## # A tibble: 1 × 1
+##   mean_age
+##      &lt;dbl&gt;
+## 1     29.7
+```
+
+---
+class: inverse, center, middle
+# No if just doing Visualization
+
+---
+class: inverse
+
+```r
+df %&gt;% ggplot(aes(x=Age, color=Sex))+
+    geom_density()
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+class: inverse
+# When do we need to handle missing values
+
+- When you know the values of the missing values
+
+
+- When building predictive models
+
+- Other cases?
+
+---
+class: inverse, middle, center
+# Checking the NAs
+
+---
+class: inverse
+
+
+```r
+# Missing values by columns
+colSums(is.na(df))
+```
+
+```
+## Survived   Pclass      Sex      Age    SibSp    Parch     Fare    Cabin 
+##        0        0        0      177        0        0        0      687 
+## Embarked 
+##        2
+```
+---
+class: inverse
+
+
+```r
+# Missing values by columns
+colMeans(is.na(df))
+```
+
+```
+##    Survived      Pclass         Sex         Age       SibSp       Parch 
+## 0.000000000 0.000000000 0.000000000 0.198653199 0.000000000 0.000000000 
+##        Fare       Cabin    Embarked 
+## 0.000000000 0.771043771 0.002244669
+```
+
+
+---
+class: inverse
+# Steps to Handle missing values
+
+- Step 1: Identify all the forms of Missing Values ('Unknown', 'Missing','9999'...) 
+
+- Step 2: Convert them to `NA`
+
+- Step 3:  Handle it
+
+  - Approach 1: Remove rows that have any NAs
+  
+  - Approach 2: Fill NAs with the previous or next value of the column
+  
+  - Approach 3: Replace by the mean, majority or a predicted value. 
+
+---
+class: inverse
+# Step 1: Identify forms of missing
+
+
+```r
+colSums(df=='Missing', na.rm = TRUE)
+```
+
+```
+## Survived   Pclass      Sex      Age    SibSp    Parch     Fare    Cabin 
+##        0        0        0        0        0        0       27        0 
+## Embarked 
+##        0
+```
+
+---
+class: inverse
+# Step 2: Convert all missing to NA 
+
+
+```r
+# Convert Unknown, Missing and Not Available to NA
+df &lt;- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
+```
+
+---
+class: inverse
+# Approach 1: Drop rows
+
+- Drop rows that have any NAs
+
+
+```r
+drop_na(df)
+```
+
+```
+## # A tibble: 167 × 9
+##    Survived Pclass Sex      Age SibSp Parch Fare    Cabin       Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;   
+##  1        1 1      female    38     1     0 71.2833 C85         C       
+##  2        1 1      female    35     1     0 53.1    C123        S       
+##  3        0 1      male      54     0     0 51.8625 E46         S       
+##  4        1 3      female     4     1     1 16.7    G6          S       
+##  5        1 1      female    58     0     0 26.55   C103        S       
+##  6        1 2      male      34     0     0 13      D56         S       
+##  7        1 1      male      28     0     0 35.5    A6          S       
+##  8        0 1      male      19     3     2 263     C23 C25 C27 S       
+##  9        1 2      female    29     0     0 10.5    F33         S       
+## 10        0 3      male      25     0     0 7.65    F G73       S       
+## # ℹ 157 more rows
+```
+
+---
+class: inverse
+
+- Drop rows that have any NAs in Age or Sex
+
+
+```r
+drop_na(df, Age, Sex)
+```
+
+```
+## # A tibble: 689 × 9
+##    Survived Pclass Sex      Age SibSp Parch Fare    Cabin Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1        0 3      male      22     1     0 7.25    &lt;NA&gt;  S       
+##  2        1 1      female    38     1     0 71.2833 C85   C       
+##  3        1 3      female    26     0     0 7.925   &lt;NA&gt;  S       
+##  4        1 1      female    35     1     0 53.1    C123  S       
+##  5        0 3      male      35     0     0 8.05    &lt;NA&gt;  S       
+##  6        0 1      male      54     0     0 51.8625 E46   S       
+##  7        0 3      male       2     3     1 21.075  &lt;NA&gt;  S       
+##  8        1 3      female    27     0     2 11.1333 &lt;NA&gt;  S       
+##  9        1 2      female    14     1     0 30.0708 &lt;NA&gt;  C       
+## 10        1 3      female     4     1     1 16.7    G6    S       
+## # ℹ 679 more rows
+```
+
+---
+class: inverse
+# Drop columns with missing values
+
+
+```r
+df %&gt;% select(-Age, -Sex)
+```
+
+```
+## # A tibble: 891 × 7
+##    Survived Pclass SibSp Parch Fare    Cabin Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1        0 3          1     0 7.25    &lt;NA&gt;  S       
+##  2        1 1          1     0 71.2833 C85   C       
+##  3        1 3          0     0 7.925   &lt;NA&gt;  S       
+##  4        1 1          1     0 53.1    C123  S       
+##  5        0 3          0     0 8.05    &lt;NA&gt;  S       
+##  6        0 3          0     0 8.4583  &lt;NA&gt;  Q       
+##  7        0 1          0     0 51.8625 E46   S       
+##  8        0 3          3     1 21.075  &lt;NA&gt;  S       
+##  9        1 3          0     2 11.1333 &lt;NA&gt;  S       
+## 10        1 2          1     0 30.0708 &lt;NA&gt;  C       
+## # ℹ 881 more rows
+```
+
+---
+class: inverse
+# Approach 2: Fill in missing values with previous or next value
+
+
+```r
+df %&gt;% fill(Age, Sex, Cabin, .direction = 'updown')
+```
+
+```
+## # A tibble: 891 × 9
+##    Survived Pclass Sex      Age SibSp Parch Fare    Cabin Embarked
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   
+##  1        0 3      male      22     1     0 7.25    C85   S       
+##  2        1 1      female    38     1     0 71.2833 C85   C       
+##  3        1 3      female    26     0     0 7.925   C123  S       
+##  4        1 1      female    35     1     0 53.1    C123  S       
+##  5        0 3      male      35     0     0 8.05    E46   S       
+##  6        0 3      male      54     0     0 8.4583  E46   Q       
+##  7        0 1      male      54     0     0 51.8625 E46   S       
+##  8        0 3      male       2     3     1 21.075  G6    S       
+##  9        1 3      female    27     0     2 11.1333 G6    S       
+## 10        1 2      female    14     1     0 30.0708 G6    C       
+## # ℹ 881 more rows
+```
+
+---
+class: inverse
+# Approach 3: Replace Missing values with replace_na
+
+
+```r
+# Replace by the mean (numeric variable)
+mean_age &lt;- mean(df$Age, na.rm=TRUE)
+df$Age &lt;- replace_na(df$Age, mean_age)
+```
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+
+```r
+# Replace by the majority (categorical variable)
+majority_sex &lt;- names(which.max(table(df$Sex)))
+df$Sex &lt;- replace_na(df$Sex, majority_sex)
+```
+
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+
+```r
+# Replace by the majority (categorical variable)
+majority_class &lt;- names(which.max(table(df$Pclass)))
+df$Pclass &lt;- replace_na(df$Pclass, majority_class)
+```
+
+---
+class: inverse, middle, center
+# Package VIM
+
+---
+
+```r
+library(VIM)
+df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df &lt;- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
+```
+
+---
+
+```r
+aggr(df)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, middle, center
+# Package vis_dat
+
+---
+
+
+```r
+library(visdat)
+df &lt;- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+vis_miss(df)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+---
+
+```r
+vis_dat(df)
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+```r
+vis_expect(df, ~.x == 'Missing')
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|
+    x=='Not Available'|is.na(x)})
+```
+
+![](5_missing_value_slides_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

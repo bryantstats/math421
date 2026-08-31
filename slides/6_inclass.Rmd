@@ -1,0 +1,94 @@
+---
+title: "6_inclass"
+output: html_document
+date: "2024-10-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+df <- read_csv('https://bryantstats.github.io/math421/data/all-states-history.csv')
+```
+
+
+
+```{r}
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+
+
+
+df = df %>% mutate(Survived = as.character(Survived), 
+              Pclass = as.character(Pclass))
+
+```
+
+```{r}
+ggplot(df)+
+  geom_bar(mapping = aes(x = Survived))
+```
+
+
+```{r}
+df %>% 
+  ggplot()+
+  geom_bar(mapping = aes(x = Survived, colour = Sex))
+```
+
+
+```{r}
+df %>% 
+  ggplot()+
+  geom_bar(mapping = aes(x = Survived, fill = Sex))
+```
+
+
+```{r}
+df %>% 
+  ggplot()+
+  geom_bar(mapping = aes(x = Survived, fill = Sex))
+```
+
+
+
+```{r}
+df %>% 
+  filter(Pclass == 1) %>% 
+  ggplot()+
+  geom_bar(mapping = aes(x = Survived, fill = Sex))
+```
+
+
+
+```{r}
+df %>% 
+  filter(Pclass == 3) %>% 
+  ggplot()+
+  geom_bar(mapping = aes(x = Survived, fill = Sex))
+```
+
+
+
+
+
+
+```{r}
+df %>% 
+  ggplot()+
+  geom_bar(mapping = aes(x = Sex, fill = Survived), position = "dodge")+
+  facet_wrap(~Pclass)
+```
+
+
+
+```{r, warning=FALSE, message=FALSE}
+df %>% 
+  ggplot(mapping = aes(x = Age, y = Fare))+
+  geom_point()+
+  geom_smooth()
+```
+

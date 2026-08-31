@@ -1,0 +1,21 @@
+---
+title: "Assignment1"
+format: html
+editor: visual
+---
+
+
+This assignment guides you to set up the working environment for the class and publish your work on your webpage. Do the follows
+
+1. Download and Install R at [this link](https://cran.rstudio.com/) 
+2. Download and Install Rsudio at [this link](https://posit.co/download/rstudio-desktop/) 
+3. Download and Install Git at [this link](https://git-scm.com/) 
+4. Download and Install Github Desktop at [this link](https://desktop.github.com/download/)
+5. Create a Github account and a repository
+6. Publish a Github Page for the repository
+7. Create a sample html named Assignment 1 from Rmarkdown or Quarto in Rstudio
+8. Post/Upload the html file on your Github Page
+9. Submit the link of your Github Page to Canvas
+
+[This video]() shows how to do these steps (notice: the video is available after the first class). 
+
