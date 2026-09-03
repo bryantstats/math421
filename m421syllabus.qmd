@@ -16,7 +16,8 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 ## Office Hours:
 
-WF: 12-2pm or by appointment
+Office: 3537
+MTh: 10:15-12:45pm or by appointment
 
 [Office hour Zoom Link](https://bryant.zoom.us/j/4419675207)
 
