@@ -52,7 +52,7 @@ class: center, middle, inverse, title-slide
 Put the following to the console in Rstudio
 
 
-```r
+``` r
 (3+4)^2 - 3^4 - 1/2 - 3*4
 ```
 
@@ -76,7 +76,7 @@ Put the following to the console in Rstudio
 
 - Numeric vectors
 
-```r
+``` r
 x &lt;- c(2,3,4,5,6)
 x
 ```
@@ -92,7 +92,7 @@ x
 
 - Character vectors
 
-```r
+``` r
 x &lt;-  c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
 x
 ```
@@ -106,7 +106,7 @@ x
 - Logical vectors
 
 
-```r
+``` r
 x &lt;- c(TRUE, FALSE, TRUE)
 sum(x)
 ```
@@ -125,7 +125,7 @@ sum(x)
 --
 
 
-```r
+``` r
 x &lt;- c(2, 3, 4, 5, 6)
 y &lt;- c(1, 0, 0, 0, 99)
 x+y
@@ -135,7 +135,7 @@ x+y
 ## [1]   3   3   4   5 105
 ```
 
-```r
+``` r
 x-y
 ```
 
@@ -143,7 +143,7 @@ x-y
 ## [1]   1   3   4   5 -93
 ```
 
-```r
+``` r
 x*y
 ```
 
@@ -158,7 +158,7 @@ x*y
 
 - You can apply a function to vector
 
-```r
+``` r
 x &lt;- c(2, 3, 4, 5, 6)
 y &lt;- c(1, 0, 0, 0, 99)
 x^2
@@ -168,7 +168,7 @@ x^2
 ## [1]  4  9 16 25 36
 ```
 
-```r
+``` r
 log(x)
 ```
 
@@ -176,7 +176,7 @@ log(x)
 ## [1] 0.6931472 1.0986123 1.3862944 1.6094379 1.7917595
 ```
 
-```r
+``` r
 sin(x)
 ```
 
@@ -190,7 +190,7 @@ sin(x)
 # Some functions with vectors
 
 
-```r
+``` r
 x &lt;- c(2, 3, 40, 5, 6)
 mean(x)
 ```
@@ -199,7 +199,7 @@ mean(x)
 ## [1] 11.2
 ```
 
-```r
+``` r
 sum(x)
 ```
 
@@ -207,7 +207,7 @@ sum(x)
 ## [1] 56
 ```
 
-```r
+``` r
 max(x)
 ```
 
@@ -215,7 +215,7 @@ max(x)
 ## [1] 40
 ```
 
-```r
+``` r
 length(x)
 ```
 
@@ -227,7 +227,7 @@ length(x)
 # Some functions with vectors
 
 
-```r
+``` r
 x &lt;- c(2, 3, 40, 5, 6)
 # Standard Deviation
 sd(x)
@@ -237,7 +237,7 @@ sd(x)
 ## [1] 16.17714
 ```
 
-```r
+``` r
 # Index of the maximum element
 which.max(x)
 ```
@@ -246,7 +246,7 @@ which.max(x)
 ## [1] 3
 ```
 
-```r
+``` r
 # Index of the element equaling 40
 which(x==40)
 ```
@@ -260,7 +260,7 @@ which(x==40)
 # Quickly generate vectors
 
 
-```r
+``` r
 c(1:10)
 ```
 
@@ -268,7 +268,7 @@ c(1:10)
 ##  [1]  1  2  3  4  5  6  7  8  9 10
 ```
 
-```r
+``` r
 rep(1, 10)
 ```
 
@@ -276,7 +276,7 @@ rep(1, 10)
 ##  [1] 1 1 1 1 1 1 1 1 1 1
 ```
 
-```r
+``` r
 rep(c(1,2,3), 10)
 ```
 
@@ -284,7 +284,7 @@ rep(c(1,2,3), 10)
 ##  [1] 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3
 ```
 
-```r
+``` r
 # Arithmetic sequences
 seq(1, 2, .2)
 ```
@@ -320,7 +320,7 @@ $$
 
 - **Solution**
 
-```r
+``` r
 x &lt;- c(1:100)
 
 sum(x)
@@ -343,7 +343,7 @@ $$
 - **Solution**
 
 
-```r
+``` r
 x &lt;- c(1:100)
 sum(x^2)
 ```
@@ -365,7 +365,7 @@ $$
 - Solution*
 
 
-```r
+``` r
 x &lt;- c(1:100)
 sum(x^3)/100
 ```
@@ -381,7 +381,7 @@ sum(x^3)/100
 --
 
 
-```r
+``` r
 # Or
 
 mean(x^3)
@@ -406,7 +406,7 @@ $$
 - **Solution**
 
 
-```r
+``` r
 x &lt;- seq(1, 99, 2)
 y &lt;- seq(2, 100, 2)
 
@@ -431,7 +431,7 @@ $$
 - **Solution**
 
 
-```r
+``` r
 x &lt;- c(1:100)
 y &lt;- c(2:101)
 
@@ -467,7 +467,7 @@ $$
 - The sum of the first 1000 terms
 
 
-```r
+``` r
 n &lt;-  1000
 x &lt;-  c(1:n)
 sum(1/x^2)
@@ -481,7 +481,7 @@ sum(1/x^2)
 - The sum of the first 10000 terms
 
 
-```r
+``` r
 n &lt;-  10000
 x &lt;-  c(1:n)
 sum(1/x^2)
@@ -544,9 +544,9 @@ $$
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
