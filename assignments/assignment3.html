@@ -378,29 +378,29 @@ the assignment to Canvas under Assignment 3.</p>
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th align="left">Rank</th>
 <th align="left">Age</th>
 <th align="left">Name</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left">0</td>
 <td align="left">28</td>
 <td align="left">Tom</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">1</td>
 <td align="left">34</td>
 <td align="left">Jack</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">2</td>
 <td align="left">29</td>
 <td align="left">Steve</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">3</td>
 <td align="left">42</td>
 <td align="left">Ricky</td>
@@ -409,8 +409,13 @@ the assignment to Canvas under Assignment 3.</p>
 </table>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Use <code>read.csv</code> to import the Covid19 Vaccination data
-from WHO: <a href="../data/us-states.csv">link</a>.</p></li>
+from WHO: <a href="https://bryantstats.github.io/math421/data/us-states.csv">link</a>.</p></li>
 <li><p>Show the names of the variables in the data</p></li>
+</ol>
+<pre class="r"><code>df = read.csv(&#39;https://bryantstats.github.io/math421/data/us-states.csv&#39;)
+names(df)</code></pre>
+<pre><code>## [1] &quot;date&quot;   &quot;state&quot;  &quot;fips&quot;   &quot;cases&quot;  &quot;deaths&quot;</code></pre>
+<ol start="4" style="list-style-type: decimal">
 <li><p>How many columns and rows the data have?</p></li>
 <li><p>How many missing values are there? Show the missing values by
 columns. What variable has the most number of missing values?</p></li>
@@ -433,7 +438,7 @@ taking the values as follows</p></li>
 </ul>
 <p>Find the frequency and relative frequency of <code>no_death</code>
 and <code>has_death</code>.</p>
-<ol start="11" style="list-style-type: decimal">
+<ol start="12" style="list-style-type: decimal">
 <li><p>Find the first quartile (Q1), second quartile (Q2) and and third
 quartile (Q3) of the variable <code>death</code>. (Hint: Use the
 <code>summary</code> function)</p></li>
@@ -448,7 +453,7 @@ Q3</p></li>
 <li><p><code>high_death</code> if the number of deaths greater than
 Q3</p></li>
 </ul>
-<ol start="13" style="list-style-type: decimal">
+<ol start="14" style="list-style-type: decimal">
 <li><p>Find the average cases in Rhode Island in 2021</p></li>
 <li><p>Find the median cases by weekdays in Rhode Island in
 2021</p></li>
@@ -471,9 +476,9 @@ functions on the data</p></li>
 <li>ifelse</li>
 <li>case_when</li>
 </ul>
-<ol start="17" style="list-style-type: decimal">
-<li>In the dataset in #16, practice the follows. You can reuse the code
-of 16.</li>
+<ol start="18" style="list-style-type: decimal">
+<li>In the dataset in #17, practice the follows. You can reuse the code
+of 17.</li>
 </ol>
 <ul>
 <li>Create a categorical variable from a continuous variable</li>
