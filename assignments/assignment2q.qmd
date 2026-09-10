@@ -1,3 +1,4 @@
+
 ---
 title: "Assignment 2"
 format: html
@@ -29,6 +30,15 @@ knitr::opts_chunk$set(message = FALSE)
 $$
 S = 1 + 4 + 7 + 10 +... + 100
 $$
+
+This is my answer: 
+
+```{r}
+x = seq(1, 100, 3)
+sum(x)
+```
+
+
 
 2.  Calculate:
 
