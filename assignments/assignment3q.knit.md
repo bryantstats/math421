@@ -5,6 +5,7 @@ editor: visual
 ---
 
 
+
 ***How to do it?***: 
 
 - Open the Quarto file of this assignment ([link](assignment3.qmd)) in Rstudio. 
@@ -17,9 +18,9 @@ editor: visual
 
 ***Submission***: Submit the link on Github of the assignment to Canvas. 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = FALSE)
-```
+
+
+
 
 
 -------
@@ -41,10 +42,11 @@ Problems
 
 3. Show the names of the variables in the data
 
-```{r, echo=FALSE, eval=FALSE}
-df = read.csv('https://bryantstats.github.io/math421/data/us-states.csv')
-names(df)
-```
+
+::: {.cell}
+
+:::
+
 
 
 4. How many columns and rows the data have? 
@@ -105,5 +107,6 @@ Find the frequency and relative frequency of `no_death` and `has_death`.
 - From one categorical variable, create a new categorical variable with fewer categories
 
 If you do not have a data, you can use [the titanic dataset](https://www.kaggle.com/competitions/titanic/overview), which can be downloaded at [this link](https://bryantstats.github.io/math421/data/titanic.csv)
+
 
 
