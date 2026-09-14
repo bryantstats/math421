@@ -8,7 +8,7 @@ editor: visual
 
 ***How to do it?***: 
 
-- Open the Quarto file of this assignment ([link](assignment3.qmd)) in Rstudio. 
+- Open the Quarto file of this assignment ([link](assignment3q.qmd)) in Rstudio. 
 
 - Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
 
