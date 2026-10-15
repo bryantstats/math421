@@ -1,4 +1,3 @@
-
 ---
 title: "M421 - Midterm Projects: RI Hospital Data"
 format: 
@@ -23,31 +22,31 @@ The midterm has two components: the Rmarkdown notebook (html) and the presentati
 - Now you have an Rmarkdown that can be knitted to be a html presentation 
 ```
 
--   You can also use the Rmd templates of the class slides.
+- You can also use the Rmd templates of the class slides.
 
--   You can also use Quarto to create the presentation: *In Rstudio -\> File -\> New File -\> Quarto Presentation...*
+- You can also use Quarto to create the presentation: *In Rstudio -\> File -\> New File -\> Quarto Presentation...*
 
--   You do not need to rerun all the codes for the presentation. For example, to show the model comparison, you just need to show the image of the model comparison instead of running all the models again.
+- You do not need to rerun all the codes for the presentation. For example, to show the model comparison, you just need to show the image of the model comparison instead of running all the models again.
 
--   To inset an image in a slide, use `![](image.png)`
+- To inset an image in a slide, use `![](image.png)`
 
--   To scale images, you can use `![](image.png){width="60%"}` or follow these below instructions.
+- To scale images, you can use `![](image.png){width="60%"}` or follow these below instructions.
 
-    -   https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html
+  - https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html
 
-    -   http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/
+  - http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/
 
--   To turn off message and warning of a code cell, use: `{r, message=FALSE, warning=FALSE}` for the cell.
+- To turn off message and warning of a code cell, use: `{r, message=FALSE, warning=FALSE}` for the cell.
 
--   To turn off message and warning of a code cell, use: `{r, message=FALSE, warning=FALSE}` for the cell.
+- To turn off message and warning of a code cell, use: `{r, message=FALSE, warning=FALSE}` for the cell.
 
 **What to present**:
 
--   Present Part 2 - Visualization
+- Present Part 2 - Visualization
 
--   Present Question Question 4, 5 and 6 in Part 3.
+- Present Question Question 4, 5 and 6 in Part 3.
 
--   Present any errors/challenges you run into and how you fix/overcome them.
+- Present any errors/challenges you run into and how you fix/overcome them.
 
 **Data:**
 
@@ -57,7 +56,7 @@ Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ
 
 **Notice**
 
--   Since this is a large dataset, you could try to run the codes on the smaller dataset, which is a portion of the original dataset before running the codes on the original data. To create a random subset of the data you could use
+- Since this is a large dataset, you could try to run the codes on the smaller dataset, which is a portion of the original dataset before running the codes on the original data. To create a random subset of the data you could use
 
 ```{r, eval=FALSE}
 # find the number of rows of the data
@@ -145,13 +144,13 @@ Continue with the data from part I. Use the follows as the target and input vari
 
 *Target Variable*: Create the target variable taking value of
 
--   `low` if the total charge of a patient (`tot`) is smaller than the median of the total charge, and
+- `low` if the total charge of a patient (`tot`) is smaller than the median of the total charge, and
 
--   `high` otherwise.
+- `high` otherwise.
 
 *Input Variables*:
 
--   "provider","moa","mod","admtype","campus", 'los','diag_adm'
+- "provider","moa","mod","admtype","campus", 'los','diag_adm'
 
 ------------------------------------------------------------------------
 
@@ -171,9 +170,7 @@ Continue with the data from part I. Use the follows as the target and input vari
 
 ------------------------------------------------------------------------
 
-
 ```{r, echo=FALSE, eval=FALSE}
 
 
 ```
-
