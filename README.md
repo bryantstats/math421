@@ -18,5 +18,6 @@
 |11. Modeling: Universal Framework| [Slides](gganimate/11_predictive_modeling.html), [Rmd](gganimate/11_predictive_modeling.Rmd) |[Assignment 11](assignments/assignment11.html) | | 
 |12. Modeling: Tuning| [Slides](gganimate/12_predictive_modeling_2.html), [Rmd](gganimate/12_predictive_modeling_2.Rmd) |[Assignment 12](assignments/assignment12.html) | |  
 |**Midterm**|[qmd](assignments/midterm_qmd.html), [Toc](assignments/midterm_toc.html), [Rmd](assignments/midterm_toc.Rmd) <br> [Tab](assignments/midterm_tab.html), [Rmd](assignments/midterm_tab.Rmd) | | |
+|**Final Exam**|Monday, Dec. 14, 12:00pm | | |
 
 
