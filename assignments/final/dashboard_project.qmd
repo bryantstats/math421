@@ -1,5 +1,5 @@
 ---
-title: "Final Project - Building Interactive Dashboards with Quarto"
+title: "Building Interactive Dashboards with Quarto"
 format:
   html:
     toc: true
