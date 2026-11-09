@@ -102,7 +102,6 @@
     code span.wa { color: #ff5555; } /* Warning */
   </style>
   <link rel="stylesheet" href="quarto_dashboards_files/libs/revealjs/dist/theme/quarto-e7615ae3f47a09451c723600273e2044.css">
-  <link rel="stylesheet" href="quarto_dashboards.css">
   <link href="quarto_dashboards_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="quarto_dashboards_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="quarto_dashboards_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -223,7 +222,7 @@ Math 421 · Statistical Analysis with R
 <li><strong>Publish</strong>: GitHub Pages or Posit Connect Cloud</li>
 </ol>
 <div class="fragment">
-<p>All examples use the Titanic data and come from the <a href="../assignments/final/dashboard_project.html">project templates</a>. Every code example is followed by a screenshot of the dashboard it makes.</p>
+<p>All examples use the Titanic data and come from the <a href="../assignments/final/dashboard_project.html">project templates</a>.</p>
 </div>
 </section>
 <section id="static-or-interactive" class="slide level2">
@@ -293,56 +292,32 @@ Math 421 · Statistical Analysis with R
 </section>
 <section id="your-first-dashboard" class="slide level2">
 <h2>Your first dashboard</h2>
-<div class="columns">
-<div class="column" style="width:57%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "My First Dashboard"</span></span>
-<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> dashboard</span></span>
-<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb1-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-9"><a href="" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://bryantstats.github.io/math421/"</span>,</span>
-<span id="cb1-10"><a href="" aria-hidden="true" tabindex="-1"></a>              <span class="st">"data/titanic_final.csv"</span>)</span>
-<span id="cb1-11"><a href="" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url) <span class="sc">|&gt;</span></span>
-<span id="cb1-12"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Survived =</span> <span class="fu">factor</span>(Survived,</span>
-<span id="cb1-13"><a href="" aria-hidden="true" tabindex="-1"></a>                           <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)),</span>
-<span id="cb1-14"><a href="" aria-hidden="true" tabindex="-1"></a>         <span class="at">Pclass =</span> <span class="fu">factor</span>(Pclass))</span>
-<span id="cb1-15"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-16"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">## Row</span></span>
-<span id="cb1-18"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-20"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: Survival by class</span></span>
-<span id="cb1-21"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Pclass, <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
-<span id="cb1-22"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span>
-<span id="cb1-23"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-24"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-26"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: Age</span></span>
-<span id="cb1-27"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Age)) <span class="sc">+</span></span>
-<span id="cb1-28"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span>
-<span id="cb1-29"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div><div class="column" style="width:43%;">
-<p><img data-src="quarto_dashboards_img/first_dashboard.jpg"></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="" aria-label="1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a><span class="an">title:</span><span class="co"> "My First Dashboard"</span></span>
+<span id="cb1-3"><a href="" aria-label="3"></a><span class="an">format:</span><span class="co"> dashboard</span></span>
+<span id="cb1-4"><a href="" aria-label="4"></a><span class="co">---</span></span>
+<span id="cb1-5"><a href="" aria-label="5"></a></span>
+<span id="cb1-6"><a href="" aria-label="6"></a><span class="fu">## Row</span></span>
+<span id="cb1-7"><a href="" aria-label="7"></a></span>
+<span id="cb1-8"><a href="" aria-label="8"></a><span class="in">```{r}</span></span>
+<span id="cb1-9"><a href="" aria-label="9"></a><span class="co">#| title: Survival by class</span></span>
+<span id="cb1-10"><a href="" aria-label="10"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Pclass, <span class="at">fill =</span> Survived)) <span class="sc">+</span> <span class="fu">geom_bar</span>()</span>
+<span id="cb1-11"><a href="" aria-label="11"></a><span class="in">```</span></span>
+<span id="cb1-12"><a href="" aria-label="12"></a></span>
+<span id="cb1-13"><a href="" aria-label="13"></a><span class="in">```{r}</span></span>
+<span id="cb1-14"><a href="" aria-label="14"></a><span class="co">#| title: Age</span></span>
+<span id="cb1-15"><a href="" aria-label="15"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Age)) <span class="sc">+</span> <span class="fu">geom_histogram</span>()</span>
+<span id="cb1-16"><a href="" aria-label="16"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><code>format: dashboard</code> turns the document into a dashboard.</li>
 <li><strong>Each code chunk becomes a card.</strong> <code>#| title:</code> gives the card a title.</li>
-<li><code>#| include: false</code> runs the setup chunk without making a card.</li>
 <li>Two chunks in the same <code>## Row</code> sit side by side.</li>
 </ul>
-</div></div>
-<p><a href="quarto_dashboards_demo/first.qmd">Code</a> · <a href="quarto_dashboards_demo/first.html">Dashboard</a></p>
 </section>
 <section id="pages-rows-and-columns" class="slide level2">
 <h2>Pages, rows, and columns</h2>
 <p>The number of <code>#</code> decides what a heading does.</p>
 <table class="caption-top">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Heading</th>
@@ -363,94 +338,36 @@ Math 421 · Statistical Analysis with R
 <td style="text-align: left;">a column of cards, stacked</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>### Column</code> inside a <code>## Row</code></td>
-<td style="text-align: left;">a column nested in that row (and the other way around)</td>
+<td style="text-align: left;"><code>### Row</code> inside a <code>## Column</code></td>
+<td style="text-align: left;">a row nested in that column</td>
 </tr>
 </tbody>
 </table>
-<p>Size them with attributes: <code>## Row {height=30%}</code>, <code>### Column {width=60%}</code>.</p>
+<p>Size them with attributes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="" aria-label="1"></a><span class="fu">## Row {height=25%}</span></span>
+<span id="cb2-2"><a href="" aria-label="2"></a><span class="fu">## Column {width=60%}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment">
 <p>By default the top level is <strong>rows</strong>. Add <code>orientation: columns</code> under <code>dashboard:</code> in the YAML to start with columns.</p>
-</section>
-<section id="layout-example" class="slide level2">
-<h2>Layout example</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Layout"</span></span>
-<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> dashboard</span></span>
-<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu"># Overview</span></span>
-<span id="cb2-7"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">## Row {height=30%}</span></span>
-<span id="cb2-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="" aria-hidden="true" tabindex="-1"></a>::: {.card title="Card A"}</span>
-<span id="cb2-11"><a href="" aria-hidden="true" tabindex="-1"></a>Row 1, first card</span>
-<span id="cb2-12"><a href="" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-13"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="" aria-hidden="true" tabindex="-1"></a>::: {.card title="Card B"}</span>
-<span id="cb2-15"><a href="" aria-hidden="true" tabindex="-1"></a>Row 1, second card</span>
-<span id="cb2-16"><a href="" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-17"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">## Row {height=70%}</span></span>
-<span id="cb2-19"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column {width=60%}</span></span>
-<span id="cb2-21"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="" aria-hidden="true" tabindex="-1"></a>::: {.card title="Card C"}</span>
-<span id="cb2-23"><a href="" aria-hidden="true" tabindex="-1"></a>Row 2, left column (60% wide)</span>
-<span id="cb2-24"><a href="" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-25"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">### Column {width=40%}</span></span>
-<span id="cb2-27"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="" aria-hidden="true" tabindex="-1"></a>::: {.card title="Card D"}</span>
-<span id="cb2-29"><a href="" aria-hidden="true" tabindex="-1"></a>Row 2, right column, top</span>
-<span id="cb2-30"><a href="" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-31"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="" aria-hidden="true" tabindex="-1"></a>::: {.card title="Card E"}</span>
-<span id="cb2-33"><a href="" aria-hidden="true" tabindex="-1"></a>Row 2, right column, bottom</span>
-<span id="cb2-34"><a href="" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-35"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu"># Details</span></span>
-<span id="cb2-37"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="" aria-hidden="true" tabindex="-1"></a>::: {.card title="Card F"}</span>
-<span id="cb2-39"><a href="" aria-hidden="true" tabindex="-1"></a>A second page</span>
-<span id="cb2-40"><a href="" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div><div class="column" style="width:60%;">
-<p><img data-src="quarto_dashboards_img/layout.jpg"></p>
-<ul>
-<li><code># Overview</code> and <code># Details</code> are the two tabs in the navigation bar.</li>
-<li>Row 1 holds cards A and B side by side.</li>
-<li>Row 2 is split into two columns: C on the left (60%), D and E stacked on the right (40%).</li>
-<li><code>::: {.card title="..."}</code> makes a card from plain text, with no code.</li>
-</ul>
-</div></div>
-<p><a href="quarto_dashboards_demo/layout.qmd">Code</a> · <a href="quarto_dashboards_demo/layout.html">Dashboard</a></p>
+</div>
 </section>
 <section id="sidebars" class="slide level2">
 <h2>Sidebars</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu"># Overview</span></span>
-<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">## {.sidebar}</span></span>
-<span id="cb3-4"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="" aria-hidden="true" tabindex="-1"></a>The sinking of the Titanic is one</span>
-<span id="cb3-6"><a href="" aria-hidden="true" tabindex="-1"></a>of the most infamous shipwrecks</span>
-<span id="cb3-7"><a href="" aria-hidden="true" tabindex="-1"></a>in history.</span>
-<span id="cb3-8"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">## Column</span></span>
-<span id="cb3-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">### Row {height=25%}</span></span>
-<span id="cb3-12"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="" aria-hidden="true" tabindex="-1"></a>(value boxes)</span>
-<span id="cb3-14"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">### Row {height=75%}</span></span>
-<span id="cb3-16"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="" aria-hidden="true" tabindex="-1"></a>(plots)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div><div class="column" style="width:60%;">
-<p><img data-src="quarto_dashboards_img/static_dashboard.jpg"></p>
 <p>Put a sidebar on a page with <code>## {.sidebar}</code>. Text and inputs go inside it.</p>
-</div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="" aria-label="1"></a><span class="fu"># Overview</span></span>
+<span id="cb3-2"><a href="" aria-label="2"></a></span>
+<span id="cb3-3"><a href="" aria-label="3"></a><span class="fu">## {.sidebar}</span></span>
+<span id="cb3-4"><a href="" aria-label="4"></a></span>
+<span id="cb3-5"><a href="" aria-label="5"></a>The sinking of the Titanic is one of the most infamous shipwrecks in history.</span>
+<span id="cb3-6"><a href="" aria-label="6"></a></span>
+<span id="cb3-7"><a href="" aria-label="7"></a><span class="fu">## Column</span></span>
+<span id="cb3-8"><a href="" aria-label="8"></a></span>
+<span id="cb3-9"><a href="" aria-label="9"></a><span class="fu">### Row {height=25%}</span></span>
+<span id="cb3-10"><a href="" aria-label="10"></a></span>
+<span id="cb3-11"><a href="" aria-label="11"></a>(value boxes)</span>
+<span id="cb3-12"><a href="" aria-label="12"></a></span>
+<span id="cb3-13"><a href="" aria-label="13"></a><span class="fu">### Row {height=75%}</span></span>
+<span id="cb3-14"><a href="" aria-label="14"></a></span>
+<span id="cb3-15"><a href="" aria-label="15"></a>(plots)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -467,29 +384,21 @@ Math 421 · Statistical Analysis with R
 </section>
 <section id="tabs" class="slide level2">
 <h2>Tabs</h2>
-<div class="columns">
-<div class="column" style="width:52%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu"># Distributions</span></span>
-<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">## Column {.tabset}</span></span>
-<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: Age</span></span>
-<span id="cb4-7"><a href="" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">color =</span> Survived)) <span class="sc">+</span></span>
-<span id="cb4-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span>
-<span id="cb4-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p)</span>
-<span id="cb4-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-11"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-13"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: Fare</span></span>
-<span id="cb4-14"><a href="" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Fare, <span class="at">color =</span> Survived)) <span class="sc">+</span></span>
-<span id="cb4-15"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span>
-<span id="cb4-16"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p)</span>
-<span id="cb4-17"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div><div class="column" style="width:48%;">
-<p><img data-src="quarto_dashboards_img/tabs.jpg"></p>
-<p>Add <code>{.tabset}</code> to a row or column. Each card in it becomes a tab, and the card titles (<code>Age</code>, <code>Fare</code>) become the tab names.</p>
-</div></div>
+<p>Add <code>{.tabset}</code> to a row or column. Each card in it becomes a tab.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="" aria-label="1"></a><span class="fu"># Distributions</span></span>
+<span id="cb4-2"><a href="" aria-label="2"></a></span>
+<span id="cb4-3"><a href="" aria-label="3"></a><span class="fu">## Column {.tabset}</span></span>
+<span id="cb4-4"><a href="" aria-label="4"></a></span>
+<span id="cb4-5"><a href="" aria-label="5"></a><span class="in">```{r}</span></span>
+<span id="cb4-6"><a href="" aria-label="6"></a><span class="co">#| title: Age</span></span>
+<span id="cb4-7"><a href="" aria-label="7"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">color =</span> Survived)) <span class="sc">+</span> <span class="fu">geom_density</span>()</span>
+<span id="cb4-8"><a href="" aria-label="8"></a><span class="in">```</span></span>
+<span id="cb4-9"><a href="" aria-label="9"></a></span>
+<span id="cb4-10"><a href="" aria-label="10"></a><span class="in">```{r}</span></span>
+<span id="cb4-11"><a href="" aria-label="11"></a><span class="co">#| title: Fare</span></span>
+<span id="cb4-12"><a href="" aria-label="12"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Fare, <span class="at">color =</span> Survived)) <span class="sc">+</span> <span class="fu">geom_density</span>()</span>
+<span id="cb4-13"><a href="" aria-label="13"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The card titles (<code>Age</code>, <code>Fare</code>) become the tab names.</p>
 </section></section>
 <section>
 <section id="part-2-content" class="title-slide slide level1 center" data-background-color="#2c3e50">
@@ -498,79 +407,67 @@ Math 421 · Statistical Analysis with R
 </section>
 <section id="value-boxes" class="slide level2">
 <h2>Value boxes</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| content: valuebox</span></span>
-<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: "Passengers"</span></span>
-<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">icon =</span> <span class="st">"people"</span>, <span class="at">color =</span> <span class="st">"primary"</span>, <span class="at">value =</span> <span class="fu">nrow</span>(df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| content: valuebox</span></span>
-<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: "Survival rate"</span></span>
-<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">icon =</span> <span class="st">"life-preserver"</span>, <span class="at">color =</span> <span class="st">"success"</span>,</span>
-<span id="cb6-4"><a href="" aria-hidden="true" tabindex="-1"></a>     <span class="at">value =</span> scales<span class="sc">::</span><span class="fu">percent</span>(<span class="fu">mean</span>(df<span class="sc">$</span>Survived <span class="sc">==</span> <span class="st">"Yes"</span>), <span class="at">accuracy =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| content: valuebox</span></span>
-<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: "Median age"</span></span>
-<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">icon =</span> <span class="st">"person"</span>, <span class="at">color =</span> <span class="st">"info"</span>, <span class="at">value =</span> <span class="fu">median</span>(df<span class="sc">$</span>Age))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-
-<img data-src="quarto_dashboards_img/valueboxes.png" class="r-stretch"><ul>
-<li><code>#| content: valuebox</code> turns a chunk into a big-number box. The chunk returns a <code>list()</code> with <code>value</code>, <code>icon</code>, and <code>color</code>.</li>
-<li>Icons: any name from <a href="https://icons.getbootstrap.com/">Bootstrap Icons</a>. Colors: <code>"primary"</code>, <code>"success"</code>, <code>"info"</code>, <code>"warning"</code>, <code>"danger"</code>, or a hex code.</li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-label="1"></a><span class="co">#| content: valuebox</span></span>
+<span id="cb5-2"><a href="" aria-label="2"></a><span class="co">#| title: "Passengers"</span></span>
+<span id="cb5-3"><a href="" aria-label="3"></a><span class="fu">list</span>(<span class="at">icon =</span> <span class="st">"people"</span>, <span class="at">color =</span> <span class="st">"primary"</span>, <span class="at">value =</span> <span class="fu">nrow</span>(df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-label="1"></a><span class="co">#| content: valuebox</span></span>
+<span id="cb6-2"><a href="" aria-label="2"></a><span class="co">#| title: "Survival rate"</span></span>
+<span id="cb6-3"><a href="" aria-label="3"></a><span class="fu">list</span>(<span class="at">icon =</span> <span class="st">"life-preserver"</span>, <span class="at">color =</span> <span class="st">"success"</span>,</span>
+<span id="cb6-4"><a href="" aria-label="4"></a>     <span class="at">value =</span> scales<span class="sc">::</span><span class="fu">percent</span>(<span class="fu">mean</span>(df<span class="sc">$</span>Survived <span class="sc">==</span> <span class="st">"Yes"</span>), <span class="at">accuracy =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>#| content: valuebox</code> turns a chunk into a big-number box.</li>
+<li>The chunk returns a <code>list()</code> with <code>value</code>, <code>icon</code>, and <code>color</code>.</li>
+<li>Icons: any name from <a href="https://icons.getbootstrap.com/">Bootstrap Icons</a>, such as <code>"people"</code>, <code>"cash"</code>, <code>"person"</code>.</li>
+<li>Colors: <code>"primary"</code>, <code>"success"</code>, <code>"info"</code>, <code>"warning"</code>, <code>"danger"</code>, or a hex code like <code>"#1f77b4"</code>.</li>
 </ul>
 </section>
 <section id="interactive-plots-and-tables" class="slide level2">
 <h2>Interactive plots and tables</h2>
 <p>These work in a <strong>static</strong> dashboard. No server is needed.</p>
-<div class="columns">
-<div class="column" style="width:58%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: Survival by class</span></span>
-<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
-<span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Pclass, <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
-<span id="cb8-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>)</span>
-<span id="cb8-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p)        <span class="co"># hover, zoom, click the legend</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: Passenger data (type in the search box to filter)</span></span>
-<span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
-<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Name, Sex, Age, Pclass, Embarked, Fare, Survived) <span class="sc">|&gt;</span></span>
-<span id="cb9-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>(<span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div><div class="column" style="width:42%;">
-<p><img data-src="quarto_dashboards_img/table.jpg"></p>
-<p><code>datatable()</code> adds the search box, sortable columns, and pages. The <code>ggplotly()</code> plots are on the <a href="#//the-static-example">static example</a>.</p>
-</div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-label="1"></a><span class="co">#| title: Survival by class</span></span>
+<span id="cb7-2"><a href="" aria-label="2"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb7-3"><a href="" aria-label="3"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> Pclass, <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="" aria-label="4"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>)</span>
+<span id="cb7-5"><a href="" aria-label="5"></a><span class="fu">ggplotly</span>(p)                      <span class="co"># hover, zoom, click the legend</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-label="1"></a><span class="co">#| title: Passenger data (type in the search box to filter)</span></span>
+<span id="cb8-2"><a href="" aria-label="2"></a><span class="fu">library</span>(DT)</span>
+<span id="cb8-3"><a href="" aria-label="3"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="" aria-label="4"></a>  <span class="fu">select</span>(Name, Sex, Age, Pclass, Survived) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="" aria-label="5"></a>  <span class="fu">datatable</span>(<span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">10</span>))   <span class="co"># search, sort, page</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="text-and-images" class="slide level2">
 <h2>Text and images</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu"># About</span></span>
-<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>::: {.card title="About this dashboard"}</span>
-<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="al">![](logo.png)</span>{width=60}</span>
-<span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a>This dashboard was built with Quarto. The **Overview** page shows the main numbers,</span>
-<span id="cb10-8"><a href="" aria-hidden="true" tabindex="-1"></a>**Distributions** compares age and fare for passengers who did and did not survive,</span>
-<span id="cb10-9"><a href="" aria-hidden="true" tabindex="-1"></a>and **Data** lets you search the passenger list.</span>
-<span id="cb10-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="" aria-hidden="true" tabindex="-1"></a>Women and first-class passengers survived at much higher rates than men and</span>
-<span id="cb10-12"><a href="" aria-hidden="true" tabindex="-1"></a>third-class passengers.</span>
-<span id="cb10-13"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-
-<img data-src="quarto_dashboards_img/about.png" class="r-stretch"><ul>
+<p>Use a markdown card for text and images:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="" aria-label="1"></a><span class="fu"># About</span></span>
+<span id="cb9-2"><a href="" aria-label="2"></a></span>
+<span id="cb9-3"><a href="" aria-label="3"></a>::: {.card title="About this dashboard"}</span>
+<span id="cb9-4"><a href="" aria-label="4"></a></span>
+<span id="cb9-5"><a href="" aria-label="5"></a><span class="al">![](logo.png)</span>{width=60}</span>
+<span id="cb9-6"><a href="" aria-label="6"></a></span>
+<span id="cb9-7"><a href="" aria-label="7"></a>This dashboard was built with Quarto. Women and first-class</span>
+<span id="cb9-8"><a href="" aria-label="8"></a>passengers survived at much higher rates than men and</span>
+<span id="cb9-9"><a href="" aria-label="9"></a>third-class passengers.</span>
+<span id="cb9-10"><a href="" aria-label="10"></a></span>
+<span id="cb9-11"><a href="" aria-label="11"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
 <li>Text in the sidebar or in a <code>.card</code> is plain Markdown: <strong>bold</strong>, lists, links.</li>
 <li>Use inline R to put numbers in text: <code>`r nrow(df)`</code> passengers.</li>
 </ul>
 </section>
 <section id="logo-and-navigation-buttons" class="slide level2">
 <h2>Logo and navigation buttons</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
-<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">dashboard</span><span class="kw">:</span></span>
-<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">logo</span><span class="kw">:</span><span class="at"> logo.png</span></span>
-<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nav-buttons</span><span class="kw">:</span></span>
-<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">icon</span><span class="kw">:</span><span class="at"> github</span></span>
-<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> https://github.com/bryantstats</span></span>
-<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">aria-label</span><span class="kw">:</span><span class="at"> GitHub profile</span></span>
-<span id="cb11-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">icon</span><span class="kw">:</span><span class="at"> code-slash</span></span>
-<span id="cb11-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> https://raw.githubusercontent.com/bryantstats/math421/main/assignments/final/dashboard_templates/q2_static.qmd</span></span>
-<span id="cb11-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">aria-label</span><span class="kw">:</span><span class="at"> Source code</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-
-<img data-src="quarto_dashboards_img/navbar.png" class="r-stretch"><ul>
-<li><code>logo:</code> shows an image next to the title (left). Keep the image in the same folder.</li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="" aria-label="1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb10-2"><a href="" aria-label="2"></a><span class="at">  </span><span class="fu">dashboard</span><span class="kw">:</span></span>
+<span id="cb10-3"><a href="" aria-label="3"></a><span class="at">    </span><span class="fu">logo</span><span class="kw">:</span><span class="at"> logo.png</span></span>
+<span id="cb10-4"><a href="" aria-label="4"></a><span class="at">    </span><span class="fu">nav-buttons</span><span class="kw">:</span></span>
+<span id="cb10-5"><a href="" aria-label="5"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">icon</span><span class="kw">:</span><span class="at"> github</span></span>
+<span id="cb10-6"><a href="" aria-label="6"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> https://github.com/yourname</span></span>
+<span id="cb10-7"><a href="" aria-label="7"></a><span class="at">        </span><span class="fu">aria-label</span><span class="kw">:</span><span class="at"> GitHub profile</span></span>
+<span id="cb10-8"><a href="" aria-label="8"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">icon</span><span class="kw">:</span><span class="at"> code-slash</span></span>
+<span id="cb10-9"><a href="" aria-label="9"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> https://raw.githubusercontent.com/yourname/repo/main/dashboard.qmd</span></span>
+<span id="cb10-10"><a href="" aria-label="10"></a><span class="at">        </span><span class="fu">aria-label</span><span class="kw">:</span><span class="at"> Source code</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>logo:</code> shows an image next to the title. Keep the image in the same folder.</li>
 <li><code>nav-buttons:</code> adds icons at the top right.
 <ul>
 <li><strong>Social media:</strong> <code>icon: linkedin</code> or <code>icon: github</code> with your profile link.</li>
@@ -588,73 +485,51 @@ Math 421 · Statistical Analysis with R
 <h1>Part 3: Interactivity</h1>
 
 </section>
-<section id="add-shiny-three-changes" class="slide level2 scrollable">
+<section id="add-shiny-three-changes" class="slide level2">
 <h2>Add Shiny: three changes</h2>
-<div class="columns">
-<div class="column" style="width:58%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-code-line-numbers="|4|7-16|20-25"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="" aria-label="1"></a><span class="co">---</span></span>
-<span id="cb12-2"><a href="" aria-label="2"></a><span class="an">title:</span><span class="co"> "Titanic - selectInput"</span></span>
-<span id="cb12-3"><a href="" aria-label="3"></a><span class="an">format:</span><span class="co"> dashboard</span></span>
-<span id="cb12-4"><a href="" aria-label="4"></a><span class="an">server:</span><span class="co"> shiny</span></span>
-<span id="cb12-5"><a href="" aria-label="5"></a><span class="co">---</span></span>
-<span id="cb12-6"><a href="" aria-label="6"></a></span>
-<span id="cb12-7"><a href="" aria-label="7"></a><span class="in">```{r}</span></span>
-<span id="cb12-8"><a href="" aria-label="8"></a><span class="co">#| context: setup</span></span>
-<span id="cb12-9"><a href="" aria-label="9"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb12-10"><a href="" aria-label="10"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb12-11"><a href="" aria-label="11"></a><span class="fu">library</span>(plotly)</span>
-<span id="cb12-12"><a href="" aria-label="12"></a><span class="fu">library</span>(DT)</span>
-<span id="cb12-13"><a href="" aria-label="13"></a>url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://bryantstats.github.io/math421/"</span>,</span>
-<span id="cb12-14"><a href="" aria-label="14"></a>              <span class="st">"data/titanic_final.csv"</span>)</span>
-<span id="cb12-15"><a href="" aria-label="15"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url)</span>
-<span id="cb12-16"><a href="" aria-label="16"></a><span class="in">```</span></span>
-<span id="cb12-17"><a href="" aria-label="17"></a></span>
-<span id="cb12-18"><a href="" aria-label="18"></a><span class="fu"># Plots</span></span>
-<span id="cb12-19"><a href="" aria-label="19"></a></span>
-<span id="cb12-20"><a href="" aria-label="20"></a><span class="fu">## {.sidebar}</span></span>
-<span id="cb12-21"><a href="" aria-label="21"></a></span>
-<span id="cb12-22"><a href="" aria-label="22"></a><span class="in">```{r}</span></span>
-<span id="cb12-23"><a href="" aria-label="23"></a><span class="fu">selectInput</span>(<span class="st">"var"</span>, <span class="st">"Choose a variable"</span>,</span>
-<span id="cb12-24"><a href="" aria-label="24"></a>            <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Sex"</span>, <span class="st">"Pclass"</span>, <span class="st">"Embarked"</span>))</span>
-<span id="cb12-25"><a href="" aria-label="25"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ol type="1">
-<li><code>server: shiny</code> runs the dashboard with Shiny.</li>
-<li><code>#| context: setup</code> loads packages and data once.</li>
-<li>Inputs go in the sidebar.</li>
-</ol>
-</div><div class="column" style="width:42%;">
-<p><img data-src="quarto_dashboards_img/select_sex.jpg"></p>
-<p>The full template, <a href="../assignments/final/dashboard_templates/1_select.qmd">1_select</a>. The <strong>Choose a variable</strong> box in the sidebar is the <code>selectInput()</code>.</p>
-</div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-code-line-numbers="|4|7-10|15-19"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="" aria-label="1"></a><span class="co">---</span></span>
+<span id="cb11-2"><a href="" aria-label="2"></a><span class="an">title:</span><span class="co"> "Titanic - selectInput"</span></span>
+<span id="cb11-3"><a href="" aria-label="3"></a><span class="an">format:</span><span class="co"> dashboard</span></span>
+<span id="cb11-4"><a href="" aria-label="4"></a><span class="an">server:</span><span class="co"> shiny                                # 1. run with Shiny</span></span>
+<span id="cb11-5"><a href="" aria-label="5"></a><span class="co">---</span></span>
+<span id="cb11-6"><a href="" aria-label="6"></a></span>
+<span id="cb11-7"><a href="" aria-label="7"></a><span class="in">```{r}</span></span>
+<span id="cb11-8"><a href="" aria-label="8"></a><span class="co">#| context: setup                            # 2. load packages + data once</span></span>
+<span id="cb11-9"><a href="" aria-label="9"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(plotly); <span class="fu">library</span>(DT)</span>
+<span id="cb11-10"><a href="" aria-label="10"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://bryantstats.github.io/math421/data/titanic_final.csv"</span>)</span>
+<span id="cb11-11"><a href="" aria-label="11"></a><span class="in">```</span></span>
+<span id="cb11-12"><a href="" aria-label="12"></a></span>
+<span id="cb11-13"><a href="" aria-label="13"></a><span class="fu"># Plots</span></span>
+<span id="cb11-14"><a href="" aria-label="14"></a></span>
+<span id="cb11-15"><a href="" aria-label="15"></a><span class="fu">## {.sidebar}</span></span>
+<span id="cb11-16"><a href="" aria-label="16"></a></span>
+<span id="cb11-17"><a href="" aria-label="17"></a><span class="in">```{r}</span></span>
+<span id="cb11-18"><a href="" aria-label="18"></a><span class="fu">selectInput</span>(<span class="st">"var"</span>, <span class="st">"Choose a variable"</span>,     <span class="co"># 3. inputs in the sidebar</span></span>
+<span id="cb11-19"><a href="" aria-label="19"></a>            <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Sex"</span>, <span class="st">"Pclass"</span>, <span class="st">"Embarked"</span>))</span>
+<span id="cb11-20"><a href="" aria-label="20"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="outputs-and-the-server-chunk" class="slide level2">
 <h2>Outputs and the server chunk</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">## Row</span></span>
-<span id="cb13-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| title: Survival by the chosen variable</span></span>
-<span id="cb13-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plotlyOutput</span>(<span class="st">"p2"</span>)</span>
-<span id="cb13-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-7"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| context: server</span></span>
-<span id="cb13-10"><a href="" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>p2 <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
-<span id="cb13-11"><a href="" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> .data[[input<span class="sc">$</span>var]],</span>
-<span id="cb13-12"><a href="" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
-<span id="cb13-13"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>)</span>
-<span id="cb13-14"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplotly</span>(p)</span>
-<span id="cb13-15"><a href="" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb13-16"><a href="" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div><div class="column" style="width:50%;">
-<p><img data-src="quarto_dashboards_img/select_pclass.jpg"></p>
-<p>After choosing <strong>Pclass</strong>, both plots redraw by class.</p>
-</div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="" aria-label="1"></a><span class="fu">## Row</span></span>
+<span id="cb12-2"><a href="" aria-label="2"></a></span>
+<span id="cb12-3"><a href="" aria-label="3"></a><span class="in">```{r}</span></span>
+<span id="cb12-4"><a href="" aria-label="4"></a><span class="co">#| title: Survival by the chosen variable</span></span>
+<span id="cb12-5"><a href="" aria-label="5"></a><span class="fu">plotlyOutput</span>(<span class="st">"p2"</span>)                           <span class="co"># an empty space named "p2"</span></span>
+<span id="cb12-6"><a href="" aria-label="6"></a><span class="in">```</span></span>
+<span id="cb12-7"><a href="" aria-label="7"></a></span>
+<span id="cb12-8"><a href="" aria-label="8"></a><span class="in">```{r}</span></span>
+<span id="cb12-9"><a href="" aria-label="9"></a><span class="co">#| context: server</span></span>
+<span id="cb12-10"><a href="" aria-label="10"></a>output<span class="sc">$</span>p2 <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({                  <span class="co"># fills the space "p2"</span></span>
+<span id="cb12-11"><a href="" aria-label="11"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> .data[[input<span class="sc">$</span>var]], <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb12-12"><a href="" aria-label="12"></a>    <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>)</span>
+<span id="cb12-13"><a href="" aria-label="13"></a>  <span class="fu">ggplotly</span>(p)</span>
+<span id="cb12-14"><a href="" aria-label="14"></a>})</span>
+<span id="cb12-15"><a href="" aria-label="15"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>Output chunks hold <strong>empty spaces</strong>: <code>plotlyOutput()</code>, <code>DTOutput()</code>, <code>plotOutput()</code>, <code>textOutput()</code>.</li>
 <li>The <code>#| context: server</code> chunk <strong>fills</strong> them: <code>renderPlotly()</code>, <code>renderDT()</code>, <code>renderPlot()</code>, <code>renderText()</code>.</li>
-<li>The names must match: <code>plotlyOutput("p2")</code> ↔︎ <code>output$p2</code>. <code>input$var</code> is the current value of <code>selectInput("var", ...)</code>.</li>
+<li>The names must match: <code>plotlyOutput("p2")</code> ↔︎ <code>output$p2</code>.</li>
+<li><code>input$var</code> is the current value of <code>selectInput("var", ...)</code>.</li>
 </ul>
 </section>
 <section id="inputs" class="slide level2">
@@ -684,7 +559,7 @@ Math 421 · Statistical Analysis with R
 <td style="text-align: left;"><a href="../assignments/final/dashboard_templates/3_slider.qmd">3_slider</a></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>radioButtons("pos", ...)</code></td>
+<td style="text-align: left;"><code>radioButtons("sex", ...)</code></td>
 <td style="text-align: left;">one value</td>
 <td style="text-align: left;"><a href="../assignments/final/dashboard_templates/4_radio.qmd">4_radio</a></td>
 </tr>
@@ -697,63 +572,30 @@ Math 421 · Statistical Analysis with R
 </table>
 <p>All five together: <a href="../assignments/final/dashboard_templates/6_combine.qmd">6_combine</a></p>
 </section>
-<section id="inputs-code-and-result" class="slide level2">
-<h2>Inputs: code and result</h2>
-<div class="columns">
-<div class="column" style="width:68%;">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">selectInput</span>(<span class="st">"var"</span>, <span class="st">"Group by"</span>,</span>
-<span id="cb14-2"><a href="" aria-hidden="true" tabindex="-1"></a>            <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Sex"</span>, <span class="st">"Pclass"</span>, <span class="st">"Embarked"</span>))</span>
-<span id="cb14-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">checkboxGroupInput</span>(<span class="st">"port"</span>, <span class="st">"Port of embarkation"</span>,</span>
-<span id="cb14-4"><a href="" aria-hidden="true" tabindex="-1"></a>                   <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Cherbourg"</span> <span class="ot">=</span> <span class="st">"C"</span>,</span>
-<span id="cb14-5"><a href="" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Queenstown"</span> <span class="ot">=</span> <span class="st">"Q"</span>,</span>
-<span id="cb14-6"><a href="" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"Southampton"</span> <span class="ot">=</span> <span class="st">"S"</span>),</span>
-<span id="cb14-7"><a href="" aria-hidden="true" tabindex="-1"></a>                   <span class="at">selected =</span> <span class="fu">c</span>(<span class="st">"C"</span>, <span class="st">"Q"</span>, <span class="st">"S"</span>))</span>
-<span id="cb14-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">sliderInput</span>(<span class="st">"age"</span>, <span class="st">"Age"</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">80</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">80</span>))</span>
-<span id="cb14-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">radioButtons</span>(<span class="st">"pos"</span>, <span class="st">"Bar type"</span>,</span>
-<span id="cb14-10"><a href="" aria-hidden="true" tabindex="-1"></a>             <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Proportion"</span> <span class="ot">=</span> <span class="st">"fill"</span>, <span class="st">"Count"</span> <span class="ot">=</span> <span class="st">"stack"</span>))</span>
-<span id="cb14-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">dateRangeInput</span>(<span class="st">"dates"</span>, <span class="st">"Date range"</span>,</span>
-<span id="cb14-12"><a href="" aria-hidden="true" tabindex="-1"></a>               <span class="at">start =</span> <span class="fu">min</span>(df<span class="sc">$</span>date), <span class="at">end =</span> <span class="fu">max</span>(df<span class="sc">$</span>date),</span>
-<span id="cb14-13"><a href="" aria-hidden="true" tabindex="-1"></a>               <span class="at">min =</span> <span class="fu">min</span>(df<span class="sc">$</span>date), <span class="at">max =</span> <span class="fu">max</span>(df<span class="sc">$</span>date))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ul>
-<li>The first argument is the id: <code>input$var</code>, <code>input$port</code>, …</li>
-<li>The second is the label shown above the input.</li>
-<li><code>"Cherbourg" = "C"</code>: show <em>Cherbourg</em>, send <code>"C"</code> to <code>input$port</code>.</li>
-</ul>
-</div><div class="column" style="width:32%;">
-<p><img data-src="quarto_dashboards_img/inputs_sidebar.png"></p>
-</div></div>
-</section>
 <section id="filter-once-with-reactive" class="slide level2">
 <h2>Filter once with <code>reactive()</code></h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#| context: server</span></span>
-<span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a>filtered <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
-<span id="cb15-3"><a href="" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span></span>
-<span id="cb15-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Embarked <span class="sc">%in%</span> input<span class="sc">$</span>port,</span>
-<span id="cb15-5"><a href="" aria-hidden="true" tabindex="-1"></a>           Age <span class="sc">&gt;=</span> input<span class="sc">$</span>age[<span class="dv">1</span>], Age <span class="sc">&lt;=</span> input<span class="sc">$</span>age[<span class="dv">2</span>],</span>
-<span id="cb15-6"><a href="" aria-hidden="true" tabindex="-1"></a>           date <span class="sc">&gt;=</span> input<span class="sc">$</span>dates[<span class="dv">1</span>], date <span class="sc">&lt;=</span> input<span class="sc">$</span>dates[<span class="dv">2</span>])</span>
-<span id="cb15-7"><a href="" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb15-8"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>p1 <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
-<span id="cb15-10"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(<span class="fu">filtered</span>()) <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="fu">empty_plot</span>())</span>
-<span id="cb15-11"><a href="" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filtered</span>(), <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">color =</span> .data[[input<span class="sc">$</span>var]])) <span class="sc">+</span> <span class="fu">geom_density</span>()</span>
-<span id="cb15-12"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplotly</span>(p)</span>
-<span id="cb15-13"><a href="" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><img data-src="quarto_dashboards_img/filtered.jpg"></p>
-<p>Only <strong>Cherbourg</strong> ticked: every plot uses the filtered data.</p>
-</div><div class="column" style="width:50%;">
-<p><img data-src="quarto_dashboards_img/no_match.jpg"></p>
-<p>No port ticked: 0 rows, so <code>empty_plot()</code> shows a message.</p>
-</div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="" aria-label="1"></a><span class="co">#| context: server</span></span>
+<span id="cb13-2"><a href="" aria-label="2"></a>filtered <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb13-3"><a href="" aria-label="3"></a>  df <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="" aria-label="4"></a>    <span class="fu">filter</span>(Embarked <span class="sc">%in%</span> input<span class="sc">$</span>port,</span>
+<span id="cb13-5"><a href="" aria-label="5"></a>           Age <span class="sc">&gt;=</span> input<span class="sc">$</span>age[<span class="dv">1</span>], Age <span class="sc">&lt;=</span> input<span class="sc">$</span>age[<span class="dv">2</span>])</span>
+<span id="cb13-6"><a href="" aria-label="6"></a>})</span>
+<span id="cb13-7"><a href="" aria-label="7"></a></span>
+<span id="cb13-8"><a href="" aria-label="8"></a>output<span class="sc">$</span>p1 <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
+<span id="cb13-9"><a href="" aria-label="9"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(<span class="fu">filtered</span>()) <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="fu">empty_plot</span>())</span>
+<span id="cb13-10"><a href="" aria-label="10"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">filtered</span>(), <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">color =</span> Survived)) <span class="sc">+</span> <span class="fu">geom_density</span>()</span>
+<span id="cb13-11"><a href="" aria-label="11"></a>  <span class="fu">ggplotly</span>(p)</span>
+<span id="cb13-12"><a href="" aria-label="12"></a>})</span>
+<span id="cb13-13"><a href="" aria-label="13"></a></span>
+<span id="cb13-14"><a href="" aria-label="14"></a>output<span class="sc">$</span>tbl <span class="ot">&lt;-</span> <span class="fu">renderDT</span>(<span class="fu">datatable</span>(<span class="fu">filtered</span>()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><code>reactive()</code> filters once; every output reuses it. Call it with <strong><code>filtered()</code></strong>.</li>
-<li><code>empty_plot()</code> is defined in the setup chunk of the templates:</li>
+<li>When the inputs leave no rows (for example, every box unticked), show a message instead of a plot. <code>empty_plot()</code> is defined in the setup chunk of the templates:</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a>empty_plot <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotly_empty</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">layout</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span> <span class="st">"No passengers match these inputs."</span>, <span class="at">y =</span> <span class="fl">0.5</span>))</span>
-<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-label="1"></a>empty_plot <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb14-2"><a href="" aria-label="2"></a>  <span class="fu">plotly_empty</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="" aria-label="3"></a>    <span class="fu">layout</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span> <span class="st">"No passengers match these inputs."</span>, <span class="at">y =</span> <span class="fl">0.5</span>))</span>
+<span id="cb14-4"><a href="" aria-label="4"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="the-interactive-example" class="slide level2">
 <h2>The interactive example</h2>
