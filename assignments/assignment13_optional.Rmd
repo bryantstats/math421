@@ -4,7 +4,7 @@ output:
   html_document:
   pdf_document: default
   word_document: default
-title: "Assignment 13 - Optional: Writing a function - Conditional Statement"
+title: "Assignment 13: Writing a function - Conditional Statement"
 ---
 
 ***How to do it?***: 

@@ -1,0 +1,215 @@
+---
+title: "Final Project - Building Interactive Dashboards with Quarto"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+---
+
+-------
+
+**Submission Guideline:** Create a separate Quarto dashboard (`.qmd` file) for each question. Put the links to all your dashboards on your GitHub page and submit the link of that page to Canvas.
+
+- Questions 1 and 2 are **static** dashboards. Render them and publish the `.html` file on your GitHub page like your other assignments.
+- Questions 3 to 10 are **interactive** dashboards (they use Shiny). Publish them on [Posit Connect Cloud](https://connect.posit.cloud) and submit the app links.
+
+**Before you start:**
+
+- Update RStudio to version 2026.04 or later (Help -> Check for Updates).
+- Install the packages `shiny`, `rsconnect`, `tidyverse`, `plotly`, `DT`, and `lubridate`.
+- Read the [Quarto dashboard guide](https://quarto.org/docs/dashboards/) and the [Shiny and Quarto Dashboards slides](../../slides/shiny_dashboards.html).
+
+**Templates:** every question below links to a template. Download the `.qmd` file, put it in its own folder, and change it. All templates read the Titanic data from the course website, so they run without any extra files.
+
+-------
+
+### Question 1.
+
+Create an empty Quarto dashboard and render it.
+
+[Dashboard](dashboard_templates/0_empty.html) and [Template](dashboard_templates/0_empty.qmd)
+
+1. In RStudio, create a new Quarto Document (File -> New File -> Quarto Document) and delete everything in it.
+
+2. Copy the code of the [empty template](dashboard_templates/0_empty.qmd) into the file and save it in a new folder.
+
+3. Click **Render**. The result should look like the [Dashboard](dashboard_templates/0_empty.html) above: two pages, a sidebar, and four empty cards.
+
+4. Change the title, the page names, and the card titles. Render it again.
+
+How the layout works:
+
+- `format: dashboard` in the YAML header makes the document a dashboard.
+- `# Page name` (one `#`) creates a page. The page names appear as tabs in the top navigation bar.
+- `## {.sidebar}` inside a page creates a sidebar on that page.
+- `## Row` and `## Column` arrange cards. Use `{height=30%}` or `{width=50%}` to size them.
+- Each code chunk becomes a card. `### Card title` or `#| title: Card title` gives the card a title.
+
+-------
+
+### Question 2.
+
+Create a static dashboard with:
+
+- a sidebar
+- at least three pages
+- at least four plots
+- at least one value box
+- a searchable data table
+
+Use the Titanic data or your own data.
+
+[Dashboard](dashboard_templates/q2_static.html) and [Template](dashboard_templates/q2_static.qmd)
+
+Notice:
+
+- On a page with a sidebar, the sections after the sidebar are laid out as **columns**. To put a row of value boxes above a row of plots, put both rows inside one column (`## Column`, then `### Row` and `### Row`), as in the template's **Overview** page.
+- `#| content: valuebox` turns a chunk into a value box. The chunk returns `list(icon = ..., color = ..., value = ...)`. Icon names come from [Bootstrap Icons](https://icons.getbootstrap.com/).
+- `DT::datatable()` gives a table with a search box.
+- `ggplotly()` from the `plotly` package makes a ggplot interactive (hover, zoom).
+- `## Column {.tabset}` shows the cards in that column as tabs.
+
+-------
+
+### Question 3.
+
+Publish your first interactive dashboard on Posit Connect Cloud.
+
+1. Look at the [selectInput dashboard](https://01a1c073-842a-c712-1764-03f3b33644fd.share.connect.posit.cloud/), then download its [template](dashboard_templates/1_select.qmd) and save it as a `.qmd` file in a new folder. Put [logo.png](dashboard_templates/logo.png) in the same folder.
+
+2. Click **Run Document** (the button that replaces Render when the YAML has `server: shiny`) to run the dashboard on your computer.
+
+3. Go to https://connect.posit.cloud and create a free account. Signing up with your GitHub account is the easiest choice.
+
+4. In RStudio, click the blue **Publish** icon at the top right of the editor, choose **Posit Connect Cloud**, sign in, and follow the instructions. In the Publish dialog, tick only the `.qmd` file and `logo.png`.
+
+5. When publishing finishes, the dashboard opens in your browser. Copy its link; this is the link you submit.
+
+**Alternative: publish from GitHub.** If the Publish button does not work for you:
+
+- Put the `.qmd` file and `logo.png` in a folder of a **public** GitHub repository.
+- In R, set that folder as the working directory and run `rsconnect::writeManifest()`. This creates a `manifest.json` file that lists the R version and packages your dashboard needs.
+- Commit and push all files, including `manifest.json`.
+- On https://connect.posit.cloud click **Publish**, pick your repository, branch, and the `.qmd` file.
+- If you add packages later, run `rsconnect::writeManifest()` again and push the new `manifest.json`.
+
+How an interactive dashboard works:
+
+- `server: shiny` in the YAML header runs the dashboard with Shiny.
+- The `#| context: setup` chunk loads packages and data. It runs once.
+- Inputs (`selectInput()`, `sliderInput()`, ...) go in the sidebar.
+- Output chunks hold `plotlyOutput("p1")`, `DTOutput("tbl")`, and so on.
+- The `#| context: server` chunk is the server: it fills the outputs with `renderPlotly()`, `renderDT()`, ... and uses `input$...` to read the inputs.
+
+-------
+
+**Recommended: create two Posit Connect Cloud accounts.** A free account can hold only a few dashboards, and Questions 3 to 10 ask for eight. Create a second free account with a different email address, then connect both accounts to RStudio:
+
+1. In RStudio, go to Tools -> Global Options -> Publishing, click **Connect...**, choose **Posit Connect Cloud**, and sign in with your second account.
+
+2. Both accounts are now listed under **Publish from account** in the Publish dialog. Pick the account you want each time you publish a dashboard.
+
+3. Split your dashboards between the two accounts, for example Questions 3 to 6 on the first account and Questions 7 to 10 on the second.
+
+If an account is full, publishing fails with the message *"Your account has reached its maximum applications limit"*. Publishing to a full account can also stop dashboards already on that account from working. Before publishing, delete dashboards you no longer need on https://connect.posit.cloud, or publish to your other account.
+
+-------
+
+For Questions 4 to 9, use a dataset other than Titanic. Every dashboard must have a sidebar, at least two pages, at least two plots, and a searchable data table.
+
+-------
+
+### Question 4 - selectInput
+
+Create an interactive dashboard that uses `selectInput`.
+
+[Dashboard](https://01a1c073-842a-c712-1764-03f3b33644fd.share.connect.posit.cloud/) and [Template](dashboard_templates/1_select.qmd)
+
+-------
+
+### Question 5 - checkboxGroupInput
+
+Create an interactive dashboard that uses `checkboxGroupInput`.
+
+[Dashboard](https://01a1c076-dad7-9de4-7eea-94dc382774e1.share.connect.posit.cloud/) and [Template](dashboard_templates/2_checkbox.qmd)
+
+-------
+
+### Question 6 - sliderInput
+
+Create an interactive dashboard that uses `sliderInput`.
+
+[Dashboard](https://01a1c05c-77b7-2c55-8601-bebac4d25012.share.connect.posit.cloud/) and [Template](dashboard_templates/3_slider.qmd)
+
+-------
+
+### Question 7 - radioButtons
+
+Create an interactive dashboard that uses `radioButtons`.
+
+[Dashboard](https://01a1c05c-bfc0-bb00-b7e4-55a2bdbdec2d.share.connect.posit.cloud/) and [Template](dashboard_templates/4_radio.qmd)
+
+-------
+
+### Question 8 - dateRangeInput
+
+Create an interactive dashboard that uses `dateRangeInput`. Your data needs a date variable. If it is stored as text, convert it with `lubridate` (for example `mdy()` or `ymd()`).
+
+[Dashboard](https://01a1c066-384d-6cbe-c1ff-ef43bf74e9bb.share.connect.posit.cloud/) and [Template](dashboard_templates/5_date_range.qmd)
+
+-------
+
+### Question 9 - Combination of Inputs
+
+Create an interactive dashboard that uses at least three different types of inputs.
+
+[Dashboard](https://01a1c073-ceea-8236-dd38-2dc5028bec55.share.connect.posit.cloud/) and [Template](dashboard_templates/6_combine.qmd)
+
+-------
+
+Notice: every dashboard you publish counts toward the limits of your Posit Connect Cloud free plan. Check your plan's limits on https://connect.posit.cloud and delete test dashboards you no longer need.
+
+Notice: in Questions 4 to 10 you use your own data, usually a local CSV file read with `read_csv("mydata.csv")`. Put the CSV file in the same folder as the `.qmd` file, and tick it in the **Publish to Server** dialog when you publish. A data file that is not ticked, or a path like `C://Users/...`, is the most common reason a dashboard works on your computer but fails after publishing.
+
+-------
+
+### Question 10
+
+Create an interactive dashboard on a dataset that has not been used in class. The dashboard must have:
+
+- a social media button (for example LinkedIn) and a source code button in the navigation bar. Point the source code button to the raw file of your `.qmd` on GitHub (open the file on GitHub, click **Raw**, and copy the link). See `nav-buttons` in the YAML of the [Question 2 template](dashboard_templates/q2_static.qmd).
+- a sidebar
+- five different types of inputs
+- at least three pages
+- a page or column with tabs (`{.tabset}`)
+- at least five meaningful plots
+- at least one value box
+- a searchable data table
+- at least one paragraph of text that explains your findings
+- at least one image
+
+Optional: use Reddit data or other text data and visualize it.
+
+-------
+
+### Question 11 - Presentation
+
+Present your dashboard in Question 10 at the end of the course.
+
+- Present the features of your dashboard.
+- Discuss how your code is organized.
+- Discuss any errors or challenges you had to overcome.
+- Give advice to anyone who is about to do this project.
+- The presentation should be accessible to people who know R but have no experience with Quarto dashboards or Shiny.
+
+-------
+
+### References
+
+- Quarto dashboards: [Overview](https://quarto.org/docs/dashboards/), [Layout](https://quarto.org/docs/dashboards/layout.html), [Data display](https://quarto.org/docs/dashboards/data-display.html), [Inputs](https://quarto.org/docs/dashboards/inputs.html), [Using Shiny](https://quarto.org/docs/dashboards/interactivity/shiny-r.html)
+- Value box icons: [Bootstrap Icons](https://icons.getbootstrap.com/)
+- Shiny: [Get started](https://shiny.posit.co/r/getstarted/), [Mastering Shiny](https://mastering-shiny.org)
+- Publishing: [Deploy to Posit Connect Cloud](https://docs.posit.co/connect-cloud/how-to/r/shiny-r.html)
+- Course slides: [Shiny and Quarto Dashboards](../../slides/shiny_dashboards.html)
+
+-------

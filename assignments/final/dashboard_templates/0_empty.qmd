@@ -1,0 +1,48 @@
+---
+title: "My First Dashboard"
+format:
+  dashboard:
+    nav-buttons:
+      - icon: github
+        href: https://github.com/bryantstats
+        aria-label: GitHub profile
+      - icon: code-slash
+        href: https://raw.githubusercontent.com/bryantstats/math421/main/assignments/final/dashboard_templates/0_empty.qmd
+        aria-label: Source code
+---
+
+# Page 1
+
+## {.sidebar}
+
+Text in the sidebar.
+
+## Column {width=50%}
+
+### Card 1
+
+```{r}
+
+```
+
+## Column {width=50%}
+
+### Card 2
+
+```{r}
+
+```
+
+### Card 3
+
+```{r}
+
+```
+
+# Page 2
+
+### Card 4
+
+```{r}
+
+```

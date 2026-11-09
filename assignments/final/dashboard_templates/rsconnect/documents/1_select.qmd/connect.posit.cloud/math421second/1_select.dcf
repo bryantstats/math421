@@ -1,0 +1,10 @@
+name: 1_select
+title: Titanic - selectInput
+username: math421second
+account: math421second
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1c073-842a-c712-1764-03f3b33644fd
+bundleId:
+url: https://connect.posit.cloud/math421second/content/01a1c073-842a-c712-1764-03f3b33644fd
+version: 1

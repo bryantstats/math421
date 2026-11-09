@@ -17,7 +17,10 @@
 |10. Modeling: Basics| [Slides](gganimate/10_predictive_modeling.html), [Rmd](gganimate/10_predictive_modeling.Rmd) |[Assignment 10](assignments/assignment10.html) | | 
 |11. Modeling: Universal Framework| [Slides](gganimate/11_predictive_modeling.html), [Rmd](gganimate/11_predictive_modeling.Rmd) |[Assignment 11](assignments/assignment11.html) | | 
 |12. Modeling: Tuning| [Slides](gganimate/12_predictive_modeling_2.html), [Rmd](gganimate/12_predictive_modeling_2.Rmd) |[Assignment 12](assignments/assignment12.html) | |  
-|**Midterm**|[qmd](assignments/midterm_qmd.html), [Toc](assignments/midterm_toc.html), [Rmd](assignments/midterm_toc.Rmd) <br> [Tab](assignments/midterm_tab.html), [Rmd](assignments/midterm_tab.Rmd) | | |
+|**Midterm**|[Quarto Tab](assignments/midterm_qmd.html), [qmd](assignments/midterm_qmd.qmd) <br> [Rmarkdown Toc](assignments/midterm_toc.html), [Rmd](assignments/midterm_toc.Rmd) <br> [Rmarkdown Tab](assignments/midterm_tab.html), [Rmd](assignments/midterm_tab.Rmd) | | |
+|13. Functions: If-Else Statement| [Slides](gganimate/17_writing_functions.html) | |[Assignment 13](assignments/assignment13_optional.html) | 
+|14. Functions: Loop| [Slides](gganimate/18_writing_functions.html) | |[Assignment 14](assignments/assignment14_optional.html) | 
+|**Shiny Project**|[html](assignments/final/shiny_project.html), [Rmd](assignments/final/shiny_project.Rmd)  | | | 
 |**Final Exam**|Monday, Dec. 14, 12:00pm | | |
 
 

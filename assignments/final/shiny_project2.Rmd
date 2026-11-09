@@ -1,0 +1,215 @@
+
+---
+output: 
+  html_document: default
+  pdf_document: default
+  word_document: default
+title: "Final Project - Building Shiny Apps"
+---
+
+-------
+
+**Submission Guideline:**  Include to your Github page the link of the app for each question from 1-12. You could also embed all your shiny apps in an Rmarkdown.  See the note under Question 4 for how to embed shiny apps in a Rmarkdown file.
+
+-------
+
+#### Data: 
+
+- [Titanic](shiny_fa21/titanic.csv)
+- [Adult Census](shiny_fa21/adult_modified.csv)
+- [WHO Covid19](shiny_fa21/data/who_covid.csv)
+
+
+-------
+
+### Question 1.
+
+Install the packages `shiny` and `rsconnect`, and update RStudio to version 2026.04 or later (Help -> Check for Updates). Older versions of RStudio cannot publish to Posit Connect Cloud.
+
+In this question, you will build and publish your first shiny app on [Posit Connect Cloud](https://connect.posit.cloud). Follow these steps:
+
+1. Create a new R Script (File -> New R Script). 
+
+2. Copy [these code](c1.R) to the file. 
+
+3. Save the file as `app.R` in a newly created folder. 
+
+4. Press `Ctrl + Shift + Enter` to run the app locally. 
+
+5. Go to https://connect.posit.cloud and create a free account. Signing up with your GitHub account is the easiest choice.
+
+6. Go back to the app (if you closed it, hit `Ctrl + Shift + Enter` to reopen it) and click `Publish` (the blue icon) on the top right corner. 
+
+7. Choose **Posit Connect Cloud** as the destination, sign in when asked, and follow the instructions to publish the app on the Internet. 
+
+8. When publishing finishes, the app opens in your browser. Copy its link; this is the link you submit.
+
+**Alternative: publish from GitHub.** If the Publish button does not work for you, you can publish from a public GitHub repository instead.
+
+- Put `app.R` and any data file it reads in a folder of a **public** GitHub repository. 
+
+- In R, set that folder as the working directory and run the code below. It creates a `manifest.json` file that tells Connect Cloud which version of R and which packages your app needs.
+
+```{r, eval=FALSE}
+rsconnect::writeManifest()
+```
+
+- Commit and push `app.R`, the data file, and `manifest.json` to GitHub. 
+
+- On https://connect.posit.cloud click `Publish`, choose **Shiny**, then pick your repository, the branch, and `app.R` as the primary file. 
+
+- If you later add or update packages, run `rsconnect::writeManifest()` again and push the new `manifest.json`.
+
+-------
+
+### Question 2 - selectInput
+
+Write a shiny app that can plot barplot of two categorical variables in the titanic dataset, [Example of the barplot](https://bryantstats.github.io/math421/slides/6_viz.html#39).
+
+[Similar Apps](https://fa20.shinyapps.io/selectinput/) and [Codes](shiny_fa21/selectinput/a2.R)
+
+Notice:  
+
+- Two different shiny apps should be in two different folders. 
+
+- You should not use local path when reading a data file.  For example,  do not use `read_csv('C://final//titanic.csv')`.  Instead, create a new folder and put the data file (titanic.csv) and the code file in the folder just created and use `read_csv('titanic.csv')`
+
+-------
+
+### Question 3 - checkboxGroupInput
+
+Write a shiny app that creates a plot for the adult census dataset. The user inputs two variables and can choose a tick on some options of a variable (i.e., use`checkboxGroupInput`). 
+
+[Similar Apps](https://fa20.shinyapps.io/checkboxGroupInput/) and [Codes](shiny_fa21/checkboxGroupInput/a2_3.R)
+
+-------
+
+### Question 4 - sliderInput
+
+Write a shiny app that creates a plot for the adult census dataset.  The user inputs two variables and can change the range of `Age` (i.e., use `sliderInput`). 
+
+[Similar Apps](https://sonfed.shinyapps.io/sliderInput/) and [Codes](shiny_fa21/sliderInput/a2_1.R)
+
+-------
+
+Notice:  Every app you publish counts toward the limits of your Posit Connect Cloud free plan. Check your plan's limits at https://connect.posit.cloud, and delete test apps you no longer need. 
+
+You could also embed several shiny apps in one Rmarkdown and publish that document as a single app.  Do the following to embed a shiny app in an Rmarkdown. 
+
+- Create an Rmarkdown
+
+- Insert a code cell (`Ctrl + Alt + I`)
+
+- Copy the codes of the shiny to the code cell
+
+- Knit it 
+
+- When asked, choose `Yes, Always.`
+
+- Here is an example: https://fa20.shinyapps.io/a9_markdown/
+
+
+-------
+
+### Question 5 - dateRangeInput
+
+Use the WHO-Covid19 data, write a shiny app that shows statistics of Covid19 for any three countries selected by the user.  The user can also change the range of the dates.  Notice:  you may want to use selectInput instead of checkboxGroupInput for the user to select countries. 
+
+[Similar App](https://sonfed.shinyapps.io/dateRangeInput2/), 
+[Codes](shiny_fa21/dateRangeInput2/3.R), and 
+[Data](shiny_fa21/dateRangeInput2/who_covid.csv)
+
+-------
+
+### Question 6 - radioButtons
+
+Write a shiny app that creates plots for the adult census dataset. The user inputs two variables and can choose a multiple choice option (i.e., use`radioButtons`). 
+
+[Similar Apps](https://sonfed.shinyapps.io/radioButtons/) and [Codes](shiny_fa21/radioButtons/a2_2.R)
+
+-------
+
+### Question 7 - navbarPage
+
+Write a shiny app that creates plots for the adult census data. Make use of the `navbarPage`
+
+This below example shows how to use `navbarPage`
+
+[Example App](https://sonfed.shinyapps.io/navbarPage/) and 
+[Codes](shiny_fa21/navbarPage/a2_4.R)
+
+-------
+
+### Question 8 - Uploaded Data
+
+Write a shiny app that can plot barplot of two categorical variables in an uploaded dataset, [Example of the barplot](https://bryantstats.github.io/math421/slides/6_viz.html#39). 
+
+Use this data to test your app: [Adult Census Data](data/adult_modified.csv)
+
+[Similar Apps](https://fa20.shinyapps.io/uploaded_data/) and [Codes](shiny_fa21/uploaded_data/a3.R)
+
+-------
+
+### Question 9 - Uploaded Data
+
+Write a shiny app that can plot the scatter plot of two numeric variables and colored by a categorical variable in an uploaded dataset. Example of the plot: https://bryantstats.github.io/math421/slides/6_viz.html#15
+
+Use this data to test your app: [Adult Census Data](data/adult_modified.csv)
+
+
+-------
+
+### Question 10
+
+Write a shiny app on own selected data.  Make uses of  `selectInput`,  `radioButtons`, `checkboxGroupInput` and `sliderInput`. 
+
+
+-------
+
+### Question 11
+
+Write a shiny app on own selected data.  Make uses of `selectInput`, `radioButtons`, `checkboxGroupInput` and `dateRangeInput`. 
+
+
+-------
+
+### Question 12
+
+Write an app that make uses of `selectInput`, `sliderInput` or `dateRangeInput` or both, `radioButtons`, `checkboxGroupInput`  and `navbarPage`. You might use multiple datasets for the app. 
+
+-------
+
+### Question 13 - Presentation
+
+Present your shiny app in Question 12 on the final exam day. 
+
+- Present the features of your app 
+
+- Discuss the codes of the apps. 
+
+- Discuss any error or challenge you had to overcome
+
+- Give an advice for anyone who is about to do this project
+
+- The presentation should be accessible to ones that have no experience with shiny coding but know R. 
+
+-------
+
+### References
+
+
+Check out Shiny official tutorial: https://shiny.rstudio.com/tutorial/
+
+Check out Shiny Galary: https://shiny.rstudio.com/gallery/
+
+Pairs of render and output: https://bookdown.org/weicheng/shinyTutorial/images/outputs.png
+
+Check out some shiny layouts here: https://shiny.rstudio.com/articles/layout-guide.html
+
+Check out shiny dynamic UI here
+
+https://shiny.rstudio.com/gallery/dynamic-ui.html
+
+https://shiny.rstudio.com/articles/dynamic-ui.html
+
+-------

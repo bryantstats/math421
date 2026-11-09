@@ -1,0 +1,10 @@
+name: 2_checkbox
+title: Titanic - checkboxGroupInput
+username: math421
+account: math421
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1c076-dad7-9de4-7eea-94dc382774e1
+bundleId:
+url: https://connect.posit.cloud/math421/content/01a1c076-dad7-9de4-7eea-94dc382774e1
+version: 1

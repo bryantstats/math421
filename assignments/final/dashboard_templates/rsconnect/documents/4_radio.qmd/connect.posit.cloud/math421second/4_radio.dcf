@@ -1,0 +1,10 @@
+name: 4_radio
+title: Titanic - radioButtons
+username: math421second
+account: math421second
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1c05c-bfc0-bb00-b7e4-55a2bdbdec2d
+bundleId:
+url: https://connect.posit.cloud/math421second/content/01a1c05c-bfc0-bb00-b7e4-55a2bdbdec2d
+version: 1
