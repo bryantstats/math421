@@ -1,0 +1,29 @@
+---
+title: "My First Dashboard"
+format: dashboard
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+url <- paste0("https://bryantstats.github.io/math421/",
+              "data/titanic_final.csv")
+df <- read_csv(url) |>
+  mutate(Survived = factor(Survived,
+                           labels = c("No", "Yes")),
+         Pclass = factor(Pclass))
+```
+
+## Row
+
+```{r}
+#| title: Survival by class
+ggplot(df, aes(x = Pclass, fill = Survived)) +
+  geom_bar()
+```
+
+```{r}
+#| title: Age
+ggplot(df, aes(x = Age)) +
+  geom_histogram()
+```

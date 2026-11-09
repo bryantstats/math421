@@ -11,6 +11,8 @@ format:
     code-overflow: wrap
     highlight-style: github
     transition: none
+    css: quarto_dashboards.css
+    code-line-numbers: false
 execute:
   eval: false
   echo: true
@@ -26,7 +28,7 @@ execute:
 
 . . .
 
-All examples use the Titanic data and come from the [project templates](../assignments/final/dashboard_project.html).
+All examples use the Titanic data and come from the [project templates](../assignments/final/dashboard_project.html). Every code example is followed by a screenshot of the dashboard it makes.
 
 ## Static or interactive?
 
@@ -50,28 +52,52 @@ Start static. Add `server: shiny` only when a reader's choice must re-run R code
 
 ## Your first dashboard
 
+:::: {.columns}
+::: {.column width="57%"}
 ````{.markdown}
 ---
 title: "My First Dashboard"
 format: dashboard
 ---
 
+```{{r}}
+#| include: false
+library(tidyverse)
+url <- paste0("https://bryantstats.github.io/math421/",
+              "data/titanic_final.csv")
+df <- read_csv(url) |>
+  mutate(Survived = factor(Survived,
+                           labels = c("No", "Yes")),
+         Pclass = factor(Pclass))
+```
+
 ## Row
 
 ```{{r}}
 #| title: Survival by class
-ggplot(df, aes(x = Pclass, fill = Survived)) + geom_bar()
+ggplot(df, aes(x = Pclass, fill = Survived)) +
+  geom_bar()
 ```
 
 ```{{r}}
 #| title: Age
-ggplot(df, aes(x = Age)) + geom_histogram()
+ggplot(df, aes(x = Age)) +
+  geom_histogram()
 ```
 ````
+:::
+
+::: {.column width="43%"}
+![](quarto_dashboards_img/first_dashboard.jpg)
 
 - `format: dashboard` turns the document into a dashboard.
 - **Each code chunk becomes a card.** `#| title:` gives the card a title.
+- `#| include: false` runs the setup chunk without making a card.
 - Two chunks in the same `## Row` sit side by side.
+:::
+::::
+
+[Code](quarto_dashboards_demo/first.qmd) · [Dashboard](quarto_dashboards_demo/first.html)
 
 ## Pages, rows, and columns
 
@@ -82,29 +108,84 @@ The number of `#` decides what a heading does.
 | `# Overview` | a **page**: a tab in the navigation bar |
 | `## Row` | a row of cards, side by side |
 | `## Column` | a column of cards, stacked |
-| `### Row` inside a `## Column` | a row nested in that column |
+| `### Column` inside a `## Row` | a column nested in that row (and the other way around) |
 
-Size them with attributes:
-
-````{.markdown}
-## Row {height=25%}
-## Column {width=60%}
-````
-
-. . .
+Size them with attributes: `## Row {height=30%}`, `### Column {width=60%}`.
 
 By default the top level is **rows**. Add `orientation: columns` under `dashboard:` in the YAML to start with columns.
 
+## Layout example
+
+:::: {.columns}
+::: {.column width="40%"}
+````{.markdown}
+---
+title: "Layout"
+format: dashboard
+---
+
+# Overview
+
+## Row {height=30%}
+
+::: {.card title="Card A"}
+Row 1, first card
+:::
+
+::: {.card title="Card B"}
+Row 1, second card
+:::
+
+## Row {height=70%}
+
+### Column {width=60%}
+
+::: {.card title="Card C"}
+Row 2, left column (60% wide)
+:::
+
+### Column {width=40%}
+
+::: {.card title="Card D"}
+Row 2, right column, top
+:::
+
+::: {.card title="Card E"}
+Row 2, right column, bottom
+:::
+
+# Details
+
+::: {.card title="Card F"}
+A second page
+:::
+````
+:::
+
+::: {.column width="60%"}
+![](quarto_dashboards_img/layout.jpg)
+
+- `# Overview` and `# Details` are the two tabs in the navigation bar.
+- Row 1 holds cards A and B side by side.
+- Row 2 is split into two columns: C on the left (60%), D and E stacked on the right (40%).
+- `::: {.card title="..."}` makes a card from plain text, with no code.
+:::
+::::
+
+[Code](quarto_dashboards_demo/layout.qmd) · [Dashboard](quarto_dashboards_demo/layout.html)
+
 ## Sidebars
 
-Put a sidebar on a page with `## {.sidebar}`. Text and inputs go inside it.
-
+:::: {.columns}
+::: {.column width="40%"}
 ````{.markdown}
 # Overview
 
 ## {.sidebar}
 
-The sinking of the Titanic is one of the most infamous shipwrecks in history.
+The sinking of the Titanic is one
+of the most infamous shipwrecks
+in history.
 
 ## Column
 
@@ -116,6 +197,14 @@ The sinking of the Titanic is one of the most infamous shipwrecks in history.
 
 (plots)
 ````
+:::
+
+::: {.column width="60%"}
+![](quarto_dashboards_img/static_dashboard.jpg)
+
+Put a sidebar on a page with `## {.sidebar}`. Text and inputs go inside it.
+:::
+::::
 
 ::: {.callout-warning}
 On a page with a sidebar, the sections after it are laid out as **columns**, even if they are called `## Row`. To stack a row of value boxes above a row of plots, put both rows inside one `## Column`, as above.
@@ -123,8 +212,8 @@ On a page with a sidebar, the sections after it are laid out as **columns**, eve
 
 ## Tabs
 
-Add `{.tabset}` to a row or column. Each card in it becomes a tab.
-
+:::: {.columns}
+::: {.column width="52%"}
 ````{.markdown}
 # Distributions
 
@@ -132,16 +221,26 @@ Add `{.tabset}` to a row or column. Each card in it becomes a tab.
 
 ```{{r}}
 #| title: Age
-ggplot(df, aes(x = Age, color = Survived)) + geom_density()
+p <- ggplot(df, aes(x = Age, color = Survived)) +
+  geom_density()
+ggplotly(p)
 ```
 
 ```{{r}}
 #| title: Fare
-ggplot(df, aes(x = Fare, color = Survived)) + geom_density()
+p <- ggplot(df, aes(x = Fare, color = Survived)) +
+  geom_density()
+ggplotly(p)
 ```
 ````
+:::
 
-The card titles (`Age`, `Fare`) become the tab names.
+::: {.column width="48%"}
+![](quarto_dashboards_img/tabs.jpg)
+
+Add `{.tabset}` to a row or column. Each card in it becomes a tab, and the card titles (`Age`, `Fare`) become the tab names.
+:::
+::::
 
 # Part 2: Content {background-color="#2c3e50"}
 
@@ -160,34 +259,48 @@ list(icon = "life-preserver", color = "success",
      value = scales::percent(mean(df$Survived == "Yes"), accuracy = 1))
 ```
 
-- `#| content: valuebox` turns a chunk into a big-number box.
-- The chunk returns a `list()` with `value`, `icon`, and `color`.
-- Icons: any name from [Bootstrap Icons](https://icons.getbootstrap.com/), such as `"people"`, `"cash"`, `"person"`.
-- Colors: `"primary"`, `"success"`, `"info"`, `"warning"`, `"danger"`, or a hex code like `"#1f77b4"`.
+```{.r}
+#| content: valuebox
+#| title: "Median age"
+list(icon = "person", color = "info", value = median(df$Age))
+```
+
+![](quarto_dashboards_img/valueboxes.png)
+
+- `#| content: valuebox` turns a chunk into a big-number box. The chunk returns a `list()` with `value`, `icon`, and `color`.
+- Icons: any name from [Bootstrap Icons](https://icons.getbootstrap.com/). Colors: `"primary"`, `"success"`, `"info"`, `"warning"`, `"danger"`, or a hex code.
 
 ## Interactive plots and tables
 
 These work in a **static** dashboard. No server is needed.
 
+:::: {.columns}
+::: {.column width="58%"}
 ```{.r}
 #| title: Survival by class
 library(plotly)
 p <- ggplot(df, aes(x = Pclass, fill = Survived)) +
   geom_bar(position = "fill")
-ggplotly(p)                      # hover, zoom, click the legend
+ggplotly(p)        # hover, zoom, click the legend
 ```
 
 ```{.r}
 #| title: Passenger data (type in the search box to filter)
 library(DT)
 df |>
-  select(Name, Sex, Age, Pclass, Survived) |>
-  datatable(options = list(pageLength = 10))   # search, sort, page
+  select(Name, Sex, Age, Pclass, Embarked, Fare, Survived) |>
+  datatable(options = list(pageLength = 10))
 ```
+:::
+
+::: {.column width="42%"}
+![](quarto_dashboards_img/table.jpg)
+
+`datatable()` adds the search box, sortable columns, and pages. The `ggplotly()` plots are on the [static example](#/the-static-example).
+:::
+::::
 
 ## Text and images
-
-Use a markdown card for text and images:
 
 ````{.markdown}
 # About
@@ -196,12 +309,17 @@ Use a markdown card for text and images:
 
 ![](logo.png){width=60}
 
-This dashboard was built with Quarto. Women and first-class
-passengers survived at much higher rates than men and
+This dashboard was built with Quarto. The **Overview** page shows the main numbers,
+**Distributions** compares age and fare for passengers who did and did not survive,
+and **Data** lets you search the passenger list.
+
+Women and first-class passengers survived at much higher rates than men and
 third-class passengers.
 
 :::
 ````
+
+![](quarto_dashboards_img/about.png)
 
 - Text in the sidebar or in a `.card` is plain Markdown: **bold**, lists, links.
 - Use inline R to put numbers in text: `` `r nrow(df)` `` passengers.
@@ -214,14 +332,16 @@ format:
     logo: logo.png
     nav-buttons:
       - icon: github
-        href: https://github.com/yourname
+        href: https://github.com/bryantstats
         aria-label: GitHub profile
       - icon: code-slash
-        href: https://raw.githubusercontent.com/yourname/repo/main/dashboard.qmd
+        href: https://raw.githubusercontent.com/bryantstats/math421/main/assignments/final/dashboard_templates/q2_static.qmd
         aria-label: Source code
 ```
 
-- `logo:` shows an image next to the title. Keep the image in the same folder.
+![](quarto_dashboards_img/navbar.png)
+
+- `logo:` shows an image next to the title (left). Keep the image in the same folder.
 - `nav-buttons:` adds icons at the top right.
   - **Social media:** `icon: linkedin` or `icon: github` with your profile link.
   - **Source code:** `icon: code-slash` with the **Raw** link of your `.qmd` on GitHub.
@@ -236,17 +356,24 @@ Sidebar, value boxes, plotly plots, and four pages. [Dashboard](../assignments/f
 
 ## Add Shiny: three changes
 
-````{.markdown code-line-numbers="|4|7-10|15-19"}
+:::: {.columns}
+::: {.column width="58%"}
+````{.markdown code-line-numbers="|4|7-16|20-25"}
 ---
 title: "Titanic - selectInput"
 format: dashboard
-server: shiny                                # 1. run with Shiny
+server: shiny
 ---
 
 ```{{r}}
-#| context: setup                            # 2. load packages + data once
-library(shiny); library(tidyverse); library(plotly); library(DT)
-df <- read_csv("https://bryantstats.github.io/math421/data/titanic_final.csv")
+#| context: setup
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(DT)
+url <- paste0("https://bryantstats.github.io/math421/",
+              "data/titanic_final.csv")
+df <- read_csv(url)
 ```
 
 # Plots
@@ -254,35 +381,57 @@ df <- read_csv("https://bryantstats.github.io/math421/data/titanic_final.csv")
 ## {.sidebar}
 
 ```{{r}}
-selectInput("var", "Choose a variable",     # 3. inputs in the sidebar
+selectInput("var", "Choose a variable",
             choices = c("Sex", "Pclass", "Embarked"))
 ```
 ````
 
+1. `server: shiny` runs the dashboard with Shiny.
+2. `#| context: setup` loads packages and data once.
+3. Inputs go in the sidebar.
+:::
+
+::: {.column width="42%"}
+![](quarto_dashboards_img/select_sex.jpg)
+
+The full template, [1_select](../assignments/final/dashboard_templates/1_select.qmd). The **Choose a variable** box in the sidebar is the `selectInput()`.
+:::
+::::
+
 ## Outputs and the server chunk
 
+:::: {.columns}
+::: {.column width="50%"}
 ````{.markdown}
 ## Row
 
 ```{{r}}
 #| title: Survival by the chosen variable
-plotlyOutput("p2")                           # an empty space named "p2"
+plotlyOutput("p2")
 ```
 
 ```{{r}}
 #| context: server
-output$p2 <- renderPlotly({                  # fills the space "p2"
-  p <- ggplot(df, aes(x = .data[[input$var]], fill = Survived)) +
+output$p2 <- renderPlotly({
+  p <- ggplot(df, aes(x = .data[[input$var]],
+                      fill = Survived)) +
     geom_bar(position = "fill")
   ggplotly(p)
 })
 ```
 ````
+:::
+
+::: {.column width="50%"}
+![](quarto_dashboards_img/select_pclass.jpg)
+
+After choosing **Pclass**, both plots redraw by class.
+:::
+::::
 
 - Output chunks hold **empty spaces**: `plotlyOutput()`, `DTOutput()`, `plotOutput()`, `textOutput()`.
 - The `#| context: server` chunk **fills** them: `renderPlotly()`, `renderDT()`, `renderPlot()`, `renderText()`.
-- The names must match: `plotlyOutput("p2")` ↔ `output$p2`.
-- `input$var` is the current value of `selectInput("var", ...)`.
+- The names must match: `plotlyOutput("p2")` ↔ `output$p2`. `input$var` is the current value of `selectInput("var", ...)`.
 
 ## Inputs
 
@@ -291,10 +440,40 @@ output$p2 <- renderPlotly({                  # fills the space "p2"
 | `selectInput("var", ...)` | one value | [1_select](../assignments/final/dashboard_templates/1_select.qmd) |
 | `checkboxGroupInput("port", ...)` | several values | [2_checkbox](../assignments/final/dashboard_templates/2_checkbox.qmd) |
 | `sliderInput("age", ..., value = c(0, 80))` | a range: `input$age[1]`, `input$age[2]` | [3_slider](../assignments/final/dashboard_templates/3_slider.qmd) |
-| `radioButtons("sex", ...)` | one value | [4_radio](../assignments/final/dashboard_templates/4_radio.qmd) |
+| `radioButtons("pos", ...)` | one value | [4_radio](../assignments/final/dashboard_templates/4_radio.qmd) |
 | `dateRangeInput("dates", ...)` | two dates | [5_date_range](../assignments/final/dashboard_templates/5_date_range.qmd) |
 
 All five together: [6_combine](../assignments/final/dashboard_templates/6_combine.qmd)
+
+## Inputs: code and result
+
+:::: {.columns}
+::: {.column width="68%"}
+```{.r}
+selectInput("var", "Group by",
+            choices = c("Sex", "Pclass", "Embarked"))
+checkboxGroupInput("port", "Port of embarkation",
+                   choices = c("Cherbourg" = "C",
+                               "Queenstown" = "Q",
+                               "Southampton" = "S"),
+                   selected = c("C", "Q", "S"))
+sliderInput("age", "Age", min = 0, max = 80, value = c(0, 80))
+radioButtons("pos", "Bar type",
+             choices = c("Proportion" = "fill", "Count" = "stack"))
+dateRangeInput("dates", "Date range",
+               start = min(df$date), end = max(df$date),
+               min = min(df$date), max = max(df$date))
+```
+
+- The first argument is the id: `input$var`, `input$port`, ...
+- The second is the label shown above the input.
+- `"Cherbourg" = "C"`: show *Cherbourg*, send `"C"` to `input$port`.
+:::
+
+::: {.column width="32%"}
+![](quarto_dashboards_img/inputs_sidebar.png)
+:::
+::::
 
 ## Filter once with `reactive()`
 
@@ -303,20 +482,33 @@ All five together: [6_combine](../assignments/final/dashboard_templates/6_combin
 filtered <- reactive({
   df |>
     filter(Embarked %in% input$port,
-           Age >= input$age[1], Age <= input$age[2])
+           Age >= input$age[1], Age <= input$age[2],
+           date >= input$dates[1], date <= input$dates[2])
 })
 
 output$p1 <- renderPlotly({
   if (nrow(filtered()) == 0) return(empty_plot())
-  p <- ggplot(filtered(), aes(x = Age, color = Survived)) + geom_density()
+  p <- ggplot(filtered(), aes(x = Age, color = .data[[input$var]])) + geom_density()
   ggplotly(p)
 })
-
-output$tbl <- renderDT(datatable(filtered()))
 ```
 
+:::: {.columns}
+::: {.column width="50%"}
+![](quarto_dashboards_img/filtered.jpg)
+
+Only **Cherbourg** ticked: every plot uses the filtered data.
+:::
+
+::: {.column width="50%"}
+![](quarto_dashboards_img/no_match.jpg)
+
+No port ticked: 0 rows, so `empty_plot()` shows a message.
+:::
+::::
+
 - `reactive()` filters once; every output reuses it. Call it with **`filtered()`**.
-- When the inputs leave no rows (for example, every box unticked), show a message instead of a plot. `empty_plot()` is defined in the setup chunk of the templates:
+- `empty_plot()` is defined in the setup chunk of the templates:
 
 ```{.r}
 empty_plot <- function() {

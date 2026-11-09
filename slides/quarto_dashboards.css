@@ -1,0 +1,2 @@
+/* Slightly smaller text next to screenshots */
+.reveal .column > ul, .reveal .column > ol, .reveal .column > p { font-size: 0.85em; }
