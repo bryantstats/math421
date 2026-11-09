@@ -20,6 +20,7 @@
 |**Midterm**|[Quarto Tab](assignments/midterm_qmd.html), [qmd](assignments/midterm_qmd.qmd) <br> [Rmarkdown Toc](assignments/midterm_toc.html), [Rmd](assignments/midterm_toc.Rmd) <br> [Rmarkdown Tab](assignments/midterm_tab.html), [Rmd](assignments/midterm_tab.Rmd) | | |
 |13. Functions: If-Else Statement| [Slides](gganimate/17_writing_functions.html) | |[Assignment 13](assignments/assignment13_optional.html) | 
 |14. Functions: Loop| [Slides](gganimate/18_writing_functions.html) | |[Assignment 14](assignments/assignment14_optional.html) | 
+|15. Quarto Dashboards| [Slides](slides/quarto_dashboards.html), [qmd](slides/quarto_dashboards.qmd) | | | 
 |**Dashboard Project**|[html](assignments/final/dashboard_project.html), [qmd](assignments/final/dashboard_project.qmd) | | | 
 |**Final Exam**|Monday, Dec. 14, 12:00pm | | |
 
