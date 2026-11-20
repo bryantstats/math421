@@ -1,0 +1,245 @@
+
+---
+title: "Visualization - Aesthetic Mapping - Titanic - Plotly"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+---
+class: inverse, middle, center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+df <- df %>% 
+  mutate(Survived = as.character(Survived),
+         Pclass = as.character(Pclass))
+```
+
+
+---
+```{r}
+df %>% ggplot()+
+  geom_density(mapping = aes(x = Age, color=Survived))
+```
+
+---
+```{r}
+p <- df %>% ggplot()+
+  geom_density(mapping = aes(x = Age, color=Survived))
+ggplotly(p)
+```
+
+---
+**One Continuous Variable: Density**
+
+```{r}
+df %>% ggplot()+
+  geom_density(mapping = aes(x = Age))
+```
+
+---
+**One Continuous Variable: Density**
+
+```{r}
+p <- df %>% ggplot()+
+  geom_density(mapping = aes(x = Age))
+ggplotly(p)
+
+```
+
+---
+**One Continuous Variable: Histogram**
+
+```{r}
+df %>% ggplot()+
+  geom_histogram(mapping = aes(x = Age))
+```
+
+---
+**One Continuous Variable: Histogram**
+
+```{r}
+p <- df %>% ggplot()+
+  geom_histogram(mapping = aes(x = Age))
+ggplotly(p)
+```
+
+
+---
+**One Categorical Variable: Bar chart**
+
+```{r}
+df %>% ggplot()+
+  geom_bar(mapping = aes(x = Survived))
+```
+
+---
+**One Categorical Variable: Bar chart**
+
+```{r}
+p <- df %>% ggplot()+
+  geom_bar(mapping = aes(x = Survived))
+ggplotly(p)
+```
+
+---
+**Two numeric: Scatter Plot: `geom_point`**
+
+```{r}
+df %>% ggplot()+geom_point(aes(x=Age, y=Fare))
+```
+
+
+```{r}
+p <- df %>% ggplot()+geom_point(aes(x=Age, y=Fare))
+ggplotly(p)
+```
+
+---
+**Two numeric: Line Plot: `geom_line`**
+
+```{r}
+df %>% ggplot()+geom_line(aes(x=Age, y=Fare))
+```
+
+
+---
+**Two numeric: Line Plot: `geom_line`**
+
+```{r}
+p <- df %>% ggplot()+geom_line(aes(x=Age, y=Fare))
+ggplotly(p)
+```
+
+---
+**Two numeric: Smooth Plot: `geom_smooth`**
+
+```{r}
+df %>% ggplot()+geom_smooth(aes(x=Age, y=Fare))
+```
+
+---
+**Two numeric: Smooth Plot: `geom_smooth`**
+
+```{r}
+p <- df %>% ggplot()+geom_smooth(aes(x=Age, y=Fare))
+ggplotly(p)
+```
+
+---
+**Two numeric: geom_point + geom_smooth**
+
+```{r}
+df %>% ggplot() + geom_point(aes(x=Age, y=Fare))+
+  geom_smooth(aes(x=Age, y=Fare))
+```
+
+---
+**Two numeric: geom_point + geom_smooth**
+
+```{r}
+p <- df %>% ggplot() + geom_point(aes(x=Age, y=Fare))+
+  geom_smooth(aes(x=Age, y=Fare))
+ggplotly(p)
+```
+
+
+---
+**One Continuous + One Categorical: Density**
+
+```{r}
+df %>% ggplot()+
+  geom_density(mapping = aes(x = Age, color = Survived))
+```
+
+---
+**One Continuous + One Categorical: Density**
+
+```{r}
+p <- df %>% ggplot()+
+  geom_density(mapping = aes(x = Age, color = Survived))
+ggplotly(p)
+```
+
+
+---
+**One Continuous + One Categorical: Boxplot**
+
+```{r}
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x = Age, y = Survived))
+```
+
+---
+**One Continuous + One Categorical: Boxplot**
+
+```{r}
+p <- df %>% ggplot()+
+  geom_boxplot(mapping = aes(x = Age, y = Survived))
+ggplotly(p)
+```
+
+
+---
+**Two categorical variables: Barplot**
+
+```{r}
+df %>% ggplot()+
+  geom_bar(mapping=aes(x=Sex, fill=Survived), position = 'fill')
+```
+
+
+---
+**Two categorical variables: Barplot**
+
+```{r}
+p <- df %>% ggplot()+
+  geom_bar(mapping=aes(x=Sex, fill=Survived), position = 'fill')
+ggplotly(p)
+```
+
+---
+** Three variables**
+
+```{r}
+df %>% ggplot() + geom_point(aes(x=Age, y=Fare, color = Survived))
+```
+
+---
+** Three variables**
+
+```{r}
+p <- df %>% ggplot() + geom_point(aes(x=Age, y=Fare, color = Survived))
+ggplotly(p)
+```
+

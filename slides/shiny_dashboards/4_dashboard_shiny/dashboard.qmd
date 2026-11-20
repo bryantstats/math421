@@ -1,0 +1,54 @@
+---
+title: "Titanic Explorer"
+format: dashboard
+server: shiny
+---
+
+```{r}
+#| context: setup
+library(shiny)
+library(tidyverse)
+titanic <- read_csv("titanic.csv") |>
+  mutate(Survived = factor(Survived, labels = c("No", "Yes")),
+         Pclass   = factor(Pclass))
+```
+
+## {.sidebar}
+
+```{r}
+selectInput("var", "Group by", choices = c("Sex", "Pclass", "Embarked"))
+checkboxGroupInput("class", "Passenger class",
+                   choices = c("1", "2", "3"), selected = c("1", "2", "3"))
+sliderInput("age", "Age", min = 0, max = 80, value = c(0, 80))
+```
+
+## Column
+
+```{r}
+#| title: Survival
+plotOutput("bar")
+```
+
+```{r}
+#| title: Passengers
+tableOutput("tbl")
+```
+
+```{r}
+#| context: server
+filtered <- reactive({
+  titanic |>
+    filter(Pclass %in% input$class,
+           Age >= input$age[1], Age <= input$age[2])
+})
+
+output$bar <- renderPlot({
+  ggplot(filtered(), aes(x = .data[[input$var]], fill = Survived)) +
+    geom_bar(position = "fill") +
+    labs(y = "Proportion")
+})
+
+output$tbl <- renderTable({
+  filtered() |> select(Name, Sex, Age, Pclass, Survived) |> head(10)
+})
+```

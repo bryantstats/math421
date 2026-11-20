@@ -1,0 +1,1 @@
+df <- read_csv('https://bryantstats.github.io/math421/data/us-counties.csv')

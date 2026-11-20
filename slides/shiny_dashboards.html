@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="shiny_dashboards_files/libs/clipboard/clipboard.min.js"></script>
+<script src="shiny_dashboards_files/libs/quarto-html/tabby.min.js"></script>
+<script src="shiny_dashboards_files/libs/quarto-html/popper.min.js"></script>
+<script src="shiny_dashboards_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="shiny_dashboards_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="shiny_dashboards_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="shiny_dashboards_files/libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
+
+  <meta name="author" content="Math 421 · Statistical Analysis with R">
+  <title>Interactive Apps in R</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="shiny_dashboards_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="shiny_dashboards_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="shiny_dashboards_files/libs/revealjs/dist/theme/quarto-e7615ae3f47a09451c723600273e2044.css">
+  <link href="shiny_dashboards_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="shiny_dashboards_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="shiny_dashboards_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="shiny_dashboards_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Interactive Apps in R</h1>
+  <p class="subtitle">Shiny and Quarto Dashboards</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Math 421 · Statistical Analysis with R
+</div>
+</div>
+</div>
+
+</section>
+<section id="today" class="slide level2">
+<h2>Today</h2>
+<p><strong>Part 1: Shiny.</strong> Build a web app with nothing but R code.</p>
+<p><strong>Part 2: Quarto dashboards.</strong> Lay out plots and numbers as a dashboard, then make it interactive with Shiny.</p>
+<p><strong>Part 3: Publish and choose.</strong> Put your app on the Internet, and decide which tool fits a project.</p>
+<div class="fragment">
+<p>Every example uses the Titanic data and runs on your computer. The code is in the <a href="shiny_dashboards/"><code>shiny_dashboards</code></a> folder next to these slides.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Folder</th>
+<th style="text-align: left;">What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>1_shiny_basic</code></td>
+<td style="text-align: left;">Smallest useful Shiny app</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>2_shiny_explorer</code></td>
+<td style="text-align: left;">Several inputs, <code>reactive()</code>, <code>navbarPage</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>3_dashboard_static</code></td>
+<td style="text-align: left;">Quarto dashboard, no Shiny</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>4_dashboard_shiny</code></td>
+<td style="text-align: left;">Quarto dashboard + Shiny</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="two-tools-one-idea" class="slide level2">
+<h2>Two tools, one idea</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Shiny app</strong></th>
+<th style="text-align: left;"><strong>Quarto dashboard</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">File</td>
+<td style="text-align: left;"><code>app.R</code></td>
+<td style="text-align: left;"><code>dashboard.qmd</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Layout</td>
+<td style="text-align: left;">Written in R: <code>fluidPage()</code>, <code>sidebarLayout()</code></td>
+<td style="text-align: left;">Written in Markdown: <code>## Row</code>, <code>## Column</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Interactive?</td>
+<td style="text-align: left;">Always</td>
+<td style="text-align: left;">Only with <code>server: shiny</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Best for</td>
+<td style="text-align: left;">Apps: filters, uploads, many pages</td>
+<td style="text-align: left;">Reports with plots, numbers, a few filters</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Run it</td>
+<td style="text-align: left;"><code>Ctrl + Shift + Enter</code></td>
+<td style="text-align: left;">Render (static) or Run Document (Shiny)</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>An interactive Quarto dashboard <strong>is</strong> Shiny underneath. Learn Shiny first and dashboards become easy.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<section id="part-1-shiny" class="title-slide slide level1 center" data-background-color="#2c3e50">
+<h1>Part 1: Shiny</h1>
+
+</section>
+<section id="every-shiny-app-has-three-parts" class="slide level2">
+<h2>Every Shiny app has three parts</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-label="1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb1-2"><a href="" aria-label="2"></a></span>
+<span id="cb1-3"><a href="" aria-label="3"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1-4"><a href="" aria-label="4"></a>  <span class="co"># 1. UI: what the user sees (inputs and empty spaces for outputs)</span></span>
+<span id="cb1-5"><a href="" aria-label="5"></a>)</span>
+<span id="cb1-6"><a href="" aria-label="6"></a></span>
+<span id="cb1-7"><a href="" aria-label="7"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1-8"><a href="" aria-label="8"></a>  <span class="co"># 2. Server: R code that fills those spaces</span></span>
+<span id="cb1-9"><a href="" aria-label="9"></a>}</span>
+<span id="cb1-10"><a href="" aria-label="10"></a></span>
+<span id="cb1-11"><a href="" aria-label="11"></a><span class="fu">shinyApp</span>(ui, server)   <span class="co"># 3. Put them together and run</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment">
+<ul>
+<li>Save it as <strong><code>app.R</code></strong> in its own folder, with the data file next to it.</li>
+<li>Press <strong><code>Ctrl + Shift + Enter</code></strong> (Mac: <code>Cmd + Shift + Enter</code>) to run it.</li>
+<li>Read data with <code>read_csv("titanic.csv")</code>, never a path like <code>C://Users/...</code>.</li>
+</ul>
+</div>
+</section>
+<section id="example-1-survival-by-group" class="slide level2">
+<h2>Example 1: survival by group</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-code-line-numbers="|12|14|19-23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-label="1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb2-2"><a href="" aria-label="2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-3"><a href="" aria-label="3"></a></span>
+<span id="cb2-4"><a href="" aria-label="4"></a>titanic <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"titanic.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="" aria-label="5"></a>  <span class="fu">mutate</span>(<span class="at">Survived =</span> <span class="fu">factor</span>(Survived, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)),</span>
+<span id="cb2-6"><a href="" aria-label="6"></a>         <span class="at">Pclass   =</span> <span class="fu">factor</span>(Pclass))</span>
+<span id="cb2-7"><a href="" aria-label="7"></a></span>
+<span id="cb2-8"><a href="" aria-label="8"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb2-9"><a href="" aria-label="9"></a>  <span class="fu">titlePanel</span>(<span class="st">"Titanic: Survival by Group"</span>),</span>
+<span id="cb2-10"><a href="" aria-label="10"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb2-11"><a href="" aria-label="11"></a>    <span class="fu">sidebarPanel</span>(</span>
+<span id="cb2-12"><a href="" aria-label="12"></a>      <span class="fu">selectInput</span>(<span class="st">"var"</span>, <span class="st">"Group by"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Sex"</span>, <span class="st">"Pclass"</span>, <span class="st">"Embarked"</span>))</span>
+<span id="cb2-13"><a href="" aria-label="13"></a>    ),</span>
+<span id="cb2-14"><a href="" aria-label="14"></a>    <span class="fu">mainPanel</span>(<span class="fu">plotOutput</span>(<span class="st">"bar"</span>))</span>
+<span id="cb2-15"><a href="" aria-label="15"></a>  )</span>
+<span id="cb2-16"><a href="" aria-label="16"></a>)</span>
+<span id="cb2-17"><a href="" aria-label="17"></a></span>
+<span id="cb2-18"><a href="" aria-label="18"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb2-19"><a href="" aria-label="19"></a>  output<span class="sc">$</span>bar <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb2-20"><a href="" aria-label="20"></a>    <span class="fu">ggplot</span>(titanic, <span class="fu">aes</span>(<span class="at">x =</span> .data[[input<span class="sc">$</span>var]], <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb2-21"><a href="" aria-label="21"></a>      <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb2-22"><a href="" aria-label="22"></a>      <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Proportion"</span>)</span>
+<span id="cb2-23"><a href="" aria-label="23"></a>  })</span>
+<span id="cb2-24"><a href="" aria-label="24"></a>}</span>
+<span id="cb2-25"><a href="" aria-label="25"></a></span>
+<span id="cb2-26"><a href="" aria-label="26"></a><span class="fu">shinyApp</span>(ui, server)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="example-1-how-the-pieces-connect" class="slide level2 scrollable">
+<h2>Example 1: how the pieces connect</h2>
+
+<img data-src="shiny_dashboards/1_shiny_basic/screenshot.png" style="width:80.0%" class="r-stretch"><ol type="1">
+<li><code>selectInput("var", ...)</code> creates a dropdown. Its value is <strong><code>input$var</code></strong>.</li>
+<li><code>plotOutput("bar")</code> reserves a space named <code>"bar"</code>.</li>
+<li><code>output$bar &lt;- renderPlot({...})</code> fills that space.</li>
+<li>When the user picks a new variable, Shiny <strong>re-runs</strong> <code>renderPlot</code> automatically.</li>
+</ol>
+<p><code>.data[[input$var]]</code> turns the text <code>"Sex"</code> into the column <code>Sex</code> inside <code>aes()</code>.</p>
+</section>
+<section id="inputs-and-outputs-come-in-pairs" class="slide level2">
+<h2>Inputs and outputs come in pairs</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Inputs</strong> (in <code>ui</code>)</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Gives <code>input$id</code> as</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>selectInput()</code></td>
+<td style="text-align: left;">one value</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>checkboxGroupInput()</code></td>
+<td style="text-align: left;">several values</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>sliderInput()</code></td>
+<td style="text-align: left;">number or range</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>radioButtons()</code></td>
+<td style="text-align: left;">one value</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>dateRangeInput()</code></td>
+<td style="text-align: left;">two dates</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fileInput()</code></td>
+<td style="text-align: left;">an uploaded file</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:50%;">
+<p><strong>Outputs</strong>: put the left one in <code>ui</code> and fill it with the right one in <code>server</code></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>ui</code></th>
+<th style="text-align: left;"><code>server</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>plotOutput()</code></td>
+<td style="text-align: left;"><code>renderPlot()</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>tableOutput()</code></td>
+<td style="text-align: left;"><code>renderTable()</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>textOutput()</code></td>
+<td style="text-align: left;"><code>renderText()</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>uiOutput()</code></td>
+<td style="text-align: left;"><code>renderUI()</code></td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>The id must match exactly: <code>plotOutput("bar")</code> ↔︎ <code>output$bar</code>. A typo gives a blank space, not an error.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="example-2-more-inputs-ui" class="slide level2">
+<h2>Example 2: more inputs (UI)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-code-line-numbers="|1,2,15|5-10|12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-label="1"></a>ui <span class="ot">&lt;-</span> <span class="fu">navbarPage</span>(<span class="st">"Titanic Explorer"</span>,</span>
+<span id="cb3-2"><a href="" aria-label="2"></a>  <span class="fu">tabPanel</span>(<span class="st">"Plot"</span>,</span>
+<span id="cb3-3"><a href="" aria-label="3"></a>    <span class="fu">sidebarLayout</span>(</span>
+<span id="cb3-4"><a href="" aria-label="4"></a>      <span class="fu">sidebarPanel</span>(</span>
+<span id="cb3-5"><a href="" aria-label="5"></a>        <span class="fu">selectInput</span>(<span class="st">"var"</span>, <span class="st">"Group by"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Sex"</span>, <span class="st">"Pclass"</span>, <span class="st">"Embarked"</span>)),</span>
+<span id="cb3-6"><a href="" aria-label="6"></a>        <span class="fu">checkboxGroupInput</span>(<span class="st">"class"</span>, <span class="st">"Passenger class"</span>,</span>
+<span id="cb3-7"><a href="" aria-label="7"></a>                           <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>), <span class="at">selected =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>)),</span>
+<span id="cb3-8"><a href="" aria-label="8"></a>        <span class="fu">sliderInput</span>(<span class="st">"age"</span>, <span class="st">"Age"</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">80</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">80</span>)),</span>
+<span id="cb3-9"><a href="" aria-label="9"></a>        <span class="fu">radioButtons</span>(<span class="st">"pos"</span>, <span class="st">"Bar type"</span>,</span>
+<span id="cb3-10"><a href="" aria-label="10"></a>                     <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Proportion"</span> <span class="ot">=</span> <span class="st">"fill"</span>, <span class="st">"Count"</span> <span class="ot">=</span> <span class="st">"stack"</span>))</span>
+<span id="cb3-11"><a href="" aria-label="11"></a>      ),</span>
+<span id="cb3-12"><a href="" aria-label="12"></a>      <span class="fu">mainPanel</span>(<span class="fu">plotOutput</span>(<span class="st">"bar"</span>), <span class="fu">textOutput</span>(<span class="st">"n"</span>))</span>
+<span id="cb3-13"><a href="" aria-label="13"></a>    )</span>
+<span id="cb3-14"><a href="" aria-label="14"></a>  ),</span>
+<span id="cb3-15"><a href="" aria-label="15"></a>  <span class="fu">tabPanel</span>(<span class="st">"Data"</span>, <span class="fu">tableOutput</span>(<span class="st">"tbl"</span>))</span>
+<span id="cb3-16"><a href="" aria-label="16"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>navbarPage()</code> + <code>tabPanel()</code> give the app tabs across the top.</li>
+<li>A range slider gives <strong>two</strong> numbers: <code>input$age[1]</code> and <code>input$age[2]</code>.</li>
+<li><code>radioButtons()</code> can show one label (<code>"Count"</code>) but send another value (<code>"stack"</code>).</li>
+</ul>
+</section>
+<section id="example-2-reactive-server" class="slide level2">
+<h2>Example 2: <code>reactive()</code> (server)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-code-line-numbers="|3-7|10,15,18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-label="1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb4-2"><a href="" aria-label="2"></a>  <span class="co"># Filter once, reuse in every output</span></span>
+<span id="cb4-3"><a href="" aria-label="3"></a>  filtered <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb4-4"><a href="" aria-label="4"></a>    titanic <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="" aria-label="5"></a>      <span class="fu">filter</span>(Pclass <span class="sc">%in%</span> input<span class="sc">$</span>class,</span>
+<span id="cb4-6"><a href="" aria-label="6"></a>             Age <span class="sc">&gt;=</span> input<span class="sc">$</span>age[<span class="dv">1</span>], Age <span class="sc">&lt;=</span> input<span class="sc">$</span>age[<span class="dv">2</span>])</span>
+<span id="cb4-7"><a href="" aria-label="7"></a>  })</span>
+<span id="cb4-8"><a href="" aria-label="8"></a></span>
+<span id="cb4-9"><a href="" aria-label="9"></a>  output<span class="sc">$</span>bar <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb4-10"><a href="" aria-label="10"></a>    <span class="fu">ggplot</span>(<span class="fu">filtered</span>(), <span class="fu">aes</span>(<span class="at">x =</span> .data[[input<span class="sc">$</span>var]], <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="" aria-label="11"></a>      <span class="fu">geom_bar</span>(<span class="at">position =</span> input<span class="sc">$</span>pos) <span class="sc">+</span></span>
+<span id="cb4-12"><a href="" aria-label="12"></a>      <span class="fu">labs</span>(<span class="at">y =</span> <span class="cf">if</span> (input<span class="sc">$</span>pos <span class="sc">==</span> <span class="st">"fill"</span>) <span class="st">"Proportion"</span> <span class="cf">else</span> <span class="st">"Count"</span>)</span>
+<span id="cb4-13"><a href="" aria-label="13"></a>  })</span>
+<span id="cb4-14"><a href="" aria-label="14"></a></span>
+<span id="cb4-15"><a href="" aria-label="15"></a>  output<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">renderText</span>(<span class="fu">paste</span>(<span class="fu">nrow</span>(<span class="fu">filtered</span>()), <span class="st">"passengers selected"</span>))</span>
+<span id="cb4-16"><a href="" aria-label="16"></a></span>
+<span id="cb4-17"><a href="" aria-label="17"></a>  output<span class="sc">$</span>tbl <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
+<span id="cb4-18"><a href="" aria-label="18"></a>    <span class="fu">filtered</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(Name, Sex, Age, Pclass, Survived) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">20</span>)</span>
+<span id="cb4-19"><a href="" aria-label="19"></a>  })</span>
+<span id="cb4-20"><a href="" aria-label="20"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>reactive()</code> is a <strong>reusable result</strong> that updates when its inputs change.</li>
+<li>Call it with parentheses: <strong><code>filtered()</code></strong>, not <code>filtered</code>.</li>
+<li>Without it, you would copy the same <code>filter()</code> into all three outputs.</li>
+</ul>
+</section>
+<section id="example-2-the-result" class="slide level2">
+<h2>Example 2: the result</h2>
+
+<img data-src="shiny_dashboards/2_shiny_explorer/screenshot.png" class="r-stretch"><p>Untick class 3 or move the slider: the plot, the count, and the <strong>Data</strong> tab all update together.</p>
+</section></section>
+<section>
+<section id="part-2-quarto-dashboards" class="title-slide slide level1 center" data-background-color="#2c3e50">
+<h1>Part 2: Quarto Dashboards</h1>
+
+</section>
+<section id="a-dashboard-is-a-.qmd-file" class="slide level2">
+<h2>A dashboard is a <code>.qmd</code> file</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="" aria-label="1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="" aria-label="2"></a><span class="an">title:</span><span class="co"> "Titanic at a Glance"</span></span>
+<span id="cb5-3"><a href="" aria-label="3"></a><span class="an">format:</span><span class="co"> dashboard</span></span>
+<span id="cb5-4"><a href="" aria-label="4"></a><span class="co">---</span></span>
+<span id="cb5-5"><a href="" aria-label="5"></a></span>
+<span id="cb5-6"><a href="" aria-label="6"></a><span class="fu">## Row {height=25%}</span></span>
+<span id="cb5-7"><a href="" aria-label="7"></a></span>
+<span id="cb5-8"><a href="" aria-label="8"></a>(code chunks here become cards side by side)</span>
+<span id="cb5-9"><a href="" aria-label="9"></a></span>
+<span id="cb5-10"><a href="" aria-label="10"></a><span class="fu">## Row {height=75%}</span></span>
+<span id="cb5-11"><a href="" aria-label="11"></a></span>
+<span id="cb5-12"><a href="" aria-label="12"></a>(more code chunks)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Each <strong>code chunk</strong> becomes a <strong>card</strong>. Give it a title with <code>#| title: ...</code>.</li>
+<li><code>## Row</code> and <code>## Column</code> arrange the cards. <code>{height=...}</code> and <code>{width=...}</code> size them.</li>
+<li><code># Page name</code> (one <code>#</code>) makes separate pages; <code>## Row {.tabset}</code> makes tabs.</li>
+<li>Click <strong>Render</strong>. The result is an HTML file and needs no server.</li>
+</ul>
+</section>
+<section id="example-3-value-boxes" class="slide level2">
+<h2>Example 3: value boxes</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-label="1"></a><span class="co">#| content: valuebox</span></span>
+<span id="cb6-2"><a href="" aria-label="2"></a><span class="co">#| title: "Passengers"</span></span>
+<span id="cb6-3"><a href="" aria-label="3"></a><span class="fu">list</span>(<span class="at">icon =</span> <span class="st">"people"</span>, <span class="at">color =</span> <span class="st">"primary"</span>, <span class="at">value =</span> <span class="fu">nrow</span>(titanic))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-label="1"></a><span class="co">#| content: valuebox</span></span>
+<span id="cb7-2"><a href="" aria-label="2"></a><span class="co">#| title: "Survival rate"</span></span>
+<span id="cb7-3"><a href="" aria-label="3"></a><span class="fu">list</span>(<span class="at">icon =</span> <span class="st">"life-preserver"</span>, <span class="at">color =</span> <span class="st">"success"</span>,</span>
+<span id="cb7-4"><a href="" aria-label="4"></a>     <span class="at">value =</span> scales<span class="sc">::</span><span class="fu">percent</span>(<span class="fu">mean</span>(titanic<span class="sc">$</span>Survived <span class="sc">==</span> <span class="st">"Yes"</span>), <span class="at">accuracy =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>#| content: valuebox</code> turns a chunk into a big-number box.</li>
+<li>The chunk returns a <code>list()</code> with <code>value</code>, an <code>icon</code>, and a <code>color</code>.</li>
+<li>Icons are names from <a href="https://icons.getbootstrap.com/">Bootstrap Icons</a>, e.g.&nbsp;<code>"people"</code>, <code>"cash"</code>.</li>
+<li>Colors: <code>"primary"</code>, <code>"success"</code>, <code>"warning"</code>, <code>"danger"</code>, <code>"info"</code>, or a hex code.</li>
+</ul>
+</section>
+<section id="example-3-plots-as-cards" class="slide level2">
+<h2>Example 3: plots as cards</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-label="1"></a><span class="co">#| title: Survival by class</span></span>
+<span id="cb8-2"><a href="" aria-label="2"></a><span class="fu">ggplot</span>(titanic, <span class="fu">aes</span>(<span class="at">x =</span> Pclass, <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="" aria-label="3"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="" aria-label="4"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Proportion"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-label="1"></a><span class="co">#| title: Age distribution</span></span>
+<span id="cb9-2"><a href="" aria-label="2"></a><span class="fu">ggplot</span>(titanic, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="" aria-label="3"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Any R output works as a card: ggplot, plotly, a <code>knitr::kable()</code> table, a leaflet map.</p>
+</section>
+<section id="example-3-the-result" class="slide level2">
+<h2>Example 3: the result</h2>
+
+<img data-src="shiny_dashboards/3_dashboard_static/screenshot.png" class="r-stretch"><p>This dashboard is <strong>static</strong>: it looks the same for every visitor. To let them filter, add Shiny.</p>
+</section>
+<section id="example-4-add-shiny-to-a-dashboard" class="slide level2 scrollable">
+<h2>Example 4: add Shiny to a dashboard</h2>
+<p>Three changes turn a static dashboard into an interactive one:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-code-line-numbers="|4|7-11|13-17"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="" aria-label="1"></a><span class="co">---</span></span>
+<span id="cb10-2"><a href="" aria-label="2"></a><span class="an">title:</span><span class="co"> "Titanic Explorer"</span></span>
+<span id="cb10-3"><a href="" aria-label="3"></a><span class="an">format:</span><span class="co"> dashboard</span></span>
+<span id="cb10-4"><a href="" aria-label="4"></a><span class="an">server:</span><span class="co"> shiny</span></span>
+<span id="cb10-5"><a href="" aria-label="5"></a><span class="co">---</span></span>
+<span id="cb10-6"><a href="" aria-label="6"></a></span>
+<span id="cb10-7"><a href="" aria-label="7"></a><span class="in">```{r}</span></span>
+<span id="cb10-8"><a href="" aria-label="8"></a><span class="co">#| context: setup</span></span>
+<span id="cb10-9"><a href="" aria-label="9"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb10-10"><a href="" aria-label="10"></a>titanic <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"titanic.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(...)</span>
+<span id="cb10-11"><a href="" aria-label="11"></a><span class="in">```</span></span>
+<span id="cb10-12"><a href="" aria-label="12"></a></span>
+<span id="cb10-13"><a href="" aria-label="13"></a><span class="fu">## {.sidebar}</span></span>
+<span id="cb10-14"><a href="" aria-label="14"></a></span>
+<span id="cb10-15"><a href="" aria-label="15"></a><span class="in">```{r}</span></span>
+<span id="cb10-16"><a href="" aria-label="16"></a><span class="fu">selectInput</span>(<span class="st">"var"</span>, <span class="st">"Group by"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Sex"</span>, <span class="st">"Pclass"</span>, <span class="st">"Embarked"</span>))</span>
+<span id="cb10-17"><a href="" aria-label="17"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li><code>server: shiny</code> runs the dashboard with a Shiny server.</li>
+<li>A <code>#| context: setup</code> chunk loads packages and data once.</li>
+<li>Inputs go in a <code>## {.sidebar}</code> section.</li>
+</ol>
+</section>
+<section id="example-4-outputs-and-server" class="slide level2">
+<h2>Example 4: outputs and server</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-label="1"></a><span class="co">#| title: Survival</span></span>
+<span id="cb11-2"><a href="" aria-label="2"></a><span class="fu">plotOutput</span>(<span class="st">"bar"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="" aria-label="1"></a><span class="co">#| context: server</span></span>
+<span id="cb12-2"><a href="" aria-label="2"></a>filtered <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb12-3"><a href="" aria-label="3"></a>  titanic <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="" aria-label="4"></a>    <span class="fu">filter</span>(Pclass <span class="sc">%in%</span> input<span class="sc">$</span>class,</span>
+<span id="cb12-5"><a href="" aria-label="5"></a>           Age <span class="sc">&gt;=</span> input<span class="sc">$</span>age[<span class="dv">1</span>], Age <span class="sc">&lt;=</span> input<span class="sc">$</span>age[<span class="dv">2</span>])</span>
+<span id="cb12-6"><a href="" aria-label="6"></a>})</span>
+<span id="cb12-7"><a href="" aria-label="7"></a></span>
+<span id="cb12-8"><a href="" aria-label="8"></a>output<span class="sc">$</span>bar <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb12-9"><a href="" aria-label="9"></a>  <span class="fu">ggplot</span>(<span class="fu">filtered</span>(), <span class="fu">aes</span>(<span class="at">x =</span> .data[[input<span class="sc">$</span>var]], <span class="at">fill =</span> Survived)) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="" aria-label="10"></a>    <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="" aria-label="11"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Proportion"</span>)</span>
+<span id="cb12-12"><a href="" aria-label="12"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Output chunks hold <code>plotOutput()</code>, <code>tableOutput()</code>, … exactly as in Shiny’s <code>ui</code>.</li>
+<li>The <code>#| context: server</code> chunk is the body of Shiny’s <code>server</code> function.</li>
+<li>Run it with <strong>Run Document</strong> in RStudio, or <code>quarto serve dashboard.qmd</code>.</li>
+</ul>
+</section>
+<section id="example-4-the-result" class="slide level2">
+<h2>Example 4: the result</h2>
+
+<img data-src="shiny_dashboards/4_dashboard_shiny/screenshot.png" class="r-stretch"><p>Same inputs and server code as Example 2. Quarto supplies the layout, cards, and sidebar.</p>
+</section>
+<section id="same-app-side-by-side" class="slide level2">
+<h2>Same app, side by side</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Job</th>
+<th style="text-align: left;">Shiny <code>app.R</code></th>
+<th style="text-align: left;">Quarto dashboard</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Load packages and data</td>
+<td style="text-align: left;">top of <code>app.R</code></td>
+<td style="text-align: left;"><code>#| context: setup</code> chunk</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Inputs</td>
+<td style="text-align: left;"><code>sidebarPanel(...)</code></td>
+<td style="text-align: left;"><code>## {.sidebar}</code> + a chunk</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Output spaces</td>
+<td style="text-align: left;"><code>mainPanel(plotOutput("bar"))</code></td>
+<td style="text-align: left;">a chunk with <code>plotOutput("bar")</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Server code</td>
+<td style="text-align: left;"><code>server &lt;- function(input, output) {...}</code></td>
+<td style="text-align: left;"><code>#| context: server</code> chunk</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tabs / pages</td>
+<td style="text-align: left;"><code>navbarPage()</code> + <code>tabPanel()</code></td>
+<td style="text-align: left;"><code># Page</code> or <code>{.tabset}</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Run</td>
+<td style="text-align: left;"><code>Ctrl + Shift + Enter</code></td>
+<td style="text-align: left;">Run Document / <code>quarto serve</code></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><code>input$...</code>, <code>output$...</code>, <code>render*()</code>, and <code>reactive()</code> are <strong>identical</strong> in both.</p>
+</div>
+</section></section>
+<section>
+<section id="part-3-publish-and-choose" class="title-slide slide level1 center" data-background-color="#2c3e50">
+<h1>Part 3: Publish and Choose</h1>
+
+</section>
+<section id="publish-on-posit-connect-cloud" class="slide level2 scrollable">
+<h2>Publish on Posit Connect Cloud</h2>
+<p>Posit Connect Cloud (<a href="https://connect.posit.cloud">connect.posit.cloud</a>) replaces shinyapps.io. It hosts Shiny apps and Quarto dashboards.</p>
+<p><strong>From RStudio</strong> (version 2026.04 or newer)</p>
+<ol type="1">
+<li>Create a free account at connect.posit.cloud (sign up with GitHub).</li>
+<li>Open <code>app.R</code> or <code>dashboard.qmd</code> and click the blue <strong>Publish</strong> icon.</li>
+<li>Choose <strong>Posit Connect Cloud</strong>, sign in, and publish.</li>
+</ol>
+<p><strong>From GitHub</strong></p>
+<ol type="1">
+<li>Put the app folder (code + data) in a <strong>public</strong> GitHub repository.</li>
+<li>In that folder run <code>rsconnect::writeManifest()</code> and push <code>manifest.json</code>.</li>
+<li>On connect.posit.cloud click <strong>Publish</strong>, choose the repository, branch, and main file.</li>
+</ol>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>A static dashboard (Example 3) is just HTML, so it can also go on GitHub Pages like your other assignments.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="which-one-should-i-use" class="slide level2">
+<h2>Which one should I use?</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Shiny app</strong> when you need</p>
+<ul>
+<li>many inputs that depend on each other</li>
+<li>file uploads (<code>fileInput()</code>)</li>
+<li>several pages of tools</li>
+<li>custom layout or behavior</li>
+<li>an app that will keep growing</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Quarto dashboard</strong> when you want</p>
+<ul>
+<li>a polished report with big numbers and plots</li>
+<li>a few filters on top of it</li>
+<li>no server at all (static)</li>
+<li>to reuse a Quarto report you already wrote</li>
+</ul>
+</div></div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Not sure? Start with a Shiny <code>app.R</code>. The same <code>server</code> code moves into a dashboard later almost unchanged.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="common-errors" class="slide level2">
+<h2>Common errors</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">What you see</th>
+<th style="text-align: left;">Usual cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Blank space where a plot should be</td>
+<td style="text-align: left;">Output id typo: <code>plotOutput("bar")</code> vs <code>output$barr</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>object 'filtered' not found</code> or wrong result</td>
+<td style="text-align: left;">Called <code>filtered</code> without <code>()</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Can't access reactive value 'var' outside of reactive consumer</code></td>
+<td style="text-align: left;">Used <code>input$var</code> outside a <code>render*()</code> or <code>reactive()</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>could not find function "selectInput"</code> in a dashboard</td>
+<td style="text-align: left;"><code>library(shiny)</code> missing from the <code>setup</code> chunk</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Works locally, fails after publishing</td>
+<td style="text-align: left;">Local file path (<code>C://...</code>) or data file not in the app folder</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Plot empty after unticking every box</td>
+<td style="text-align: left;">Filter returns 0 rows; check with <code>validate(need(...))</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practice" class="slide level2 scrollable">
+<h2>Practice</h2>
+<ol type="1">
+<li>Run all four examples. In Example 1, add <code>"Parch"</code> to the choices.</li>
+<li>In Example 2, add a <code>sliderInput()</code> for <code>Fare</code> and use it in <code>filtered()</code>.</li>
+<li>Turn Example 3 into <strong>two pages</strong>: <code># Overview</code> (value boxes) and <code># Plots</code> (the two plots).</li>
+<li>In Example 4, add a card that shows how many passengers are selected (<code>textOutput()</code> in a chunk, <code>renderText()</code> in the server chunk).</li>
+<li>Publish one app and one dashboard on Posit Connect Cloud and send the links.</li>
+</ol>
+</section>
+<section id="references" class="slide level2">
+<h2>References</h2>
+<ul>
+<li>Shiny: <a href="https://shiny.posit.co/r/getstarted/">Get started</a> · <a href="https://shiny.posit.co/r/gallery/">Gallery</a> · <a href="https://mastering-shiny.org">Mastering Shiny (free book)</a></li>
+<li>Quarto dashboards: <a href="https://quarto.org/docs/dashboards/">Overview</a> · <a href="https://quarto.org/docs/dashboards/layout.html">Layout</a> · <a href="https://quarto.org/docs/dashboards/interactivity/shiny-r.html">Using Shiny</a></li>
+<li>Publishing: <a href="https://docs.posit.co/connect-cloud/how-to/r/shiny-r.html">Deploy a Shiny app to Connect Cloud</a></li>
+<li>Icons for value boxes: <a href="https://icons.getbootstrap.com/">Bootstrap Icons</a></li>
+</ul>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="shiny_dashboards_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="shiny_dashboards_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

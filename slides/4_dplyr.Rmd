@@ -1,0 +1,461 @@
+
+---
+title: "Data Wrangling with Dplyr"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, eval = TRUE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, cache=TRUE, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+
+---
+class: inverse, center, middle
+# tidyverse
+
+---
+class: inverse
+
+# `tidyverse` package
+
+- The tidyverse is an opinionated collection of R packages designed for data science.
+
+- All packages share an underlying design philosophy, grammar, and data structures.
+
+---
+class: inverse
+
+# Core Packages
+
+- **ggplot2**: Visualization
+
+- **dplyr**: Data Wrangling
+
+- **purrr**: Functional Programming
+
+---
+class: inverse
+
+# Install `tidyverse`
+
+```{r, cache=TRUE, eval=FALSE}
+install.packages('tidyverse')
+library(tidyverse)
+```
+
+```{r, cache=TRUE, eval=TRUE}
+library(tidyverse)
+```
+
+---
+class: inverse, center, middle
+
+# read_csv
+
+---
+class: inverse
+
+# read_csv 
+
+Use `read_csv` instead of `read.csv` to read the data 
+
+- `read_csv` 
+
+```{r, cache=TRUE, eval=FALSE}
+library(tidyverse)
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+```{r, cache=TRUE, eval=TRUE}
+start_time <- Sys.time()
+df <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+end_time <- Sys.time()
+
+end_time - start_time
+
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+```{r, cache=TRUE, eval=TRUE}
+start_time <- Sys.time()
+df <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+end_time <- Sys.time()
+
+end_time - start_time
+```
+
+
+---
+class: inverse
+
+- read_csv recognize the types of data better
+
+```{r, cache=TRUE, eval=TRUE}
+df <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+
+```
+
+---
+class: inverse
+
+- read_csv recognize the types of data better
+
+```{r, cache=TRUE, eval=TRUE}
+df <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+
+```
+
+---
+class: inverse
+
+- Data prints out nicely with read_csv
+
+```{r, cache=TRUE}
+df <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+df
+```
+
+
+---
+class: inverse, center, middle
+
+# Pipe (%>%) 
+
+# Hotkey: Ctrl + Shift + M
+
+
+---
+class: inverse
+
+# Pipe operator (%>%) 
+
+- $x$ %>% $f$ is the same $f(x)$
+
+```{r, cache=TRUE, eval=TRUE}
+
+x <- c(1:10)
+
+# conventional way
+sum(x)
+
+# Pipe
+x %>% sum
+
+```
+
+
+---
+class: inverse
+
+# Pipe operator (%>%)
+
+- $x$ %>% $f$ %>% $g$ is the same $g(f(x))$
+
+```{r, cache=TRUE, eval=TRUE}
+
+x <- c(1:10)
+
+# conventional way
+log(sum(x))
+
+# Pipe
+x %>% sum %>% log
+```
+
+---
+class: inverse, center, middle
+
+# dplyr
+
+---
+class: inverse
+
+# Five verbs of dplyr
+
+- `select()` selects columns from data
+- `filter()` filter rows of data
+- `summarise()` summarises data (calculating summary statistics)
+- `arrange()` arrange data
+- `mutate()` creates new variables
+
+---
+class: inverse, center, middle
+# select
+
+
+---
+class: inverse
+
+# select: select columns
+
+```{r, cache=TRUE}
+df <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+df1 <-  select(df, state, date)
+
+```
+
+---
+class: inverse
+
+# select with pipe
+
+```{r, cache=TRUE}
+df %>% select(state, date)
+```
+
+---
+class: inverse
+
+```{r, cache=TRUE}
+# Deselect date from the data
+df %>% select(-date)
+```
+
+---
+class: inverse
+
+```{r, cache=TRUE}
+# select only numeric variables
+df %>% select_if(is.numeric)
+```
+
+---
+class: inverse
+
+```{r, cache=TRUE}
+# select only non-numeric variables
+df %>% select_if(~!is.numeric(.))
+```
+
+
+---
+class: inverse, center, middle
+# filter
+
+---
+class: inverse
+
+# filter
+
+```{r, cache=TRUE}
+# Select rows or days with no deaths
+df %>% filter(deaths==0)
+```
+
+---
+class: inverse
+
+# filter
+
+```{r, cache=TRUE}
+# Select rows or days with no deaths
+df %>% filter(state=='Rhode Island',deaths==0)
+```
+
+---
+class: inverse, center, middle
+# mutate
+
+---
+class: inverse
+
+# mutate:  Create new columns
+
+```{r, cache=TRUE}
+df %>% mutate(cases_minus_deaths = cases - deaths)
+```
+
+
+---
+class: inverse
+
+# mutate
+
+- If you want to add the new columns to the original data
+
+```{r, cache=TRUE}
+df <- df %>% mutate(non_death = cases - deaths)
+```
+
+
+---
+class: inverse
+
+# mutate
+
+```{r, cache=TRUE}
+df %>% mutate(deaths2 = ifelse(deaths==0,'No_deaths','Has_deaths'))
+```
+
+---
+class: inverse, middle, center
+# arrange
+
+
+---
+class: inverse
+
+# arrange
+
+```{r, cache=TRUE}
+df %>% arrange(deaths)
+```
+---
+class: inverse
+
+# arrange
+
+```{r, cache=TRUE}
+df %>% arrange(-deaths)
+```
+
+
+---
+class: inverse, center, middle
+# summarise
+
+---
+class: inverse
+
+# summarise: Calculations on continuous variables
+
+```{r, cache=TRUE}
+df %>% summarise(mean_death = mean(deaths, na.rm=TRUE))
+```
+
+---
+class: inverse
+
+# summarise: Calculations on continuous variables
+
+```{r, cache=TRUE}
+df %>% summarise(mean_death = mean(deaths, na.rm=TRUE), 
+                 median_cases=median(cases, na.rm=TRUE), 
+                 max_death=max(deaths, na.rm=TRUE))
+```
+
+---
+class: inverse, middle, center
+# Some Other Functions
+
+---
+class: inverse
+
+# Use `count` for categorical variables
+
+```{r, cache=TRUE}
+df %>% count(state)
+```
+
+
+---
+class: inverse
+
+```{r, cache=TRUE}
+df %>% 
+  count(state) %>% 
+  arrange(-n)
+```
+
+---
+class: inverse
+
+# n_distinct
+
+```{r, cache=TRUE}
+df %>% 
+  summarise(n_distinct(state))
+
+# OR
+n_distinct(df$state)
+```
+
+---
+class: inverse
+
+# Combo 1: group_by + summarise
+
+
+```{r, cache=TRUE}
+df %>% 
+  group_by(state) %>% 
+  summarise(mean_deaths = mean(deaths))
+```
+
+---
+class: inverse
+
+# Combo 2: filter + group_by + summarise
+
+```{r, cache=TRUE}
+df %>% 
+  filter(date>'01-01-2021') %>% 
+  group_by(state) %>% 
+  summarise(mean_deaths = mean(deaths))
+
+```
+
+---
+class: inverse
+
+# Combo 3: filter + group_by + summarise + arrange
+
+```{r, cache=TRUE}
+df %>% 
+  filter(date>'01-01-2021') %>% 
+  group_by(state) %>% 
+  summarise(average_deaths = mean(deaths)) %>% 
+  arrange(-average_deaths)
+
+```
+

@@ -1,0 +1,826 @@
+
+---
+title: "![](./figures/bat-cartoon.png) gganimate - Making a bar race"
+author: <font size="5"> Son Nguyen </font>
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>`
+---
+
+<style>
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide > h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide > h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide > h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+</style>
+
+```{css, echo=FALSE}
+.left-code {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 59%;
+  float: right;
+  padding-left: 1%;
+}
+```
+
+```{r setup, warning=FALSE, include = FALSE}
+
+# R markdown options
+knitr::opts_chunk$set(echo = TRUE, 
+                       
+                      fig.width = 10,
+                      fig.height = 5,
+                      fig.align = "center", 
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+
+---
+
+class: inverse, middle, center
+
+# Introduction
+
+---
+
+# What is gganimate?
+
+- An extension to ggplot2 for creating animated graphics in R
+
+- Originally written by David Robinson
+
+- Updated by Thomas Lin Pedersen
+
+- Code from a year(ish) ago will probably not work anymore
+
+- Uses the R package [tweenr](https://github.com/thomasp85/tweenr) (also by Lin Pedersen)
+
+- Pedersen describes it as... 
+
+> "a theoretical backbone of how to describe animation, and it's also an implementation of set theoretical backbones."
+
+```{r logo, fig.align="right", out.width = "150px", echo = FALSE, warning=FALSE}
+knitr::include_graphics("figures/logo.png")
+```
+
+---
+
+# gganimate Example
+
+```{r , fig.height = 7.5, fig.width = 10, eval=FALSE}
+# Load packages
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+g <- ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = continent)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = c("darkorchid4", "orange", 
+                                 "purple", "darkorange", "black")) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') +
+  transition_time(year) +
+  ease_aes('linear')
+
+animate(g, nframes = 400)
+```
+
+---
+
+# gganimate Example
+
+```{r gapminder, echo = FALSE, fig.height = 7.5, fig.width = 10}
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+g <- ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = continent)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = c("darkorchid4", "orange", 
+                                 "purple", "darkorange", "black")) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') +
+  transition_time(year) +
+  ease_aes('linear')
+
+animate(g, nframes = 400)
+```
+
+---
+
+# gganimate Example
+
+```{r covid, echo = FALSE, fig.height = 7.5,  fig.width = 10, warning=FALSE}
+
+df <- read_csv('../data/all-states-history.csv')
+
+df <- df %>% filter(deathIncrease>0, positiveIncrease>0)
+
+library(lubridate)
+
+df$month <- month(df$date, label = TRUE)
+df$month2 <- month(df$date)
+
+df$day <- wday(df$date)
+df$day_type <- case_when(df$day < 6 ~ 'weekday',
+                         TRUE~'weekend')
+
+df$week <- week(df$date)
+d1 <- df %>% group_by(week, state) %>% summarise(mean = mean(positive))
+d2 <- d1 %>% group_by(week) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=state, fill=state, label=state)) + geom_col()+
+    geom_text(aes(y = mean, label = state), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Number of Positive Caeses', fill='state')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+
+animate(a1, nframes = 400)
+```
+
+---
+# How does it work?
+
+From the documentation...
+
+> gganimate provides "a range of new grammar classes that can be added to the plot object in order to customize how it should change with time."  
+
+<br>
+
+| New Grammar Classes | |
+| :----- | :------------ | 
+| transitions | defines how the data changes in the graphic across time |
+| views | defines changes in the viewpoint of the graphic (i.e. x and y axes) | 
+| shadows | defines how to display "memories" in the animation |
+| enter/exit | defines how the data should appear and disappear during the animation |
+| ease_aes | defines the aesthetics associated with the ease during transitions |
+
+---
+
+# Transition: <font color="black"> States </font>
+
+`transition_states`: Transition between *values* of a variable
+
+Principles:
+
+- `Step 1`: data is split in subsets according to the values of a variable
+
+- `Step 2`: each subset generates a plot
+
+- `Step 3`:	plots of subsets are combined into an animation
+
+
+---
+
+# Set up
+
+Packages to load if you are following along
+
+```{r packages, message=FALSE}
+
+# Loads the library
+library(gganimate)
+# Other libraries that will be used
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+```
+
+---
+
+# Data
+
+
+.left-code[
+```{r step1, eval = FALSE, echo = TRUE}
+# Create a dataset
+data <- tibble(salary = c(1000, 2000), 
+               year = c(2019, 2020))
+kable(data)
+```
+
+]
+.right-plot[
+```{r, ref.label = "step1", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+
+# Static Plot
+
+.left-code[
+```{r step2, eval = FALSE, echo = TRUE}
+ggplot(data, #<<
+       aes(x = year, #<<
+           y = salary)) #<<
+```
+]
+.right-plot[
+```{r, ref.label = "step2", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+
+---
+
+# Static Plot
+
+
+
+.left-code[
+```{r step3, eval = FALSE, echo = TRUE}
+ggplot(data, 
+       aes(x = year, 
+           y = salary))+ 
+  geom_point(size=4) #<<
+```
+]
+.right-plot[
+```{r, ref.label = "step3", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+
+---
+
+# State 1
+
+
+.left-code[
+```{r step31, eval = FALSE, echo = TRUE}
+ggplot(data %>% filter(year==2019), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_point(size=4)+
+  xlim(2019, 2020)+
+  ylim(1000, 2000)
+```
+]
+.right-plot[
+```{r, ref.label = "step31", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+
+# State 2
+
+.left-code[
+```{r step311, eval = FALSE, echo = TRUE}
+ggplot(data %>% filter(year==2020), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_point(size=4)+
+  xlim(2019, 2020)+
+  ylim(1000, 2000)
+```
+]
+.right-plot[
+```{r, ref.label = "step311", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+
+# Combining States
+
+.left-code[
+```{r step4, eval = FALSE, echo = TRUE}
+g <- ggplot(data, 
+       aes(x = year, 
+           y = salary))+
+  geom_point(size=4) + 
+  transition_states(year) #<<
+animate(g)
+```
+]
+.right-plot[
+```{r, ref.label = "step4", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Static Plot
+
+.left-code[
+```{r step5, eval = FALSE, echo = TRUE}
+ggplot(data,  #<<
+       aes(x = year,  #<<
+           y = salary)) #<<
+```
+]
+.right-plot[
+```{r, ref.label = "step5", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+---
+# Static Plot
+
+
+.left-code[
+```{r step6, eval = FALSE, echo = TRUE}
+ggplot(data, 
+       aes(x = year, 
+           y = salary))+ 
+  geom_col() #<<
+```
+]
+.right-plot[
+```{r, ref.label = "step6", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# State 1
+
+
+.left-code[
+```{r step61, eval = FALSE, echo = TRUE}
+ggplot(data %>% filter(year==2019), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_col()+
+  xlim(2018.5, 2020.5)+
+  ylim(0, 2000)
+```
+]
+.right-plot[
+```{r, ref.label = "step61", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# State 2
+
+.left-code[
+```{r step611, eval = FALSE, echo = TRUE}
+ggplot(data %>% filter(year==2020), 
+       aes(x = year, 
+           y = salary))+ 
+  geom_col()+
+  xlim(2018.5, 2020.5)+
+  ylim(0, 2000)
+```
+]
+.right-plot[
+```{r, ref.label = "step611", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+
+---
+# Combining States
+
+
+.left-code[
+```{r step7, eval = FALSE, echo = TRUE}
+g <- ggplot(data, 
+       aes(x = year, 
+           y = salary))+
+  geom_col() + 
+  transition_states(year) #<<
+animate(g)
+```
+]
+.right-plot[
+```{r, ref.label = "step7", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Combining States
+
+.left-code[
+```{r step8, eval = FALSE, echo = TRUE}
+g <- ggplot(data, 
+       aes(x = year, 
+           y = salary, 
+           fill = salary))+ #<<
+  geom_col() + 
+  transition_states(year) 
+animate(g)
+```
+]
+.right-plot[
+```{r, ref.label = "step8", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Second Data
+
+.left-code[
+```{r step81, eval = FALSE, echo = TRUE}
+data <- data.frame(
+  salary = c(1000, 2000, 5000, 20000), 
+    year = c(2019, 2020, 2019, 2020), 
+    Job=c('Part Time','Part Time',
+          'Full-time','Full-time'))
+kable(data)
+```
+]
+.right-plot[
+```{r, ref.label = "step81", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+
+---
+# Static Plot
+
+.left-code[
+```{r step82, eval = FALSE, echo = TRUE}
+ggplot(data, 
+       aes(x=Job, 
+           y=salary, 
+           fill=salary))+ 
+  geom_col()
+```
+]
+.right-plot[
+```{r, ref.label = "step82", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# State 1
+
+.left-code[
+```{r step811, eval = FALSE, echo = TRUE}
+ggplot(data %>% filter(year==2019), 
+       aes(x=Job, 
+           y=salary, 
+           fill=salary))+ 
+  geom_col()+
+  ylim(0, 25000)
+```
+]
+.right-plot[
+```{r, ref.label = "step811", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# State 2
+
+.left-code[
+```{r step8111, eval = FALSE, echo = TRUE}
+ggplot(data %>% 
+         filter(year==2020), 
+       aes(x=Job, 
+           y=salary, 
+           fill=salary)) + 
+  geom_col()+
+  ylim(0, 25000)
+```
+]
+.right-plot[
+```{r, ref.label = "step8111", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Combining States
+.left-code[
+```{r step18111, eval = FALSE, echo = TRUE}
+g <- ggplot(data, aes(x=Job, 
+                 y=salary, 
+                 fill=salary)) + 
+  geom_col()+
+  ylim(0, 25000)+
+  transition_states(year)#<<
+animate(g)
+```
+]
+.right-plot[
+```{r, ref.label = "step18111", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Combining States
+.left-code[
+```{r step128111, eval = FALSE, echo = TRUE}
+g <- ggplot(data, aes(x=Job, 
+                 y=salary, 
+                 fill=salary)) + 
+  geom_col()+
+  ylim(0, 25000)+
+  transition_states(year)+
+  labs(title = 'Year: {closest_state}')#<<
+animate(g)
+```
+]
+.right-plot[
+```{r, ref.label = "step128111", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Compare NY and FL 
+
+Let's make an animation to compare the number of covid-19 cases in NY and FL from July to December 2020
+
+- Step 1: Make the data for ploting:  Calculate the number of cases for these two states in these months
+
+- Step 2: Make an animation with `transition_states` through variable `month`
+---
+# Step 1
+
+```{r, warning=FALSE}
+df <- read_csv('../data/all-states-history.csv')
+df$month <- month(df$date)
+```
+
+
+.left-code[
+```{r step1281110, eval = FALSE, echo = TRUE}
+d1 <- df %>% 
+  filter(state %in% c('NY','FL'),
+                      month>6)%>% 
+  group_by(month, state) %>% 
+  summarise(mean = mean(positive)) 
+kable(d1)
+```
+]
+.right-plot[
+```{r, ref.label = "step1281110", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Step 2
+
+.left-code[
+```{r step12811100, eval = FALSE, echo = TRUE}
+p1 <- d1 %>% 
+  ggplot(aes(y=state, x=mean)) + 
+  geom_col()+
+  transition_states(month)+
+  labs(x = 'Total Positive', 
+       title = 'Month: {closest_state}')
+
+animate(p1, nframes=400)
+```
+]
+.right-plot[
+```{r, ref.label = "step12811100", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Make a bar race
+
+- Position of states' bars are not fixed
+- But the ranks are fixed. 
+- We need to create the rank variable to rank the states in each month
+
+---
+# Craete the rank variable
+
+.left-code[
+```{r step128111090, eval = FALSE, echo = TRUE}
+d2 <- d1 %>% 
+  group_by(month) %>% 
+  mutate(rank=rank(-mean))
+kable(d2)
+```
+]
+.right-plot[
+```{r, ref.label = "step128111090", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Make the animation
+
+.left-code[
+```{r step1128111090, eval = FALSE, echo = TRUE}
+p1 <- d2 %>% 
+  ggplot(aes(y=factor(rank), 
+             x=mean, group=state, 
+             fill=state)) + 
+  geom_col()+
+  transition_states(month)+
+  labs(x = 'Total Positive', 
+       title = 'Month: {closest_state}')
+
+animate(p1, nframes=400)
+```
+]
+.right-plot[
+```{r, ref.label = "step1128111090", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Make it looks nicer
+
+.left-code[
+```{r step11281110901, eval = FALSE, echo = TRUE}
+p1 <- d2 %>% 
+  ggplot(aes(x=rank, 
+             y=mean, 
+             group=state, 
+             fill=state, 
+             label=state))+ 
+     geom_col()+
+    geom_text(aes(y = mean, 
+                  label = state), 
+              hjust = 1.4)+ 
+    coord_flip(clip = "off", 
+               expand = FALSE)+
+    scale_x_reverse()+
+    labs(title='Month {closest_state}', 
+         y='Total Positive', x='', fill='')+
+    theme(plot.title = 
+          element_text(hjust=1,size=22),
+          axis.ticks.y=element_blank(),
+          axis.text.y=element_blank())+ 
+    transition_states(month)+
+    ease_aes("cubic-in-out")
+
+animate(p1, nframes=400)
+```
+]
+.right-plot[
+```{r, ref.label = "step11281110901", echo = FALSE,  fig.height = 6, fig.width = 7}
+```
+]
+
+
+---
+# Bar Race - Covid19
+
+```{r covid2, echo = TRUE, fig.height = 7.5,  fig.width = 10, eval=FALSE, message=FALSE}
+
+df <- read_csv('../data/all-states-history.csv')
+df <- df %>% filter(deathIncrease>0, positiveIncrease>0)
+
+library(lubridate)
+
+df$week <- week(df$date)
+d1 <- df %>% group_by(week, state) %>% summarise(mean = mean(positive))
+d2 <- d1 %>% group_by(week) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=state, fill=state, label=state)) + geom_col()+
+    geom_text(aes(y = mean, label = state), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Number of Positive Caeses', fill='state')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+
+animate(a1, nframes = 400)
+```
+
+---
+# Bar Race - Covid19
+
+```{r covid3, echo = FALSE, fig.height = 7.5,  fig.width = 10, message=FALSE, warning=FALSE}
+
+df <- read_csv('../data/all-states-history.csv')
+df <- df %>% filter(deathIncrease>0, positiveIncrease>0)
+
+library(lubridate)
+
+df$week <- week(df$date)
+d1 <- df %>% group_by(week, state) %>% summarise(mean = mean(positive))
+d2 <- d1 %>% group_by(week) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=state, fill=state, label=state)) + geom_col()+
+    geom_text(aes(y = mean, label = state), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Number of Positive Caeses', fill='state')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+
+animate(a1, nframes = 400)
+```
+
+```{r, eval=FALSE, echo=FALSE}
+# Assignment 8 solution
+df <- read_csv('../data/WHO-COVID-19-global-data.csv')
+
+library(lubridate)
+
+df <- df %>% filter(Date_reported>='2021-01-01', Date_reported<'2022-01-01')
+df$week <- week(df$Date_reported)
+d1 <- df %>% group_by(week, Country) %>% summarise(mean = mean(Cumulative_cases))
+d2 <- d1 %>% group_by(week) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=Country, fill=Country, label=Country)) + 
+    geom_col()+
+    geom_text(aes(y = mean, label = Country), hjust = .5)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Number of Positive Caeses', fill='Country')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+
+animate(a1, nframes = 400)
+```
+

@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Wrangling with Dplyr</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Data Wrangling with Dplyr
+]
+
+---
+
+class: inverse
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+class: inverse, center, middle
+# tidyverse
+
+---
+class: inverse
+
+# `tidyverse` package
+
+- The tidyverse is an opinionated collection of R packages designed for data science.
+
+- All packages share an underlying design philosophy, grammar, and data structures.
+
+---
+class: inverse
+
+# Core Packages
+
+- **ggplot2**: Visualization
+
+- **dplyr**: Data Wrangling
+
+- **purrr**: Functional Programming
+
+---
+class: inverse
+
+# Install `tidyverse`
+
+
+```r
+install.packages('tidyverse')
+library(tidyverse)
+```
+
+
+```r
+library(tidyverse)
+```
+
+---
+class: inverse, center, middle
+
+# read_csv
+
+---
+class: inverse
+
+# read_csv 
+
+Use `read_csv` instead of `read.csv` to read the data 
+
+- `read_csv` 
+
+
+```r
+library(tidyverse)
+df &lt;- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+
+```r
+start_time &lt;- Sys.time()
+df &lt;- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+end_time &lt;- Sys.time()
+
+end_time - start_time
+```
+
+```
+## Time difference of 2.413997 mins
+```
+
+
+---
+class: inverse
+
+# read_csv vs. read.csv
+
+- read_csv is faster
+
+
+```r
+start_time &lt;- Sys.time()
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+end_time &lt;- Sys.time()
+
+end_time - start_time
+```
+
+```
+## Time difference of 7.581324 secs
+```
+
+
+---
+class: inverse
+
+- read_csv recognize the types of data better
+
+
+```r
+df &lt;- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+```
+
+```
+## 'data.frame':	2502832 obs. of  6 variables:
+##  $ date  : chr  "2020-01-21" "2020-01-22" "2020-01-23" "2020-01-24" ...
+##  $ county: chr  "Snohomish" "Snohomish" "Snohomish" "Cook" ...
+##  $ state : chr  "Washington" "Washington" "Washington" "Illinois" ...
+##  $ fips  : int  53061 53061 53061 17031 53061 6059 17031 53061 4013 6037 ...
+##  $ cases : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ deaths: int  0 0 0 0 0 0 0 0 0 0 ...
+```
+
+---
+class: inverse
+
+- read_csv recognize the types of data better
+
+
+```r
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+str(df)
+```
+
+```
+## spec_tbl_df [2,502,832 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ date  : Date[1:2502832], format: "2020-01-21" "2020-01-22" ...
+##  $ county: chr [1:2502832] "Snohomish" "Snohomish" "Snohomish" "Cook" ...
+##  $ state : chr [1:2502832] "Washington" "Washington" "Washington" "Illinois" ...
+##  $ fips  : chr [1:2502832] "53061" "53061" "53061" "17031" ...
+##  $ cases : num [1:2502832] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ deaths: num [1:2502832] 0 0 0 0 0 0 0 0 0 0 ...
+##  - attr(*, "spec")=
+##   .. cols(
+##   ..   date = col_date(format = ""),
+##   ..   county = col_character(),
+##   ..   state = col_character(),
+##   ..   fips = col_character(),
+##   ..   cases = col_double(),
+##   ..   deaths = col_double()
+##   .. )
+##  - attr(*, "problems")=&lt;externalptr&gt;
+```
+
+---
+class: inverse
+
+- Data prints out nicely with read_csv
+
+
+```r
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+df
+```
+
+```
+## # A tibble: 2,502,832 x 6
+##    date       county      state      fips  cases deaths
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0
+##  2 2020-01-22 Snohomish   Washington 53061     1      0
+##  3 2020-01-23 Snohomish   Washington 53061     1      0
+##  4 2020-01-24 Cook        Illinois   17031     1      0
+##  5 2020-01-24 Snohomish   Washington 53061     1      0
+##  6 2020-01-25 Orange      California 06059     1      0
+##  7 2020-01-25 Cook        Illinois   17031     1      0
+##  8 2020-01-25 Snohomish   Washington 53061     1      0
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0
+## 10 2020-01-26 Los Angeles California 06037     1      0
+## # ... with 2,502,822 more rows
+```
+
+
+---
+class: inverse, center, middle
+
+# Pipe (%&gt;%) 
+
+# Hotkey: Ctrl + Shift + M
+
+
+---
+class: inverse
+
+# Pipe operator (%&gt;%) 
+
+- `\(x\)` %&gt;% `\(f\)` is the same `\(f(x)\)`
+
+
+```r
+x &lt;- c(1:10)
+
+# conventional way
+sum(x)
+```
+
+```
+## [1] 55
+```
+
+```r
+# Pipe
+x %&gt;% sum
+```
+
+```
+## [1] 55
+```
+
+
+---
+class: inverse
+
+# Pipe operator (%&gt;%)
+
+- `\(x\)` %&gt;% `\(f\)` %&gt;% `\(g\)` is the same `\(g(f(x))\)`
+
+
+```r
+x &lt;- c(1:10)
+
+# conventional way
+log(sum(x))
+```
+
+```
+## [1] 4.007333
+```
+
+```r
+# Pipe
+x %&gt;% sum %&gt;% log
+```
+
+```
+## [1] 4.007333
+```
+
+---
+class: inverse, center, middle
+
+# dplyr
+
+---
+class: inverse
+
+# Five verbs of dplyr
+
+- `select()` selects columns from data
+- `filter()` filter rows of data
+- `summarise()` summarises data (calculating summary statistics)
+- `arrange()` arrange data
+- `mutate()` creates new variables
+
+---
+class: inverse, center, middle
+# select
+
+
+---
+class: inverse
+
+# select: select columns
+
+
+```r
+df &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+df1 &lt;-  select(df, state, date)
+```
+
+---
+class: inverse
+
+# select with pipe
+
+
+```r
+df %&gt;% select(state, date)
+```
+
+```
+## # A tibble: 2,502,832 x 2
+##    state      date      
+##    &lt;chr&gt;      &lt;date&gt;    
+##  1 Washington 2020-01-21
+##  2 Washington 2020-01-22
+##  3 Washington 2020-01-23
+##  4 Illinois   2020-01-24
+##  5 Washington 2020-01-24
+##  6 California 2020-01-25
+##  7 Illinois   2020-01-25
+##  8 Washington 2020-01-25
+##  9 Arizona    2020-01-26
+## 10 California 2020-01-26
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse
+
+
+```r
+# Deselect date from the data
+df %&gt;% select(-date)
+```
+
+```
+## # A tibble: 2,502,832 x 5
+##    county      state      fips  cases deaths
+##    &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Snohomish   Washington 53061     1      0
+##  2 Snohomish   Washington 53061     1      0
+##  3 Snohomish   Washington 53061     1      0
+##  4 Cook        Illinois   17031     1      0
+##  5 Snohomish   Washington 53061     1      0
+##  6 Orange      California 06059     1      0
+##  7 Cook        Illinois   17031     1      0
+##  8 Snohomish   Washington 53061     1      0
+##  9 Maricopa    Arizona    04013     1      0
+## 10 Los Angeles California 06037     1      0
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse
+
+
+```r
+# select only numeric variables
+df %&gt;% select_if(is.numeric)
+```
+
+```
+## # A tibble: 2,502,832 x 2
+##    cases deaths
+##    &lt;dbl&gt;  &lt;dbl&gt;
+##  1     1      0
+##  2     1      0
+##  3     1      0
+##  4     1      0
+##  5     1      0
+##  6     1      0
+##  7     1      0
+##  8     1      0
+##  9     1      0
+## 10     1      0
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse
+
+
+```r
+# select only non-numeric variables
+df %&gt;% select_if(~!is.numeric(.))
+```
+
+```
+## # A tibble: 2,502,832 x 4
+##    date       county      state      fips 
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;
+##  1 2020-01-21 Snohomish   Washington 53061
+##  2 2020-01-22 Snohomish   Washington 53061
+##  3 2020-01-23 Snohomish   Washington 53061
+##  4 2020-01-24 Cook        Illinois   17031
+##  5 2020-01-24 Snohomish   Washington 53061
+##  6 2020-01-25 Orange      California 06059
+##  7 2020-01-25 Cook        Illinois   17031
+##  8 2020-01-25 Snohomish   Washington 53061
+##  9 2020-01-26 Maricopa    Arizona    04013
+## 10 2020-01-26 Los Angeles California 06037
+## # ... with 2,502,822 more rows
+```
+
+
+---
+class: inverse, center, middle
+# filter
+
+---
+class: inverse
+
+# filter
+
+
+```r
+# Select rows or days with no deaths
+df %&gt;% filter(deaths==0)
+```
+
+```
+## # A tibble: 262,872 x 6
+##    date       county      state      fips  cases deaths
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0
+##  2 2020-01-22 Snohomish   Washington 53061     1      0
+##  3 2020-01-23 Snohomish   Washington 53061     1      0
+##  4 2020-01-24 Cook        Illinois   17031     1      0
+##  5 2020-01-24 Snohomish   Washington 53061     1      0
+##  6 2020-01-25 Orange      California 06059     1      0
+##  7 2020-01-25 Cook        Illinois   17031     1      0
+##  8 2020-01-25 Snohomish   Washington 53061     1      0
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0
+## 10 2020-01-26 Los Angeles California 06037     1      0
+## # ... with 262,862 more rows
+```
+
+---
+class: inverse
+
+# filter
+
+
+```r
+# Select rows or days with no deaths
+df %&gt;% filter(state=='Rhode Island',deaths==0)
+```
+
+```
+## # A tibble: 182 x 6
+##    date       county  state        fips  cases deaths
+##    &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 2020-03-01 Unknown Rhode Island &lt;NA&gt;      2      0
+##  2 2020-03-02 Unknown Rhode Island &lt;NA&gt;      2      0
+##  3 2020-03-03 Unknown Rhode Island &lt;NA&gt;      2      0
+##  4 2020-03-04 Unknown Rhode Island &lt;NA&gt;      2      0
+##  5 2020-03-05 Unknown Rhode Island &lt;NA&gt;      2      0
+##  6 2020-03-06 Unknown Rhode Island &lt;NA&gt;      3      0
+##  7 2020-03-07 Unknown Rhode Island &lt;NA&gt;      3      0
+##  8 2020-03-08 Unknown Rhode Island &lt;NA&gt;      3      0
+##  9 2020-03-09 Unknown Rhode Island &lt;NA&gt;      3      0
+## 10 2020-03-10 Unknown Rhode Island &lt;NA&gt;      5      0
+## # ... with 172 more rows
+```
+
+---
+class: inverse, center, middle
+# mutate
+
+---
+class: inverse
+
+# mutate:  Create new columns
+
+
+```r
+df %&gt;% mutate(cases_minus_deaths = cases - deaths)
+```
+
+```
+## # A tibble: 2,502,832 x 7
+##    date       county      state      fips  cases deaths cases_minus_deaths
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;              &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0                  1
+##  2 2020-01-22 Snohomish   Washington 53061     1      0                  1
+##  3 2020-01-23 Snohomish   Washington 53061     1      0                  1
+##  4 2020-01-24 Cook        Illinois   17031     1      0                  1
+##  5 2020-01-24 Snohomish   Washington 53061     1      0                  1
+##  6 2020-01-25 Orange      California 06059     1      0                  1
+##  7 2020-01-25 Cook        Illinois   17031     1      0                  1
+##  8 2020-01-25 Snohomish   Washington 53061     1      0                  1
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0                  1
+## 10 2020-01-26 Los Angeles California 06037     1      0                  1
+## # ... with 2,502,822 more rows
+```
+
+
+---
+class: inverse
+
+# mutate
+
+- If you want to add the new columns to the original data
+
+
+```r
+df &lt;- df %&gt;% mutate(non_death = cases - deaths)
+```
+
+
+---
+class: inverse
+
+# mutate
+
+
+```r
+df %&gt;% mutate(deaths2 = ifelse(deaths==0,'No_deaths','Has_deaths'))
+```
+
+```
+## # A tibble: 2,502,832 x 8
+##    date       county      state      fips  cases deaths non_death deaths2  
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;    
+##  1 2020-01-21 Snohomish   Washington 53061     1      0         1 No_deaths
+##  2 2020-01-22 Snohomish   Washington 53061     1      0         1 No_deaths
+##  3 2020-01-23 Snohomish   Washington 53061     1      0         1 No_deaths
+##  4 2020-01-24 Cook        Illinois   17031     1      0         1 No_deaths
+##  5 2020-01-24 Snohomish   Washington 53061     1      0         1 No_deaths
+##  6 2020-01-25 Orange      California 06059     1      0         1 No_deaths
+##  7 2020-01-25 Cook        Illinois   17031     1      0         1 No_deaths
+##  8 2020-01-25 Snohomish   Washington 53061     1      0         1 No_deaths
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0         1 No_deaths
+## 10 2020-01-26 Los Angeles California 06037     1      0         1 No_deaths
+## # ... with 2,502,822 more rows
+```
+
+---
+class: inverse, middle, center
+# arrange
+
+
+---
+class: inverse
+
+# arrange
+
+
+```r
+df %&gt;% arrange(deaths)
+```
+
+```
+## # A tibble: 2,502,832 x 7
+##    date       county      state      fips  cases deaths non_death
+##    &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+##  1 2020-01-21 Snohomish   Washington 53061     1      0         1
+##  2 2020-01-22 Snohomish   Washington 53061     1      0         1
+##  3 2020-01-23 Snohomish   Washington 53061     1      0         1
+##  4 2020-01-24 Cook        Illinois   17031     1      0         1
+##  5 2020-01-24 Snohomish   Washington 53061     1      0         1
+##  6 2020-01-25 Orange      California 06059     1      0         1
+##  7 2020-01-25 Cook        Illinois   17031     1      0         1
+##  8 2020-01-25 Snohomish   Washington 53061     1      0         1
+##  9 2020-01-26 Maricopa    Arizona    04013     1      0         1
+## 10 2020-01-26 Los Angeles California 06037     1      0         1
+## # ... with 2,502,822 more rows
+```
+---
+class: inverse
+
+# arrange
+
+
+```r
+df %&gt;% arrange(-deaths)
+```
+
+```
+## # A tibble: 2,502,832 x 7
+##    date       county        state    fips    cases deaths non_death
+##    &lt;date&gt;     &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+##  1 2022-05-13 New York City New York &lt;NA&gt;  2422658  40267   2382391
+##  2 2022-05-12 New York City New York &lt;NA&gt;  2417909  40261   2377648
+##  3 2022-05-11 New York City New York &lt;NA&gt;  2411431  40256   2371175
+##  4 2022-05-10 New York City New York &lt;NA&gt;  2408357  40248   2368109
+##  5 2022-05-09 New York City New York &lt;NA&gt;  2406070  40240   2365830
+##  6 2022-05-06 New York City New York &lt;NA&gt;  2392182  40232   2351950
+##  7 2022-05-07 New York City New York &lt;NA&gt;  2392182  40232   2351950
+##  8 2022-05-08 New York City New York &lt;NA&gt;  2392903  40232   2352671
+##  9 2022-05-05 New York City New York &lt;NA&gt;  2387684  40227   2347457
+## 10 2022-05-04 New York City New York &lt;NA&gt;  2383719  40220   2343499
+## # ... with 2,502,822 more rows
+```
+
+
+---
+class: inverse, center, middle
+# summarise
+
+---
+class: inverse
+
+# summarise: Calculations on continuous variables
+
+
+```r
+df %&gt;% summarise(mean_death = mean(deaths, na.rm=TRUE))
+```
+
+```
+## # A tibble: 1 x 1
+##   mean_death
+##        &lt;dbl&gt;
+## 1       162.
+```
+
+---
+class: inverse
+
+# summarise: Calculations on continuous variables
+
+
+```r
+df %&gt;% summarise(mean_death = mean(deaths, na.rm=TRUE), 
+                 median_cases=median(cases, na.rm=TRUE), 
+                 max_death=max(deaths, na.rm=TRUE))
+```
+
+```
+## # A tibble: 1 x 3
+##   mean_death median_cases max_death
+##        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;
+## 1       162.         1773     40267
+```
+
+---
+class: inverse, middle, center
+# Some Other Functions
+
+---
+class: inverse
+
+# Use `count` for categorical variables
+
+
+```r
+df %&gt;% count(state)
+```
+
+```
+## # A tibble: 56 x 2
+##    state                    n
+##    &lt;chr&gt;                &lt;int&gt;
+##  1 Alabama              52312
+##  2 Alaska               20568
+##  3 American Samoa         239
+##  4 Arizona              11934
+##  5 Arkansas             59032
+##  6 California           45693
+##  7 Colorado             49527
+##  8 Connecticut           7091
+##  9 Delaware              3131
+## 10 District of Columbia   798
+## # ... with 46 more rows
+```
+
+
+---
+class: inverse
+
+
+```r
+df %&gt;% 
+  count(state) %&gt;% 
+  arrange(-n)
+```
+
+```
+## # A tibble: 56 x 2
+##    state               n
+##    &lt;chr&gt;           &lt;int&gt;
+##  1 Texas          193519
+##  2 Georgia        124889
+##  3 Virginia       103128
+##  4 Kentucky        92572
+##  5 Missouri        89600
+##  6 Illinois        79502
+##  7 Kansas          79294
+##  8 North Carolina  77809
+##  9 Iowa            77070
+## 10 Tennessee       74719
+## # ... with 46 more rows
+```
+
+---
+class: inverse
+
+# n_distinct
+
+
+```r
+df %&gt;% 
+  summarise(n_distinct(state))
+```
+
+```
+## # A tibble: 1 x 1
+##   `n_distinct(state)`
+##                 &lt;int&gt;
+## 1                  56
+```
+
+```r
+# OR
+n_distinct(df$state)
+```
+
+```
+## [1] 56
+```
+
+---
+class: inverse
+
+# Combo 1: group_by + summarise
+
+
+
+```r
+df %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(mean_deaths = mean(deaths))
+```
+
+```
+## # A tibble: 56 x 2
+##    state                mean_deaths
+##    &lt;chr&gt;                      &lt;dbl&gt;
+##  1 Alabama                   139.  
+##  2 Alaska                     15.8 
+##  3 American Samoa              2.61
+##  4 Arizona                   951.  
+##  5 Arkansas                   68.7 
+##  6 California                808.  
+##  7 Colorado                   95.5 
+##  8 Connecticut               772.  
+##  9 Delaware                  362.  
+## 10 District of Columbia      907.  
+## # ... with 46 more rows
+```
+
+---
+class: inverse
+
+# Combo 2: filter + group_by + summarise
+
+
+```r
+df %&gt;% 
+  filter(date&gt;'01-01-2021') %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(mean_deaths = mean(deaths))
+```
+
+```
+## # A tibble: 56 x 2
+##    state                mean_deaths
+##    &lt;chr&gt;                      &lt;dbl&gt;
+##  1 Alabama                   139.  
+##  2 Alaska                     15.8 
+##  3 American Samoa              2.61
+##  4 Arizona                   951.  
+##  5 Arkansas                   68.7 
+##  6 California                808.  
+##  7 Colorado                   95.5 
+##  8 Connecticut               772.  
+##  9 Delaware                  362.  
+## 10 District of Columbia      907.  
+## # ... with 46 more rows
+```
+
+---
+class: inverse
+
+# Combo 3: filter + group_by + summarise + arrange
+
+
+```r
+df %&gt;% 
+  filter(date&gt;'01-01-2021') %&gt;% 
+  group_by(state) %&gt;% 
+  summarise(average_deaths = mean(deaths)) %&gt;% 
+  arrange(-average_deaths)
+```
+
+```
+## # A tibble: 56 x 2
+##    state                average_deaths
+##    &lt;chr&gt;                         &lt;dbl&gt;
+##  1 New Jersey                    1006.
+##  2 Massachusetts                  964.
+##  3 Arizona                        951.
+##  4 District of Columbia           907.
+##  5 California                     808.
+##  6 New York                       787.
+##  7 Connecticut                    772.
+##  8 Florida                        510.
+##  9 Delaware                       362.
+## 10 Rhode Island                   359.
+## # ... with 46 more rows
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

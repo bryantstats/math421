@@ -1,0 +1,10 @@
+name: 5_date_range
+title: Titanic - dateRangeInput
+username: math421second
+account: math421second
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1c066-384d-6cbe-c1ff-ef43bf74e9bb
+bundleId:
+url: https://connect.posit.cloud/math421second/content/01a1c066-384d-6cbe-c1ff-ef43bf74e9bb
+version: 1

@@ -1,0 +1,185 @@
+---
+title: "Trampoline Injuries in the ER"
+author: "NEISS 2019-2024"
+format:
+  dashboard:
+    theme: cosmo
+    embed-resources: true
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+library(plotly)
+library(DT)
+
+# trampoline.rds is made by prep.R: it keeps the trampoline cases
+# (product code 1233) from the NEISS files 2019-2024 and adds labels.
+tramp <- read_rds("trampoline.rds") |>
+  mutate(age_group = factor(age_group,
+                            levels = c("0-2", "3-5", "6-11", "12-17", "18-34", "35+")))
+
+# IMPORTANT: a national estimate is the SUM OF WEIGHTS, not the number of rows.
+```
+
+# Overview
+
+## Row {height="25%"}
+
+```{r}
+#| content: valuebox
+#| title: "ER visits per year (estimate)"
+list(icon = "hospital", color = "primary",
+     value = format(round(sum(tramp$weight) / 6), big.mark = ","))
+```
+
+```{r}
+#| content: valuebox
+#| title: "Patients younger than 12"
+pct_kids <- 100 * sum(tramp$weight[tramp$age < 12]) / sum(tramp$weight)
+list(icon = "people", color = "warning", value = paste0(round(pct_kids), "%"))
+```
+
+```{r}
+#| content: valuebox
+#| title: "Diagnosed with a fracture"
+pct_frac <- 100 * sum(tramp$weight[tramp$diagnosis == "Fracture"]) / sum(tramp$weight)
+list(icon = "bandaid", color = "danger", value = paste0(round(pct_frac), "%"))
+```
+
+## Row
+
+### Column {width="35%"}
+
+::: card
+**Product:** trampolines (NEISS product code 1233), 2019 to 2024.
+
+**Questions**
+
+1.  Which ages are hurt the most, and how badly?
+2.  How do the injuries happen at home compared with trampoline parks?
+3.  Did the pandemic change where children got hurt?
+:::
+
+### Column {width="65%"}
+
+```{r}
+#| title: "In 2020, trampoline-park injuries fell by half while home injuries rose"
+by_year <- tramp |>
+  filter(place != "Other/not recorded") |>
+  group_by(year, place) |>
+  summarise(estimate = sum(weight), .groups = "drop")
+
+p <- ggplot(by_year, aes(year, estimate, color = place)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  scale_y_continuous(labels = scales::comma, limits = c(0, NA)) +
+  scale_color_manual(values = c("Home" = "#2a6fdb",
+                                "Trampoline park/rec place" = "#e07b1f")) +
+  labs(x = NULL, y = "ER visits (national estimate)", color = NULL) +
+  theme_minimal()
+ggplotly(p)
+```
+
+# Who is hurt
+
+## Column
+
+```{r}
+#| title: "Most patients are young children; the most common age is 6"
+by_age <- tramp |>
+  mutate(age_year = floor(age)) |>
+  filter(age_year <= 40) |>
+  group_by(age_year) |>
+  summarise(per_year = sum(weight) / 6)
+
+p <- ggplot(by_age, aes(age_year, per_year)) +
+  geom_col(fill = "#2a6fdb") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = "Age (years)", y = "ER visits per year (estimate)") +
+  theme_minimal()
+ggplotly(p)
+```
+
+## Column
+
+```{r}
+#| title: "Children 3 to 5 have the highest share of fractures"
+frac_age <- tramp |>
+  group_by(age_group) |>
+  summarise(percent = 100 * sum(weight * (diagnosis == "Fracture")) / sum(weight))
+
+p <- ggplot(frac_age, aes(age_group, percent)) +
+  geom_col(fill = "#d64545") +
+  labs(x = "Age group", y = "% of injuries that are fractures") +
+  theme_minimal()
+ggplotly(p)
+```
+
+# How it happens
+
+## Column
+
+```{r}
+#| title: "Home: other jumpers and falls off the trampoline. Parks: bad landings"
+# The injury type is read from the narrative in prep.R. Narratives that do not
+# say how the injury happened are left out of this plot.
+mech_place <- tramp |>
+  filter(place != "Other/not recorded",
+         !mechanism %in% c("Not described", "Fell (no detail)")) |>
+  group_by(place, mechanism) |>
+  summarise(estimate = sum(weight), .groups = "drop") |>
+  group_by(place) |>
+  mutate(percent = 100 * estimate / sum(estimate))
+
+p <- ggplot(mech_place, aes(reorder(mechanism, percent), percent, fill = place)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_manual(values = c("Home" = "#2a6fdb",
+                               "Trampoline park/rec place" = "#e07b1f")) +
+  labs(x = NULL, y = "% of injuries at that place", fill = NULL) +
+  theme_minimal()
+ggplotly(p)
+```
+
+## Column
+
+```{r}
+#| title: "Falling off the trampoline is the most likely to break a bone"
+frac_mech <- tramp |>
+  filter(mechanism != "Not described") |>
+  group_by(mechanism) |>
+  summarise(percent = 100 * sum(weight * (diagnosis == "Fracture")) / sum(weight))
+
+p <- ggplot(frac_mech, aes(reorder(mechanism, percent), percent)) +
+  geom_col(fill = "#d64545") +
+  coord_flip() +
+  labs(x = NULL, y = "% of injuries that are fractures") +
+  theme_minimal()
+ggplotly(p)
+```
+
+# Narratives
+
+```{r}
+#| title: "ER narratives, 2024 (search for words such as NET, FLIP, PARK)"
+tramp |>
+  filter(year == 2024) |>
+  transmute(Date = date, Age = round(age, 1), Sex = sex, Place = place,
+            Diagnosis = diagnosis, Narrative = narrative) |>
+  datatable(rownames = FALSE, options = list(pageLength = 10))
+```
+
+# Findings
+
+::: card
+### What we learned
+
+**1. Young children are hurt the most, and badly.** About 117,000 people go to an ER each year after a trampoline injury, and about 70% of them are under 12. Children 3 to 5 have the highest share of fractures (about 42%), so small children do not just "bounce back."
+
+**2. At home, the danger is other jumpers and the edge.** On home trampolines, about 29% of the described injuries involve more than one jumper and 31% are falls off the trampoline, compared with 17% and 13% at trampoline parks. At parks, more than half are bad landings. Falls off the trampoline are the most likely to end in a fracture (43%). Advice for parents: one jumper at a time, and use a net.
+
+**3. Surprise: the pandemic moved injuries to backyards.** In 2020, when trampoline parks closed, park injuries fell by about half (from about 41,000 to 22,000), while home injuries rose to their highest level (about 45,000).
+
+**Limits.** NEISS counts injuries, not jumpers, so we cannot say that home trampolines are riskier per jump. About 45% of cases have no location, and the injury type is read from the narratives with simple rules, so those numbers are approximate.
+:::

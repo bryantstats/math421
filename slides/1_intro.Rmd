@@ -1,0 +1,219 @@
+
+---
+title: "Intro"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+   
+
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+
+# Table of Content
+
+1. R in Statistical Analysis
+
+2. R vs. Rstudio 
+
+3. Rstudio 
+
+4. Workflow
+
+---
+
+class: inverse, center, middle
+
+# R in Statistical Analysis
+
+---
+class: center
+
+![](images/R_jobs.png)
+
+Percentage of Matching Job Posting on Indeed.com to Statistics Jobs involving R, SAS and Python
+
+---
+class: center
+
+![](images/r_stack_overflow.png)
+---
+
+class: center
+
+![](images/r3.png)
+Most Popular Programming Languang by TIBOE
+
+---
+# More from TIBOE
+
+[Link](https://www.tiobe.com/tiobe-index/)
+
+---
+# Why the huge jump from 2019 to 2020?
+
+--
+- [Covid 19 Research] (https://www.infoworld.com/article/3565552/r-language-rises-with-covid-19-research.html)
+
+--
+
+- [Top 100 R resources for Covid 19](https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f)
+
+- [covid19-r
+](https://mine-cetinkaya-rundel.github.io/covid19-r/)
+
+
+---
+class: inverse, center, middle
+
+# R in the Age of AI
+
+---
+# R in the Age of AI
+
+
+-  Do we still need to learn R/Programming if AI can write all the codes?
+
+
+---
+# R in the Age of AI
+
+-  Do we still need to learn R/Programming if AI can write all the codes?
+
+-  We still need to addition/subtraction when calculators are available. 
+
+
+---
+# R in the Age of AI
+
+-  Do we still need to learn R/Programming if AI can write all the codes?
+
+-  We still need a mental sense of direction and map literacy even though GPS exists. 
+
+---
+class: inverse, center, middle
+
+# You can outsource your thinking...
+
+---
+class: inverse, center, middle
+
+# ...but you can't outsource your understanding
+
+
+---
+# R in the Age of AI
+
+![](images/1_ai.png)
+
+---
+class: inverse, center, middle
+
+
+# Understanding the fundamentals helps unlock the full power of AI. 
+
+---
+class: inverse, center, middle
+
+# R vs. Rstudio
+
+---
+# R vs. Rstudio
+
+--
+
+
+- R is a **programming language**
+
+
+--
+
+
+- Rsudio is an **editor**
+
+
+--
+
+- Rsudio makes it easier to write R codes. 
+
+
+--
+
+
+- Do we need Rstudio to run R? 
+--
+**No!**
+
+--
+
+- Do we need R to code in Rstudio? 
+--
+**Yes!**
+
+---
+class: center
+
+# Rstudio Overview
+
+
+![](images/rstudio.png)
+---
+# Workflow
+
+- Write R in Rstudio Environment
+
+- Showcase the result by Rmarkdown
+
+- Publish the result via Github
+
+---
+class: inverse, middle, center
+
+# Your Turn
+
+Setup your workflow
+
+---
+class: inverse
+
+# Assignment 1: Setting it up
+
+- Download and Install R
+
+- Download and Install Rstudio
+
+- Download and Install Git at
+
+- Download and Install Github Desktop
+
+- While waiting for the installation, sign up for an account at Github: https://github.com/
+
+---
+
+class: inverse
+
+# Create a workflow and publish your first assignment

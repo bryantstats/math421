@@ -1,0 +1,2 @@
+/* Keep every table cell (and each link in it) on one line; <br> breaks still apply */
+table td, table th { white-space: nowrap; }

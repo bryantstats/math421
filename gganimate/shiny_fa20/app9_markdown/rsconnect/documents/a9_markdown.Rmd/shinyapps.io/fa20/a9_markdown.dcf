@@ -1,0 +1,12 @@
+name: a9_markdown
+title: a9_markdown
+username:
+account: fa20
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3147174
+bundleId: 3849393
+url: https://fa20.shinyapps.io/a9_markdown/
+when: 1605136271.65331
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,0 +1,152 @@
+---
+output: # rmarkdown::github_document
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 2.  Operations on Numeric Vectors"
+---
+
+
+-------
+
+Problems - and Solution
+-------
+-------
+
+**1. Calculate**: 
+$$
+S_{1} = 1 + 2 +...+  2020
+$$
+
+
+
+```{r}
+x <- c(1:2020)
+
+sum(x)
+```
+
+
+
+
+
+**2. Calculate**
+$$
+S_{2} = 1^2 + 2^2 +...+  2020^2
+$$
+
+
+
+
+```{r}
+x <- c(1:2020)
+sum(x^2)
+
+```
+
+
+
+
+
+**3. Calculate**
+$$
+S = \frac{1^3 + 2^3 +...+  2020^3}{2020}
+$$
+
+
+
+```{r}
+x <- c(1:2020)
+sum(x^3)/2020
+
+```
+
+
+
+
+```{r}
+# Or
+
+mean(x^3)
+```
+
+
+
+
+
+
+**4. Calculate**
+$$
+S = 1\cdot 2 + 3 \cdot 4 + 5 \cdot 6 + 7 \cdot 8 +...+ 2019 \cdot 2020
+$$
+
+
+
+
+
+```{r}
+x <- seq(1, 2019, 2)
+y <- seq(2, 2020, 2)
+
+sum(x*y)
+
+```
+
+
+
+
+
+**5. Calculate**
+$$
+S = \frac{1}{2} + \frac{2}{3} + \frac{3}{4} + ...+  \frac{2020}{2021}
+$$
+
+
+
+
+
+```{r}
+x <- c(1:2020)
+y <- c(2:2021)
+
+sum(x/y)
+
+```
+
+
+
+
+
+**6. Is this summation *convergent* or *divergent*?**
+
+$$
+S = 1+\frac{1}{4}+\frac{1}{9}+\frac{1}{16}+\frac{1}{25}+...
+$$
+
+
+
+
+
+- Rewrite $S$:
+
+$$
+S = 1+\frac{1}{2^2}+\frac{1}{3^2}+\frac{1}{4^2}+\frac{1}{5^2}+...
+$$
+
+
+
+```{r}
+# The sum of the first 1000 terms
+
+n <-  1000
+x <-  c(1:n)
+sum(1/x^2)
+
+# The sum of the first 10000 terms
+
+n <-  10000
+x <-  c(1:n)
+sum(1/x^2)
+```
+
+The series converges! 

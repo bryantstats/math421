@@ -1,0 +1,53 @@
+---
+title: "Missing Values"
+output: html_document
+date: "2024-10-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+```
+
+
+
+```{r, message=FALSE}
+df
+```
+
+```{r}
+sum(is.na(df))
+```
+
+```{r}
+colSums(is.na(df))
+```
+
+```{r, eval=FALSE}
+is.na(df)
+```
+
+```{r}
+colSums(df=="Unknown", na.rm = TRUE)
+```
+
+```{r}
+colSums(df=="Missing", na.rm = TRUE)
+```
+
+```{r}
+df2 <- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
+
+# Note:  this is not the same as the previous codes
+df3 = replace(df, df %in% c("Unknown", "Missing", "Not Available"), NA)
+
+colSums(df2=="Missing", na.rm = TRUE)
+colSums(df3=="Missing", na.rm = TRUE)
+```
+

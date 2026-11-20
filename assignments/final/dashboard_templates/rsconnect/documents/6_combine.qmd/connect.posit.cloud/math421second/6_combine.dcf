@@ -1,0 +1,10 @@
+name: 6_combine
+title: Titanic - Combination of Inputs
+username: math421second
+account: math421second
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1c073-ceea-8236-dd38-2dc5028bec55
+bundleId:
+url: https://connect.posit.cloud/math421second/content/01a1c073-ceea-8236-dd38-2dc5028bec55
+version: 1

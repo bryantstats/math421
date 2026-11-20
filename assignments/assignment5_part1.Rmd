@@ -1,0 +1,57 @@
+
+---
+output: # rmarkdown::github_document
+  html_document:
+    theme: cerulean
+    toc: true
+  pdf_document: default
+  word_document: default
+title: "Assignment 5: Part 1"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment5_part1.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+-------
+
+**The data:** 
+
+This assignment works with the Adult Census Data that can be downloaded at [this link.](https://bryantstats.github.io/math421/data/adult_census_missing.csv)
+
+-------
+
+**Questions**
+
+1. Use `read_csv` to import the data.  Show the number of NAs for each columns.   
+
+2. Using function `aggr` the VIM package to plot the number of NAs for each column. 
+
+3. Find other forms of missing values. Hint: You can use the `table` function to check if there are suspicious categories (Unknown, for example) in a variable. What all other forms of missing values shown in the data. 
+
+4. Replace all the forms of missing values found to NA
+
+5. Replot the number of NAs for each column. 
+
+6. Approach 1 to handle NAs: remove all rows that have any NAs. Save the dataset after removing as a different data. The original data is unchanged (still have NAs).  How many rows left after removing?
+
+7. Approach 2 to handle NAs:  Fill all the NAs with the previous or next value. (Hint: Using `fill` function).  Save the dataset after filling as a different data. The original data is unchanged (still have NAs). 
+
+8. Approach 3 to handle NAs: For numeric variable, replace the NAs by the median.  For categorical variables, replace the NAs to the majority. 
+
+
+
+
+

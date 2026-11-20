@@ -1,0 +1,29 @@
+---
+title: "Data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+- By WHO: https://covid19.who.int/info/
+
+    - Vaccination Data: https://covid19.who.int/who-data/vaccination-data.csv
+
+- By NYT: https://github.com/nytimes/covid-19-data
+
+- JHU: https://github.com/govex/COVID-19
+
+- JHU: https://github.com/CSSEGISandData/COVID-19
+
+
+- Our World in Data: https://github.com/owid/covid-19-data
+
+Vaccination Data
+
+- () https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv
+
+- 

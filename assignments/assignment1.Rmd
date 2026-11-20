@@ -1,0 +1,24 @@
+---
+title: "Assignment 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This assignment guides you to set up the working environment for the class and publish your work on your webpage. Do the follows
+
+1. Download and Install R: https://cran.rstudio.com/
+2. Download and Install Rsudio: https://posit.co/download/rstudio-desktop/
+3. Download and Install Git: https://git-scm.com/
+4. Download and Install Github Desktop: https://desktop.github.com/download/
+5. Create a Github account and a repository
+6. Publish a Github Page for the repository
+7. Create a sample html named Assignment 1 from Rmarkdown or Quarto in Rstudio
+8. Post/Upload the html file on your Github Page
+9. Submit the link of your Github Page to Canvas
+
+[This video](https://bryant.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=cb71cba7-978a-454c-a0cc-b1e000f780a6) and [this video](https://bryant.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c409b221-b499-434c-b50b-b1e200fbc8b5) shows how to do these steps (the video is available after the first class). 
+
+ 

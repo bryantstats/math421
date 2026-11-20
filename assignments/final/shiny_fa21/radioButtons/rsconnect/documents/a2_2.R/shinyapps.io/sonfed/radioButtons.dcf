@@ -1,0 +1,13 @@
+name: radioButtons
+title: radioButtons
+username:
+account: sonfed
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5215324
+bundleId: 5300365
+url: https://sonfed.shinyapps.io/radioButtons/
+when: 1638058430.81941
+lastSyncTime: 1638058430.81941
+asMultiple: FALSE
+asStatic: FALSE

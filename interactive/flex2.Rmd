@@ -1,0 +1,135 @@
+---
+title: "Titanic"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    logo: logo.png
+    source_code: embed
+    social: menu
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(knitr)
+library(DT)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic.csv')
+
+# Create a ggplot object
+p <- df %>% 
+  mutate(Survived = factor(Survived)) %>% 
+  ggplot()+ 
+  geom_bar(mapping=aes(x=Sex, fill=Survived), 
+           position = 'fill')+
+  labs(y='Proportion', fill='Survived')
+
+p1 <- df %>% 
+  mutate(Survived = factor(Survived)) %>% 
+  ggplot()+ 
+  geom_density(mapping=aes(x=Age, color=Survived))+
+  facet_wrap(~Pclass)
+```
+
+{.sidebar}
+=======================================================================
+
+### 1. Titanic
+
+The sinking of the Titanic is one of the most infamous shipwrecks in history. While there was some element of luck involved in surviving, it seems some groups of people were more likely to survive than others.
+
+### 2. Flexdashboard and Plotly
+
+This interactive uses `flexdashboard` and `plotly` to visualize the data. 
+
+Main Tab 1
+=======================================================================
+
+Column {data-width=500, .tabset}
+-----------------------------------------------------------------------
+
+### Table 1
+
+```{r}
+df
+```
+
+
+### Table 2
+
+```{r}
+kable(df)
+```
+
+
+### Table 3 
+
+```{r}
+datatable(df, options = list(
+  pageLength = 25
+))
+```
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r}
+p
+```
+
+### Chart D
+
+```{r}
+ggplotly(p)
+```
+
+
+Main Tab 2
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+#### 1. Plotly for R
+
+Plotly is an R package for creating interactive web-based graphs via plotly's JavaScript graphing library, plotly.js.
+
+The plotly R package serializes ggplot2 figures into Plotly's universal graph JSON. plotly::ggplotly will crawl the ggplot2 figure, extract and translate all of the attributes of the ggplot2 figure into JSON (the colors, the axes, the chart type, etc), and draw the graph with plotly.js. Furthermore, you have the option of manipulating the Plotly object with the style function.
+
+
+#### 2. Cutomizing the Layout
+
+Since the ggplotly() function returns a plotly object, we can manipulate that object in the same way that we would manipulate any other plotly object. A simple and useful application of this is to specify interaction modes, like plotly.js' layout.dragmode for specifying the mode of click+drag events.
+
+
+#### 3. Example
+
+```{r, echo=TRUE, eval=TRUE}
+library(plotly)
+df <- data.frame(x=c(1, 2, 3, 4), y=c(1, 5, 3, 5), group=c('A', 'A', 'B', 'B'))
+p <- ggplot(data=df, aes(x=x, y=y, colour=group)) + geom_point()
+ggplotly(p)
+```
+
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r}
+p1
+```
+
+### Chart D
+
+```{r}
+ggplotly(p1)
+```
+
+M

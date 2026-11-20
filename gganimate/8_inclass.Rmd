@@ -1,0 +1,41 @@
+---
+title: "gganimate"
+output: html_document
+date: "2024-10-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Loads the library
+library(gganimate)
+# Other libraries that will be used
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+
+```
+
+
+```{r}
+# Create a dataset
+data <- tibble(salary = c(1000, 2000), 
+               year = c(2019, 2020))
+```
+
+```{r}
+ggplot(data,
+       aes(x = year,
+           y = salary))+ 
+  geom_point(size=4)
+
+```
+
+
+
+```{r}
+
+```
+

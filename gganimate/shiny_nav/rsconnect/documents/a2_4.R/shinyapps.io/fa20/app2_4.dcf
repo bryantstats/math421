@@ -1,0 +1,12 @@
+name: app2_4
+title: app2_4
+username:
+account: fa20
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3144921
+bundleId: 3811083
+url: https://fa20.shinyapps.io/app2_4/
+when: 1604328960.96133
+asMultiple: FALSE
+asStatic: FALSE

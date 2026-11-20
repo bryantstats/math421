@@ -1,0 +1,13 @@
+name: checkboxGroupInput
+title: checkboxGroupInput
+username:
+account: fa20
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5215102
+bundleId: 5300250
+url: https://fa20.shinyapps.io/checkboxGroupInput/
+when: 1638052864.11676
+lastSyncTime: 1638052864.11676
+asMultiple: FALSE
+asStatic: FALSE

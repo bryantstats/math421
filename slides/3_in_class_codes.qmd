@@ -1,0 +1,49 @@
+---
+title: "Basic R - Inclass - Codes"
+format: html
+editor: visual
+---
+
+
+#### Read in a csv file
+
+```{r}
+# Read in a csv file
+df <-  read.csv('https://bryantstats.github.io/math421/data/WHO-COVID-19-global-data.csv')
+```
+
+
+```{r}
+# Show the names of the columns
+names(df)
+```
+
+
+```{r}
+# structure of the data in general
+str(df)
+
+# Show first few rows
+head(df)
+
+```
+
+```{r, echo=FALSE}
+# Fix the type of variable Date_reported
+df$Date_reported = as.Date(df$Date_reported)
+
+# We can do calculation on Date variables:
+mean(df$Date_reported)
+ 
+df$Date_reported[90000]-df$Date_reported[1]
+ 
+```
+
+```{r}
+df$New_cases2 = ifelse(df$New_cases==0, "No", "Yes")
+
+# Can we create a new variable with three categories using ifelse function?
+```
+
+
+

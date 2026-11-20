@@ -1,0 +1,258 @@
+
+---
+title: "Handle Missing Values"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      
+   
+
+---
+class: inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r, echo=FALSE}
+xaringanExtra::use_webcam()
+```
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+# New Functions
+
+- na_if
+
+- drop_na
+
+- fill
+
+- replace_na
+
+- package: vis_dat, VIM
+
+---
+class: inverse, center, middle
+# Do we need to handle missing values?
+
+---
+class: inverse, center, middle
+# No if just doing some calculations on the data
+
+---
+class: inverse
+
+```{r}
+library(tidyverse)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df %>% summarise(mean_age=mean(Age, na.rm=TRUE))
+```
+
+---
+class: inverse, center, middle
+# No if just doing Visualization
+
+---
+class: inverse
+```{r}
+df %>% ggplot(aes(x=Age, color=Sex))+
+    geom_density()
+```
+
+---
+class: inverse
+# When do we need to handle missing values
+
+- When you know the values of the missing values
+
+
+- When building predictive models
+
+- Other cases?
+
+---
+class: inverse, middle, center
+# Checking the NAs
+
+---
+class: inverse
+
+```{r}
+# Missing values by columns
+colSums(is.na(df))
+```
+---
+class: inverse
+
+```{r}
+# Missing values by columns
+colMeans(is.na(df))
+```
+
+
+---
+class: inverse
+# Steps to Handle missing values
+
+- Step 1: Identify all the forms of Missing Values ('Unknown', 'Missing','9999'...) 
+
+- Step 2: Convert them to `NA`
+
+- Step 3:  Handle it
+
+  - Approach 1: Remove rows that have any NAs
+  
+  - Approach 2: Fill NAs with the previous or next value of the column
+  
+  - Approach 3: Replace by the mean, majority or a predicted value. 
+
+---
+class: inverse
+# Step 1: Identify forms of missing
+
+```{r}
+colSums(df=='Missing', na.rm = TRUE)
+```
+
+---
+class: inverse
+# Step 2: Convert all missing to NA 
+
+```{r}
+# Convert Unknown, Missing and Not Available to NA
+df <- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
+``` 
+
+---
+class: inverse
+# Approach 1: Drop rows
+
+- Drop rows that have any NAs
+
+```{r}
+drop_na(df)
+```
+
+---
+class: inverse
+
+- Drop rows that have any NAs in Age or Sex
+
+```{r}
+drop_na(df, Age, Sex)
+```
+
+---
+class: inverse
+# Drop columns with missing values
+
+```{r}
+df %>% select(-Age, -Sex)
+```
+
+---
+class: inverse
+# Approach 2: Fill in missing values with previous or next value
+
+```{r}
+df %>% fill(Age, Sex, Cabin, .direction = 'updown')
+```
+
+---
+class: inverse
+# Approach 3: Replace Missing values with replace_na
+
+```{r}
+# Replace by the mean (numeric variable)
+mean_age <- mean(df$Age, na.rm=TRUE)
+df$Age <- replace_na(df$Age, mean_age)
+```
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+```{r}
+# Replace by the majority (categorical variable)
+majority_sex <- names(which.max(table(df$Sex)))
+df$Sex <- replace_na(df$Sex, majority_sex)
+```
+
+
+---
+class: inverse
+# Replace Missing values with replace_na
+
+```{r}
+# Replace by the majority (categorical variable)
+majority_class <- names(which.max(table(df$Pclass)))
+df$Pclass <- replace_na(df$Pclass, majority_class)
+```
+
+---
+class: inverse, middle, center
+# Package VIM
+
+---
+```{r, warning=FALSE}
+library(VIM)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+df <- replace(df, df == 'Unknown' |
+                  df == 'Missing' |
+                  df == 'Not Available', NA)
+```
+
+---
+```{r}
+aggr(df)
+```
+
+---
+class: inverse, middle, center
+# Package vis_dat
+
+---
+
+```{r}
+library(visdat)
+df <- read_csv('https://bryantstats.github.io/math421/data/titanic_missing.csv')
+vis_miss(df)
+```
+
+---
+```{r}
+vis_dat(df)
+```
+
+
+---
+
+```{r}
+vis_expect(df, ~.x == 'Missing')
+```
+
+---
+
+```{r}
+vis_expect(df, function(x){x == 'Missing'|x=='Unknown'|
+    x=='Not Available'|is.na(x)})
+```

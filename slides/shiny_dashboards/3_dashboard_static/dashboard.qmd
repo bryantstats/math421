@@ -1,0 +1,49 @@
+---
+title: "Titanic at a Glance"
+format: dashboard
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+titanic <- read_csv("titanic.csv") |>
+  mutate(Survived = factor(Survived, labels = c("No", "Yes")),
+         Pclass   = factor(Pclass))
+```
+
+## Row {height=25%}
+
+```{r}
+#| content: valuebox
+#| title: "Passengers"
+list(icon = "people", color = "primary", value = nrow(titanic))
+```
+
+```{r}
+#| content: valuebox
+#| title: "Survival rate"
+list(icon = "life-preserver", color = "success",
+     value = scales::percent(mean(titanic$Survived == "Yes"), accuracy = 1))
+```
+
+```{r}
+#| content: valuebox
+#| title: "Average fare"
+list(icon = "cash", color = "warning",
+     value = scales::dollar(mean(titanic$Fare), accuracy = 0.01))
+```
+
+## Row {height=75%}
+
+```{r}
+#| title: Survival by class
+ggplot(titanic, aes(x = Pclass, fill = Survived)) +
+  geom_bar(position = "fill") +
+  labs(y = "Proportion")
+```
+
+```{r}
+#| title: Age distribution
+ggplot(titanic, aes(x = Age, fill = Survived)) +
+  geom_histogram(bins = 30)
+```
